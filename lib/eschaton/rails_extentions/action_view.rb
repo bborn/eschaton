@@ -1,4 +1,4 @@
-class ActionView::Base
+class ActionView::Base    
   alias javascript update_page
   alias run_javascript update_page_tag
   

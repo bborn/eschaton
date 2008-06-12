@@ -1,4 +1,7 @@
 == Hello
 
 Helps with google maps
+
 See http://code.google.com/apis/maps/documentation/reference.html for full google maps reference
+
+Depends on http://jquery.com/

@@ -1,18 +1,35 @@
+# All methods noted here become available on all rails views and provide helpers relating to google maps.
 module GoogleViewExt
 
-  # Includes the required Google Maps javascript files. This must be called in the view or layout to enable google
-  # maps functionality. Valid options are:
-  # 
-  # <tt>:key</tt> =>  The key that Google Maps supplied you with
+  # Includes the required google maps javascript as well as jquery. This must be called in the view or layout 
+  # to enable google maps functionality.
+  #
+  # Options:
+  # key:: => Required. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with.
   def include_google_javascript(options)
-    javascript_src_tag "http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}
+    options.assert_valid_keys :key
+    
+    collect javascript_src_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}),
+            javascript_include_tag('jquery')
   end
   
-  # Creates a google map dom object as need be
-  # 
-  # :id, :fullscreen
-  # :width, :height
-  def google_map(options)
+  # Creates a google map div with the given +options+, this is used in the view to display the map.
+  #
+  # Options:
+  # :id::         => Optional. The id of the map the default being +map+
+  # :fullscreen:: => Optional. A value indicating if the map should be fullscreen and take up all the space in the browser window.
+  # :width::      => Optional. The width of the map in pixels.
+  # :height::     => Optional. The height of the map in pixels.
+  # :style::      => Optional. Extra style attributes to be added to the map provided as standard CSS.
+  #
+  # Examples:
+  #   google_map :fullscreen => true
+  #   google_map :width => 600, :height => 650
+  #   google_map :width => 600, :height => 650, :style => 'border: 1px dashed black; margin: 10px'
+  #   google_map :id => 'my_cool_map'
+  def google_map(options = {})
+    options.assert_valid_keys :id, :fullscreen, :width, :height, :style
+    
     options[:id] ||= 'map'
     
     map_style = options[:style] || ""

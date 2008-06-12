@@ -39,7 +39,7 @@ class PluginLoader
     
     def self.mixin_extentions(options)
       Dir[options[:path]].each do |file|
-        module_name = options[:regexp].match(file).group(1)
+        module_name = options[:regexp].match(file).group(0)
         options[:module_to_extend].extend_with_plugin module_name.camelize.constantize
       end
     end

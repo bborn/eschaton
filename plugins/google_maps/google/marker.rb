@@ -5,13 +5,13 @@ module Google
   
     # :location, :icon
     def initialize(options = {})
-      options.default! :variable => 'marker'
+      options.default! :var => 'marker'
       
       super
       
       options.assert_valid_keys :location, :icon
 
-      if create_variable?
+      if create_var?
         location = options[:location]
         location = location.to_location if location.is_a?(Hash)
       
@@ -20,19 +20,19 @@ module Google
           icon = Icon.new(:image => icon) if icon.is_a?(Symbol)
       
           script << icon
-          script << "#{self.variable} = new GMarker(#{location}, icon);"
+          script << "#{self.var} = new GMarker(#{location}, icon);"
         else
-          script << "#{self.variable} = new GMarker(#{location});"
+          script << "#{self.var} = new GMarker(#{location});"
         end
       end
     end
     
     def change_icon(image)
-      "#{self.variable}.setImage('#{image}')"
+      "#{self.var}.setImage('#{image}')"
     end
     
     def click(&block)
-      self.listen_to :click, :on => self.variable, &block
+      self.listen_to :click, :on => self.var, &block
     end
     
   end

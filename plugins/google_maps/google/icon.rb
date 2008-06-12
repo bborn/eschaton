@@ -3,12 +3,16 @@ module Google
   
     # :image, :size, :anchor, :info_window_anchor
     def initialize(options = {})
+      options.default! :var => 'icon'
+            
+      super
+      
       options.assert_valid_keys :image, :size, :anchor, :info_window_anchor
       
       options.default! :size => '24x24', :anchor => '24x24',
                        :info_window_anchor => '24x24'
-      
-      script << "var icon = new GIcon();"
+            
+      script << "#{self.var} = new GIcon();"
     
       options_to_fields options
     end
@@ -35,7 +39,7 @@ module Google
     end  
   
     private
-      # Returns Height and Width from the given +size+. The size is in the format of 'WxH' i.e 16x16, 20x24
+      # Returns height and width from the given +size+. The size is in the format of 'WxH' i.e 16x16, 20x24
       def parse_dimentions(size)
         match = size.match /(\d+)x(\d+)/
         return match.group(1).to_i, match.group(2).to_i
