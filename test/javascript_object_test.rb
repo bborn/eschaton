@@ -1,18 +1,23 @@
 require File.dirname(__FILE__) + '/test_helper'
 
 class JavascriptObjectTest < Test::Unit::TestCase
-
-  def test_javascriptify
-    assert_equal "setZoom", "set_zoom".javascriptify
-    assert_equal "setZoom", "zoom=".javascriptify
-    assert_equal "setZoomControl", "set_zoom_control".javascriptify
-    assert_equal "openInfoWindowHtml", "open_info_window_html".javascriptify    
+  
+  def assert_to_js
+  end
+  
+  def test_lowerCamelize
+    assert_equal "setZoom", "set_zoom".lowerCamelize
+    assert_equal "setZoom", "zoom=".lowerCamelize
+    assert_equal "setZoomControl", "set_zoom_control".lowerCamelize
+    assert_equal "openInfoWindowHtml", "open_info_window_html".lowerCamelize
   end
 
   def test_to_js_arguments
    assert_equal '1, 2', [1, 2].to_js_arguments
    assert_equal '1.5, "Hello"', [1.5, "Hello"].to_js_arguments
    assert_equal '[1, 2], "Goodbye"', [[1, 2], "Goodbye"].to_js_arguments
+   assert_equal 'true, false', [true, false].to_js_arguments
+   assert_equal 'one, two', [:one, :two].to_js_arguments   
    assert_equal '"map", {"zoom": 15, "controls": "small_map"}', 
                 ['map', {:zoom => 15, :controls => :small_map}].to_js_arguments
   end

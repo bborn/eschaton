@@ -1,4 +1,5 @@
 module Google
+
   class Location < MapObject
   
     attr_reader :latitude, :longitude
@@ -11,6 +12,12 @@ module Google
     
       script.inline "new GLatLng(#{self.latitude}, #{self.longitude})"
     end
+    
+    # This method provides compatibility with Hash#to_location and in this case returns self.
+    def to_location
+      self
+    end
   
   end
+  
 end

@@ -37,7 +37,12 @@ module Google
       width, height = parse_dimentions(point)
       script << "icon.infoWindowAnchor = new GPoint(#{width}, #{height});"
     end  
-  
+    
+    # This method provides compatibility with Symbol#to_icon and String#to_icon and in this case returns self.
+    def to_icon
+      self
+    end
+    
     private
       # Returns height and width from the given +size+. The size is in the format of 'WxH' i.e 16x16, 20x24
       def parse_dimentions(size)

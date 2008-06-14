@@ -85,16 +85,14 @@ module Google
       at = at.to_location if at.is_a?(Hash)
       
       if options[:url]      
-        url = EschatonGlobal.current_controller.url_for(options[:url]).to_s
+        url = EschatonGlobal.url_for(options[:url]).to_s
         parse_url_for_javascript url
       
-        %{
-          jQuery.get('#{url}', function(data) {          
+        "jQuery.get('#{url}', function(data) {          
             #{self.var}.openInfoWindow(#{at}, data);
-          });
-        }
+          });"
       else
-        "#{self.var}.openInfoWindow(#{at}, #{options[:content]});"
+        "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_json});"
       end
     end
     

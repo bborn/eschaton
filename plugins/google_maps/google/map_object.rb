@@ -1,19 +1,28 @@
 module Google
   
-  class MapObject < JavascriptObject    
+  class MapObject < JavascriptObject
+    
     def initialize(options)
       super
     end
-
+  
     # :with, :on, :body
     # If no :body option is supplied, the results of yield will be used
-    def listen_to(event, options = {});
+    # Always yields a script generator !!!
+    def listen_to(event, options = {}, &block);
       options.assert_valid_keys :with, :on, :body
     
-      block_arguments = options[:with].join(', ') if options[:with]
-      script << "GEvent.addListener(#{options[:on] || self.var}, \"#{event}\", function(#{block_arguments}) {
-                  #{options[:body] || yield(*options[:with])}
-                 });"
+      content = options[:body] || EschatonGlobal.javascript_generator do |script|
+                                    args = [script]
+                                    args += options[:with] if options[:with]
+          
+                                    yield *args
+                                  end
+      
+      js_arguments = options[:with].join(', ') if options[:with]      
+      self.script << "GEvent.addListener(#{options[:on] || self.var}, \"#{event}\", function(#{js_arguments}) {
+                       #{content}
+                      });"
     end
 
     # TODO - Make pretty and move to appropriate place

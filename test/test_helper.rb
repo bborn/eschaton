@@ -12,12 +12,17 @@ require 'test/unit'
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
-class TestController
+
+class EschatonGlobalMock
   
   def url_for(options)
-    ActionController::UrlRewriter.new(ActionController::TestRequest.new, options).rewrite(options)
+    options.merge!(:only_path => true)
+    ActionController::UrlRewriter.new(ActionController::TestRequest.new, nil).rewrite(options)
   end
   
 end
 
-EschatonGlobal.current_controller = TestController.new
+mock = EschatonGlobalMock.new
+
+EschatonGlobal.current_controller = mock
+EschatonGlobal.current_view = mock

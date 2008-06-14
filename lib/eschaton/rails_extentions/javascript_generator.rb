@@ -24,7 +24,7 @@ class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
 
   private
     def inline_script(script)
-      self << script if (!script.blank?) #TODO - use quiver_cores not_blank?
+      self << script if script.not_blank?
     end
 
 end

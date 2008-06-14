@@ -28,9 +28,8 @@ class JavascriptObject
   
   # Converts the given +method+ and +args+ to a javascript method call with arguments.  
   def method_to_js(method, *args)
-    js_method = method.to_s.javascriptify
+    js_method = method.to_s.lowerCamelize
     args = args.to_js_arguments
-
     self.script << "#{self.var}.#{js_method}(#{args});"
   end
   
@@ -53,41 +52,4 @@ class JavascriptObject
     @script ||= ScriptProxy.new
   end
   
-end
-
-class String
-  
-  # Returns the camelCase format with the first character as lower case
-  #  'zoom=' #=> 'setZoom'
-  #  'set_zoom' #=> 'setZoom'
-  #  'open_info_window' #=> 'openInfoWindow'
-  def javascriptify
-    camel_case = if self =~ /=$/ 
-                   "set_#{self.chop}"
-                 else
-                   self
-                 end
-
-    camel_case.camelize.gsub(/\b\w/){$&.downcase}
-  end
-  
-end
-
-class Array
-  
-  # Returns an argument list that can be used when calling a javascript method.
-  # Arguments will be converted to there javascript equivalents and seperated by a commas.
-  #  [1, 2] #=> 1, 2
-  #  [1.5, "Hello"] #=> 1.5, "Hello"
-  #  [[1, 2], "Goodbye"] #= > [1, 2], "Goodbye"
-  def to_js_arguments
-    self.collect {|arg|
-      if arg.is_a?(Symbol)
-        arg
-      else
-        arg.to_json
-      end
-    }.join(', ')
-  end
-    
 end

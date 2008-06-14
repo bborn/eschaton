@@ -10,6 +10,8 @@ class ScriptProxy
 
     @script << code.to_s
     @script << "\n" if options[:line_end] == :new_line
+    
+    code
   end
   
   alias << write
