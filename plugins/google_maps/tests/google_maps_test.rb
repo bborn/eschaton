@@ -1,11 +1,9 @@
 require File.dirname(__FILE__) + '/../../../test/test_helper'
 
-include ActionController
-
 class GoogleMapsTest < Test::Unit::TestCase
    
   def test_to_google_options
-   assert_equal '{bounceGravity: 12, title: "My title!", dragable: true}',
+   assert_equal '{title: "My title!", dragable: true, bounceGravity: 12}',
                 {:dragable => true, :bounce_gravity => 12, :title => "My title!"}.to_google_options
                 
    assert_equal '{dragCrossMove: true, icon: local_icon}', 
@@ -43,10 +41,13 @@ class GoogleMapsTest < Test::Unit::TestCase
   def test_marker
     marker = Google::Marker.new(:location => {:latitude => -34, :longitude => 18.5},
                                 :dragable => true, :title => 'rad yeah!')
-    marker.click do |x|
-      x.alert('hell')
-      x.to_s
+    marker.click do |script|
+      #assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, 
+      #             script.class
+      script[:log].replace_html :partial => 'hello'
+      script.hide :element_1, :element_2
     end
+    
     puts marker
   end
   

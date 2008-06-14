@@ -6,22 +6,18 @@ module Google
       super
     end
   
-    # :with, :on, :body
-    # If no :body option is supplied, the results of yield will be used
-    # Always yields a script generator !!!
-    def listen_to(event, options = {}, &block);
-      options.assert_valid_keys :with, :on, :body
-    
-      content = options[:body] || EschatonGlobal.javascript_generator do |script|
-                                    args = [script]
-                                    args += options[:with] if options[:with]
-          
-                                    yield *args
-                                  end
-      
-      js_arguments = options[:with].join(', ') if options[:with]      
-      self.script << "GEvent.addListener(#{options[:on] || self.var}, \"#{event}\", function(#{js_arguments}) {
-                       #{content}
+    # :with, :on
+    # Always yields a script generator + :with args
+    def listen_to(event, options = {}, &block)
+      options.default! :on => self.var, :with => []            
+      options.assert_valid_keys :with, :on    
+            
+      generator = Eschaton.javascript_generator
+      yield *(generator.arify + options[:with])
+
+      js_arguments = options[:with].join(', ')
+      self.script << "GEvent.addListener(#{options[:on]}, \"#{event}\", function(#{js_arguments}) {
+                       #{generator}
                       });"
     end
 
@@ -31,7 +27,7 @@ module Google
       url.scan(/#{interpolate_symbol}[\w\.#{brackets}]+/).each do |javascript_variable|
         clean = javascript_variable.gsub(interpolate_symbol, '')
         clean.gsub!(brackets, '()')
-        
+
         url.gsub!(javascript_variable, "' + #{clean} + '")
       end  
       

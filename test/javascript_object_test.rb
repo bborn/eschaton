@@ -2,7 +2,22 @@ require File.dirname(__FILE__) + '/test_helper'
 
 class JavascriptObjectTest < Test::Unit::TestCase
   
-  def assert_to_js
+  def test_to_s
+    obj = JavascriptObject.new(:var => 'map')    
+    
+    
+    p obj.script.class
+    
+    p obj.to_s
+    
+  end
+    
+  def test_to_js
+    assert_equal 'map', :map.to_js
+    assert_equal '["one", "two"]', ['one', 'two'].to_js
+    assert_equal 'true', true.to_js
+    assert_equal 'false', false.to_js
+    assert_equal '{"controls": "small_map", "zoom": 15}', ( {:zoom => 15, :controls => :small_map}).to_js
   end
   
   def test_lowerCamelize
@@ -18,7 +33,7 @@ class JavascriptObjectTest < Test::Unit::TestCase
    assert_equal '[1, 2], "Goodbye"', [[1, 2], "Goodbye"].to_js_arguments
    assert_equal 'true, false', [true, false].to_js_arguments
    assert_equal 'one, two', [:one, :two].to_js_arguments   
-   assert_equal '"map", {"zoom": 15, "controls": "small_map"}', 
+   assert_equal '"map", {"controls": "small_map", "zoom": 15}', 
                 ['map', {:zoom => 15, :controls => :small_map}].to_js_arguments
   end
 
@@ -42,13 +57,13 @@ class JavascriptObjectTest < Test::Unit::TestCase
               'map.returnToSavedPosition();',
               'map.openInfoWindow(location, "Howdy!");',
               'map.updateMarkers([1, 2, 3]);',
-              'map.setOptionsOn("map", {"zoom": 15, "controls": "small_map"});'].join("\n")
-    
+              'map.setOptionsOn("map", {"controls": "small_map", "zoom": 15});'].join("\n")
+
     assert obj.create_var
     assert obj.create_var?    
     assert_equal "#{output}\n", obj.to_s 
   end
-  
+
   def test_existing
     obj = JavascriptObject.existing(:var => 'map')
 

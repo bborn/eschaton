@@ -1,8 +1,8 @@
 class Object
-  
+
   def to_js
     if self.is_a?(Symbol)
-      self
+      self.to_s
     else
       self.to_json
     end
@@ -11,7 +11,7 @@ class Object
 end
 
 class String
-  
+
   # Returns the lower camelCase format
   #  'zoom=' #=> 'setZoom'
   #  'set_zoom' #=> 'setZoom'
@@ -25,11 +25,11 @@ class String
 
     camel_case.camelize.gsub(/\b\w/){$&.downcase}
   end
-  
+
 end
 
 class Array
-  
+
   # Returns an argument list that can be used when calling a javascript method.
   # Arguments will be converted to there javascript equivalents and seperated by a commas.
   #  [1, 2] #=> 1, 2
@@ -38,5 +38,5 @@ class Array
   def to_js_arguments
     self.collect(&:to_js).join(', ')
   end
-    
+
 end

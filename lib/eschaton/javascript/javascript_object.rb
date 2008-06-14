@@ -50,6 +50,7 @@ class JavascriptObject
 
   def script
     @script ||= ScriptProxy.new
+    #@script ||= Eschaton.javascript_generator
   end
   
 end

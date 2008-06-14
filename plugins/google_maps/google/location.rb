@@ -10,7 +10,7 @@ module Google
       
       @longitude, @latitude = options[:longitude], options[:latitude]
     
-      script.inline "new GLatLng(#{self.latitude}, #{self.longitude})"
+      script << "new GLatLng(#{self.latitude}, #{self.longitude})"
     end
     
     # This method provides compatibility with Hash#to_location and in this case returns self.

@@ -11,8 +11,8 @@ class ActionController::Base
   end
 
   def set_global
-    EschatonGlobal.current_controller = self
-    EschatonGlobal.current_view = @template
+    Eschaton.current_controller = self
+    Eschaton.current_view = @template
   end
 
 end

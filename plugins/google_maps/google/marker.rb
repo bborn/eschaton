@@ -39,16 +39,16 @@ module Google
     end
     
     def click(&block)
-      self.listen_to :click, :on => self.var, &block
+      self.listen_to :click, &block
     end
     
     def when_drag_starts(&block)
-      self.listen_to :dragstart, :on => self.var, &block
+      self.listen_to :dragstart, &block
     end
     
     def when_drag_ends(&block)
-      self.listen_to :dragend, :on => self.var, &block
+      self.listen_to :dragend, &block
     end
-    
+
   end
 end

@@ -13,16 +13,33 @@ require 'test/unit'
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
 
-class EschatonGlobalMock
+class EschatonMock
+  attr_accessor :template_format
+  include ActionView::Helpers::JavaScriptHelper
+  include ActionView::Helpers::PrototypeHelper
+  include ActionView::Helpers::ScriptaculousHelper
+
+  include ActionView::Helpers::UrlHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::FormTagHelper
+  include ActionView::Helpers::FormHelper
+  include ActionView::Helpers::CaptureHelper
+  include ActionView::Helpers::RecordIdentificationHelper
+  include ActionController::PolymorphicRoutes
   
   def url_for(options)
     options.merge!(:only_path => true)
     ActionController::UrlRewriter.new(ActionController::TestRequest.new, nil).rewrite(options)
   end
   
+  def render(options)
+    "test output"
+  end
+  
 end
 
-mock = EschatonGlobalMock.new
+mock = EschatonMock.new
 
-EschatonGlobal.current_controller = mock
-EschatonGlobal.current_view = mock
+Eschaton.current_controller = mock
+Eschaton.current_view = mock

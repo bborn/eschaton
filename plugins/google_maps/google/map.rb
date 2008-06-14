@@ -30,16 +30,15 @@ module Google
     # TODO - Handle optional arguments with javascript methods
     def center=(location)
       zoom = 12
-      location = location.to_location if location.is_a?(Hash)
-      
-      @center = location
-      script << "#{self.var}.setCenter(#{location}, #{zoom});"
+      @center = location.to_location
+
+      script << "#{self.var}.setCenter(#{@center}, #{zoom});"
     end
     
     def center
       @center
     end
-    
+
     # Adds a control or controls to the map
     #   add_control :small_zoom, :map_type
     def add_control(*types)
@@ -48,7 +47,7 @@ module Google
         script << "#{self.var}.addControl(new #{google_control}());"
       end
     end
-    
+
     # Adds a marker to the map, +marker+ is either a Marker of marker options
     def add_marker(marker_or_options)
       marker_or_options = Marker.new(marker_or_options) if marker_or_options.is_options_hash?
@@ -58,20 +57,22 @@ module Google
         script << "#{self.var}.addOverlay(marker);"
       end
     end
-    
+
     # Attaches the given +block+ results to the "click" event of the map.
-    # This will only run if the map is clicked, not an info window.
-    def click(&block)      
-      arguments = [:overlay, :location]
-      # If there is no location, it means the actual map wasn't clicked.
-      body = "if(location){
-               #{yield(*arguments)}
-              }
-             "
-      self.listen_to :click, :with => arguments, :on => self.var, 
-                             :body => body
+    # This will only run if the map is clicked, not an info window or overlay.
+    #
+    #  yields [:script, :overlay, :location]
+    def click    
+      self.listen_to :click, :with => [:overlay, :location] do |*args|
+        script = args.first               
+        script << "if(location){"
+
+        yield *args
+
+        script << "}"
+      end
     end
-    
+
     # Opens a information window on the map at the location supplied by +at+. Either a +url+ or +content+ option
     # can be supplied to place within the info window.
     #
@@ -85,7 +86,7 @@ module Google
       at = at.to_location if at.is_a?(Hash)
       
       if options[:url]      
-        url = EschatonGlobal.url_for(options[:url]).to_s
+        url = Eschaton.url_for(options[:url]).to_s
         parse_url_for_javascript url
       
         "jQuery.get('#{url}', function(data) {          
@@ -95,10 +96,10 @@ module Google
         "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_json});"
       end
     end
-    
+
     def close_info_window
       script << "#{self.var}.closeInfoWindow();"
     end
-      
+
   end
 end
