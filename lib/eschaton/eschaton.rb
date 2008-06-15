@@ -1,9 +1,6 @@
-# reset_rjs_debug = ActionView::Base.debug_rjs
-# ActionView::Base.debug_rjs = false
-#
-#  Provides access to global objects of interest.
+# Provides access to global objects of interest.
 class Eschaton
-  cattr_accessor :current_controller, :current_view
+  cattr_accessor :current_view
   
   # Generates and returns a relative url using the given +options+.
   def self.url_for(options)

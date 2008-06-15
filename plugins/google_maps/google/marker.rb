@@ -49,6 +49,10 @@ module Google
     def when_drag_ends(&block)
       self.listen_to :dragend, &block
     end
-
+    
+    def to_marker
+      self
+    end
+    
   end
 end

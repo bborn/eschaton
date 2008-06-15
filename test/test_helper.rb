@@ -12,8 +12,25 @@ require 'test/unit'
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
+class Test::Unit::TestCase
 
-class EschatonMock
+  def output_fixture(name)
+    File.read("output_fixtures/#{name}")
+  end
+
+  def assert_output_fixture(output, fixture, message = nil)
+    output = if output.generator?
+               output.generate
+             else
+               output.to_s
+             end
+
+    assert_equal output, output_fixture(fixture), message
+  end
+
+end
+
+class EschatonMockView
   attr_accessor :template_format
   include ActionView::Helpers::JavaScriptHelper
   include ActionView::Helpers::PrototypeHelper
@@ -39,7 +56,4 @@ class EschatonMock
   
 end
 
-mock = EschatonMock.new
-
-Eschaton.current_controller = mock
-Eschaton.current_view = mock
+Eschaton.current_view = EschatonMockView.new

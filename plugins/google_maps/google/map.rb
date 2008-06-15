@@ -4,39 +4,42 @@ module Google
   #
   # See more online[http://code.google.com/apis/maps/documentation/reference.html#GMap2]
   class Map < MapObject
-    attr_reader :center
+    attr_reader :center, :zoom
+    
     Control_types = [:small_map, :large_map, :small_zoom, 
                      :scale, 
                      :map_type, :menu_map_type, :hierarchical_map_type,
                      :overview_map]
     
-    # :center, :controls
+    # :center, :controls, :zoom
     def initialize(options = {})
-      options.default! :var => 'map'
+      options.default! :var => 'map', :zoom => 6
       
       super
             
-      options.assert_valid_keys :center, :controls
+      options.assert_valid_keys :center, :controls, :zoom
 
       if self.create_var?
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
     
         self.center = options[:center] if options[:center]
+        self.zoom = options[:zoom] if options[:zoom]        
         self.add_control(options[:controls]) if options[:controls]
       end
     end
     
     # Centers the map at the given +location+
-    # TODO - Handle optional arguments with javascript methods
-    def center=(location)
-      zoom = 12
-      @center = location.to_location
+    def center=(location_or_hash)
+      @center = location_or_hash.to_location
 
-      script << "#{self.var}.setCenter(#{@center}, #{zoom});"
+      self.set_center(self.center)
     end
     
-    def center
-      @center
+    # Sets the zoom level of the map
+    def zoom=(zoom)
+      @zoom = zoom
+      
+      self.set_zoom(self.zoom)
     end
 
     # Adds a control or controls to the map
@@ -49,12 +52,14 @@ module Google
     end
 
     # Adds a marker to the map, +marker+ is either a Marker of marker options
-    def add_marker(marker_or_options)
-      marker_or_options = Marker.new(marker_or_options) if marker_or_options.is_options_hash?
-      
+    def add_markers(*markers)
       return_script do |script|
-        script << marker_or_options
-        script << "#{self.var}.addOverlay(marker);"
+        markers.each do |marker_or_options|
+          marker = marker_or_options.to_marker
+
+          script << marker_or_options
+          script << "#{self.var}.addOverlay(#{marker.var});"
+        end
       end
     end
 

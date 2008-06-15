@@ -17,7 +17,7 @@ module Google
 
       js_arguments = options[:with].join(', ')
       self.script << "GEvent.addListener(#{options[:on]}, \"#{event}\", function(#{js_arguments}) {
-                       #{generator}
+                       #{generator.generate}
                       });"
     end
 

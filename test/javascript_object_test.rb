@@ -1,17 +1,7 @@
 require File.dirname(__FILE__) + '/test_helper'
 
 class JavascriptObjectTest < Test::Unit::TestCase
-  
-  def test_to_s
-    obj = JavascriptObject.new(:var => 'map')    
-    
-    
-    p obj.script.class
-    
-    p obj.to_s
-    
-  end
-    
+      
   def test_to_js
     assert_equal 'map', :map.to_js
     assert_equal '["one", "two"]', ['one', 'two'].to_js
@@ -37,8 +27,7 @@ class JavascriptObjectTest < Test::Unit::TestCase
                 ['map', {:zoom => 15, :controls => :small_map}].to_js_arguments
   end
 
-  # Replace this with your real tests.
-  def test_this_plugin
+  def test_method_to_js
     obj = JavascriptObject.new(:var => 'map')
 
     obj.zoom = 12
@@ -49,19 +38,10 @@ class JavascriptObjectTest < Test::Unit::TestCase
     obj.open_info_window(:location, "Howdy!")
     obj.update_markers [1, 2, 3]
     obj.set_options_on('map', {:zoom => 15, :controls => :small_map})
-
-    output = ['map.setZoom(12);',
-              'map.setZoom(12);',
-              'map.zoomIn();',
-              'map.zoomOut();',
-              'map.returnToSavedPosition();',
-              'map.openInfoWindow(location, "Howdy!");',
-              'map.updateMarkers([1, 2, 3]);',
-              'map.setOptionsOn("map", {"controls": "small_map", "zoom": 15});'].join("\n")
-
+    
     assert obj.create_var
-    assert obj.create_var?    
-    assert_equal "#{output}\n", obj.to_s 
+    assert obj.create_var?
+    assert_output_fixture obj, :method_to_js
   end
 
   def test_existing
@@ -76,13 +56,13 @@ class JavascriptObjectTest < Test::Unit::TestCase
     obj = JavascriptObject.existing(:var => 'map')
 
     output = obj.return_script do |script|
-               assert_equal ScriptProxy, script.class
+               assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, script.class
                
                script << "var i = 1;"
                script << "alert(i);"
              end
 
-    assert_equal "var i = 1;\nalert(i);\n", output
+    assert_equal "var i = 1;\nalert(i);", output
   end
     
 end

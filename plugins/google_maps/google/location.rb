@@ -17,6 +17,10 @@ module Google
     def to_location
       self
     end
+    
+    def to_s
+      self.script.generate(:inline => true)
+    end
   
   end
   

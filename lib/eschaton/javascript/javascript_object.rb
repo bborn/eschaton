@@ -9,12 +9,10 @@ class JavascriptObject
   # :var:: => Required. The name of the javascript variable.
   # :create_var:: => Optional. Indicates wheather the javascript variable should be created and assigned, defaulted to +true+.
   def initialize(options = {})
+    options.default! :create_var => true
+    
     @var = options.extract_and_remove(:var)
-    @create_var = if options.has_key?(:create_var) 
-                    options.extract_and_remove(:create_var)
-                  else 
-                    true
-                  end
+    @create_var = options.extract_and_remove(:create_var)
   end
   
   # Used to work on an existing javascript variable by setting the +create_var+ option to +false+.
@@ -37,20 +35,22 @@ class JavascriptObject
   
   # Yields a new script proxy to the block and returns the generated output of that script proxy
   def return_script
-    script = ScriptProxy.new
+    script = Eschaton.javascript_generator
     yield script
     
-    script.to_s
+    script.generate
   end
   
   # Returns the generated javascript.
   def to_s
-    @script.to_s
+    @script.generate(:error_wrapping => false)
   end
+  
+  alias to_js to_s
+  alias to_json to_s
 
   def script
-    @script ||= ScriptProxy.new
-    #@script ||= Eschaton.javascript_generator
+    @script ||= Eschaton.javascript_generator
   end
   
 end

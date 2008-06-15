@@ -2,16 +2,14 @@
 
 Helps with Javascript, Ajax and general scripting in rails.
 
-Its about Ruby instead of Javascript, works in a similar manner to Rails PrototypeHelper and ScriptaculousHelper.
+Its about writing Ruby instead of Javascript, works in a similar manner to Rails PrototypeHelper and ScriptaculousHelper.
 
 See ActionView::Base and ActionView::Helpers::PrototypeHelper::JavaScriptGenerator for extentions provided by
 eschaton, the rest is up to you!
 
-- Small snippets of javascript!
-- Ruby used to generate small snippets(no more that 4 - 5 lines)
-- Page behaviour abstractions written in Ruby, these generate the javascript
-- Ajax related goodies and Presentaion related ajac and javascript
-
-
-
 == How do I write a plugin ???
+
+The whole point of eschaton is to write plugins that provide the extentions you need where you need them!
+Much like rails many conventions are used to make life easy, so here is how you get into the groove of writing them!
+
+lib/eschaton_plugins

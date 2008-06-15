@@ -29,4 +29,8 @@ class Hash
     Google::Location.new(:latitude => self[:latitude], :longitude => self[:longitude])
   end
   
+  def to_marker
+    Google::Marker.new(self)
+  end
+  
 end

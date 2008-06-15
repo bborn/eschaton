@@ -20,10 +20,22 @@ class MapObjectTest < Test::Unit::TestCase
       assert_not_nil script
       assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, 
                    script.class
-      script.alert('hello')
     end
     
     puts map_object
+  end
+  
+  def test_x
+    gen = Eschaton.javascript_generator
+    
+    gen << "var i = 1;"
+    gen << "alert(i);"
+    gen.alert('cool, it works');
+    
+    puts output_fixture(:my_maps)
+    assert_output_fixture gen.generate, :my_maps
+    assert_output_fixture gen, :my_maps
+    
   end
 
 end

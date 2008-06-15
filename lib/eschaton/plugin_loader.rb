@@ -1,11 +1,13 @@
 class PluginLoader
   
-  def self.load    
+  # Loads all plugins found using plugin_locations and extends relevent objects.
+  def self.load
     self.plugin_locations.each do |plugin_location|
       mixin_plugin_extentions plugin_location
     end
   end
   
+  # Returns all the locations in which eschaton plugins are located.
   def self.plugin_locations
     locations = []
     locations << "#{File.dirname(__FILE__)}/../../plugins"

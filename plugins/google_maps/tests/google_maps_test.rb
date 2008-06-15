@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../../test/test_helper'
 
 class GoogleMapsTest < Test::Unit::TestCase
-   
+       
   def test_to_google_options
    assert_equal '{title: "My title!", dragable: true, bounceGravity: 12}',
                 {:dragable => true, :bounce_gravity => 12, :title => "My title!"}.to_google_options
@@ -49,6 +49,21 @@ class GoogleMapsTest < Test::Unit::TestCase
     end
     
     puts marker
+  end
+  
+  def test_google_map_script
+    gen = Eschaton.javascript_generator
+    
+    assert gen.respond_to?(:google_map_script)
+    
+    gen.comment "Before doc ready bloc!"
+    
+    gen.google_map_script do
+      gen.alert('Map alert!!!')
+    end
+    
+    gen.comment "After doc ready bloc!"
+    puts gen.generate
   end
   
 end

@@ -1,0 +1,8 @@
+map.setZoom(12);
+map.setZoom(12);
+map.zoomIn();
+map.zoomOut();
+map.returnToSavedPosition();
+map.openInfoWindow(location, "Howdy!");
+map.updateMarkers([1, 2, 3]);
+map.setOptionsOn("map", {"controls": "small_map", "zoom": 15});

@@ -12,7 +12,7 @@ module GoogleViewExt
     collect javascript_src_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}),
             javascript_include_tag('jquery')
   end
-  
+    
   # Creates a google map div with the given +options+, this is used in the view to display the map.
   #
   # Options:
