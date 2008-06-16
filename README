@@ -1,15 +1,4 @@
-== Whats the deal?
+Its about writing Ruby instead of Javascript, works in a similar manner to Rails PrototypeHelper and ScriptaculousHelper,
+only for google maps.
 
-Helps with Javascript, Ajax and general scripting in rails.
-
-Its about writing Ruby instead of Javascript, works in a similar manner to Rails PrototypeHelper and ScriptaculousHelper.
-
-See ActionView::Base and ActionView::Helpers::PrototypeHelper::JavaScriptGenerator for extentions provided by
-eschaton, the rest is up to you!
-
-== How do I write a plugin ???
-
-The whole point of eschaton is to write plugins that provide the extentions you need where you need them!
-Much like rails many conventions are used to make life easy, so here is how you get into the groove of writing them!
-
-lib/eschaton_plugins
+== How do I write my own plugin ???
