@@ -104,25 +104,21 @@ module Google
     # :content:: => Optional. The html content that will be placed inside the info window. 
     def open_info_window(options)
       options.assert_valid_keys :at, :url, :content
-      
+
       at = options[:at]
       at = if at == :center
              at = "#{self.var}.getCenter()"
            else
              at.to_location
            end
-      
-      self.script << if options[:url]      
-                       url = Eschaton.url_for(options[:url]).to_s
-                       parse_url_for_javascript url
-      
-                       # TODO - Use jquery eschaton plugin's get!!
-                       "jQuery.get('#{url}', function(data) {          
-                         #{self.var}.openInfoWindow(#{at}, data);
-                       });"
-                     else
-                       "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_js});"
-                     end
+
+      if options[:url]
+        self.script.get(options[:url]) do |data|
+          self.script << "#{self.var}.openInfoWindow(#{at}, #{data});"
+        end
+      else
+        self.script << "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_js});"
+      end
     end
     
     # Closes any open info windows on the map, use clear to remove all overlays on the map.

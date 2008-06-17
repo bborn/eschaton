@@ -27,43 +27,5 @@ class GoogleMapsTest < Test::Unit::TestCase
     assert_equal location.to_s, location.to_location.to_s
     assert_equal location, location.to_location
   end
-    
-  def test_map
-    gmap = Google::Map.new(:center => {:latitude => -34, :longitude => 18.5},
-                           :controls => [:small_zoom, :map_type])
-    
-    gmap.script << gmap.open_info_window(:at => gmap.center, 
-                                         :url => {:controller => :blog, :action => :show, :id => 1})
-    
-    puts gmap.to_s
-  end
-  
-  def test_marker
-    marker = Google::Marker.new(:location => {:latitude => -34, :longitude => 18.5},
-                                :dragable => true, :title => 'rad yeah!')
-    marker.click do |script|
-      #assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, 
-      #             script.class
-      script[:log].replace_html :partial => 'hello'
-      script.hide :element_1, :element_2
-    end
-    
-    puts marker
-  end
-  
-  def test_google_map_script
-    gen = Eschaton.javascript_generator
-    
-    assert gen.respond_to?(:google_map_script)
-    
-    gen.comment "Before doc ready bloc!"
-    
-    gen.google_map_script do
-      gen.alert('Map alert!!!')
-    end
-    
-    gen.comment "After doc ready bloc!"
-    puts gen.generate
-  end
-  
+
 end

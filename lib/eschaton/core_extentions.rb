@@ -17,3 +17,12 @@ class Object
   end
   
 end
+
+class String
+  
+  # Escapes +self+ and returns the escaped string.
+  def escape
+    CGI.escape self
+  end
+  
+end

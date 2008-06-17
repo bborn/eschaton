@@ -27,7 +27,7 @@ class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
     ActionView::Base.debug_rjs = options[:error_wrapping]
     
     output = self.to_s
-    output.gsub!(/\s+[\n|\n\s+]/, "\n") if options[:compact]
+    output.gsub!(/^\s+|\s+$]/, '') if options[:compact]
     output.gsub!("\n", ' ') if options[:inline]
 
     ActionView::Base.debug_rjs = reset_rjs_debug

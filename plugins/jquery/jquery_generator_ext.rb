@@ -13,4 +13,11 @@ module JqueryGeneratorExt
     self << "})"
   end
   
+  # Makes a get request to the +url+ and yields the +data+ variable in which the contents of the request are stored.
+  def get(url)
+    self << "jQuery.get(#{Eschaton.url_for(url)}, function(data) {"
+    yield :data
+    self <<  "});"    
+  end
+  
 end

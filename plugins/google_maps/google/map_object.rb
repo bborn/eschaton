@@ -25,28 +25,14 @@ module Google
       
       with_arguments = options[:with]
       js_arguments = with_arguments.join(', ')
-      self.script << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
 
       self.as_global_script do
+        self.script << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
+        
         yield *(self.script.arify + with_arguments)
+        
+        self.script <<  "});"
       end
-
-      self.script <<  "});"
-    end
-
-    # TODO - Make pretty and move to appropriate place
-    def parse_url_for_javascript(url)
-      interpolate_symbol, brackets = '%23', '%28%29'
-      url.scan(/#{interpolate_symbol}[\w\.#{brackets}]+/).each do |javascript_variable|
-        clean = javascript_variable.gsub(interpolate_symbol, '')
-        clean.gsub!(brackets, '()')
-
-        url.gsub!(javascript_variable, "' + #{clean} + '")
-      end  
-      
-      url.gsub!('&amp;', '&')
-      
-      url
     end
     
     protected
