@@ -29,12 +29,12 @@ class PluginLoader
       
       # Generator extentions
       mixin_extentions :path => "#{location}/*_generator_ext.rb",
-                       :regexp => /([a-z]*_generator_ext).rb/,
+                       :regexp => /([a-z_]*_generator_ext).rb/,
                        :module_to_extend => ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
 
       # View extentions
       mixin_extentions :path => "#{location}/*_view_ext.rb",
-                       :regexp => /([a-z]*_view_ext).rb/,
+                       :regexp => /([a-z_]*_view_ext).rb/,
                        :module_to_extend => ActionView::Base
     end
     

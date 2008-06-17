@@ -5,7 +5,7 @@ module Google
   
     # Options:
     # :location:: => Required. An existing variable(represented by a symbol), Location object or hash which indicates where the marker should be placed.
-    # :icon:: => Optional. The Icon that should be used for the marker
+    # :icon:: => Optional. The Icon that should be used for the marker otherwise the default marker icon will be used.
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
     #
@@ -39,15 +39,15 @@ module Google
     end
     
     def click(&block)
-      self.listen_to :click, &block
+      self.listen_to :event => :click, &block
     end
     
     def when_drag_starts(&block)
-      self.listen_to :dragstart, &block
+      self.listen_to :event => :dragstart, &block
     end
     
     def when_drag_ends(&block)
-      self.listen_to :dragend, &block
+      self.listen_to :event => :dragend, &block
     end
     
     def to_marker

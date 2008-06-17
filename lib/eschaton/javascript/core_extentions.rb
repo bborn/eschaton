@@ -8,24 +8,17 @@ class Object
     end
   end
 
-end
-
-class String
-
-  # Returns the lower camelCase format
+  # Returns the lower camelCase method name.
   #  'zoom=' #=> 'setZoom'
   #  'set_zoom' #=> 'setZoom'
-  #  'open_info_window' #=> 'openInfoWindow'
-  def lowerCamelize
-    camel_case = if self =~ /=$/ 
-                   "set_#{self.chop}"
-                 else
-                   self
-                 end
+  #  'open_info_window' #=> 'openInfoWindow'  
+  def to_js_method
+    method_name = self.to_s
+    method_name = "set_#{method_name.chop}" if method_name =~ /=$/ 
 
-    camel_case.camelize.gsub(/\b\w/){$&.downcase}
+    method_name.camelize.gsub(/\b\w/){$&.downcase}
   end
-
+  
 end
 
 class Array

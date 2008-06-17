@@ -6,19 +6,32 @@ module Google
       super
     end
   
-    # :with, :on
-    # Always yields a script generator + :with args
-    def listen_to(event, options = {}, &block)
+    # Listens for events on the client.
+    # 
+    # :event:: => Required. The event that should be listened to.
+    # :on::  => Optional. The object on which the event occurs, defaulted to +JavascriptObject#var+
+    # :with::  => Optional. Arguments that are passed along when the event is fired, these will also be yielded to the supplied block.
+    #
+    # A JavascriptGenerator along with the +with+ option will be yielded to the block.
+    #
+    #   map.listen_to :event => :click, :with => [:overlay, :within] do |script, overlay, location|
+    #     script.alert('hello')
+    #     map.open_info_window(:at => location, :content => 'A window is open!')
+    #     # other code that will occur when this event happens...
+    #   end
+    def listen_to(options = {})
       options.default! :on => self.var, :with => []            
-      options.assert_valid_keys :with, :on    
-            
-      generator = Eschaton.javascript_generator
-      yield *(generator.arify + options[:with])
+      options.assert_valid_keys :event, :on, :with
+      
+      with_arguments = options[:with]
+      js_arguments = with_arguments.join(', ')
+      self.script << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
 
-      js_arguments = options[:with].join(', ')
-      self.script << "GEvent.addListener(#{options[:on]}, \"#{event}\", function(#{js_arguments}) {
-                       #{generator.generate}
-                      });"
+      self.as_global_script do
+        yield *(self.script.arify + with_arguments)
+      end
+
+      self.script <<  "});"
     end
 
     # TODO - Make pretty and move to appropriate place

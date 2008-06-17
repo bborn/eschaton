@@ -37,15 +37,15 @@ Dir["plugins/*"].each do |plugin_directory|
         
   desc "Generate documentation for '#{plugin_name}' eschaton plugin."
   Rake::RDocTask.new("doc_#{plugin_name}") do |rdoc|
-      rdoc.rdoc_dir = "plugin_docs/#{plugin_name}"
-      rdoc.title    = plugin_name
-      rdoc.options << '--line-numbers' << '--inline-source'
-    
-      readme_file = "#{plugin_directory}/README"
-      rdoc.rdoc_files.include(readme_file) if File.exists?(readme_file) 
-        
-      rdoc.rdoc_files.include("#{plugin_directory}/**/*.rb")
-    end
+    rdoc.rdoc_dir = "plugin_docs/#{plugin_name}"
+    rdoc.title    = plugin_name
+    rdoc.options << '--line-numbers' << '--inline-source'
+  
+    readme_file = "#{plugin_directory}/README"
+    rdoc.rdoc_files.include(readme_file) if File.exists?(readme_file) 
+      
+    rdoc.rdoc_files.include("#{plugin_directory}/**/*.rb")
+  end
 end
 
 desc 'Generate documentation for all the eschaton plugins'
