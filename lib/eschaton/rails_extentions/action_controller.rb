@@ -6,7 +6,15 @@ class ActionController::Base
     model = "#{model_name.to_s.classify}PresentationModel".constantize
 
     render :update do |page|
-      yield model.new(:page => page, :controller => self)
+      Eschaton.with_global_script page do
+        yield model.new(page)
+      end
+    end
+  end
+  
+  def run_javascript(&block)
+    render :update do |page|
+      Eschaton.with_global_script page, &block
     end
   end
 

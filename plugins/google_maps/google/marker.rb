@@ -2,7 +2,8 @@ module Google
   
   # see http://code.google.com/apis/maps/documentation/reference.html#GMarker
   class Marker < MapObject
-  
+    attr_accessor :icon
+    
     # Options:
     # :location:: => Required. An existing variable(represented by a symbol), Location object or hash which indicates where the marker should be placed.
     # :icon:: => Optional. The Icon that should be used for the marker otherwise the default marker icon will be used.
@@ -26,8 +27,8 @@ module Google
         location = options.extract_and_remove(:location).to_location
 
         if icon = options.extract_and_remove(:icon)
-          script << icon.to_icon
-          options[:icon] = :icon
+          self.icon = icon.to_icon
+          options[:icon] = self.icon
         end
 
         script << "#{self.var} = new GMarker(#{location}, #{options.to_google_options});"

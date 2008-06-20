@@ -20,7 +20,7 @@ module Google
     def image=(image)
       image = "/images/#{image}.png" if image.is_a?(Symbol)
       
-      script << "icon.image = '#{image}';"
+      self.script << "icon.image = '#{image}';"
     end
   
     def size=(size)

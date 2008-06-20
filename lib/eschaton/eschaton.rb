@@ -15,6 +15,14 @@ class Eschaton
     ActionView::Helpers::PrototypeHelper::JavaScriptGenerator.new(self.current_view){}
   end
 
+  def self.with_global_script(script)
+    JavascriptObject.global_script = script
+    
+    yield script
+    
+    JavascriptObject.global_script = nil
+  end
+
   private
   
     def self.url_with_javascript(url)
@@ -31,10 +39,10 @@ class Eschaton
 
       if has_javascript_interpolation
         url.gsub!("&amp;", "&")
-        url = "'#{url}'"
+        #url = "'#{url}'"
       end
 
-      url
+      "'#{url}'"
     end
 
 end

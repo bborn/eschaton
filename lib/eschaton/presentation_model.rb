@@ -1,16 +1,12 @@
 class PresentationModel
-  attr_reader :page, :controller
+  attr_reader :script
   
-  def initialize(options)
-    @page, @controller = options[:page], options[:controller]
-  end
-  
-  def render(*render_options)
-    self.controller.render *render_options
+  def initialize(script)
+    @script = script
   end
   
   def focus_on(element)
-    page[element].focus
+    self.script[element].focus
   end
     
 end

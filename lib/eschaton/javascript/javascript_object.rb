@@ -3,18 +3,19 @@
 # Any method called on this object will translate the methods into a javascript compatable 
 # camelCase method which is called on the +var+. Calls are stacked and javascript is returned by calling to_s.
 class JavascriptObject
-  attr_reader :var, :create_var
+  attr_reader :var, :create_var, :inline_script
   
   # Options:
   # :var::        => Required. The name of the javascript variable.
   # :create_var:: => Optional. Indicates whether the javascript variable should be created and assigned, defaulted to +true+.
-  # :script::     => Optional. The script object to use for generation, defaulted to a new JavascriptGenerator.
+  # :script::     => Optional. The script object to use for generation.
   def initialize(options = {})
-    options.default! :create_var => true, :script => Eschaton.javascript_generator
+    options.default! :create_var => true
     
     @var = options.extract_and_remove(:var)
     @create_var = options.extract_and_remove(:create_var)
     @script = options.extract_and_remove(:script)
+    @inline_script = Eschaton.javascript_generator
   end
 
   # Used to work on an existing javascript variable by setting the +create_var+ option to +false+.
@@ -35,10 +36,18 @@ class JavascriptObject
   end
 
   alias method_missing method_to_js
-
-  # Returns this objects generated javascript.
+  
+  # Adds +javascript+ to the generator.
+  #
+  # self << "var i = 10;"
+  def <<(javascript)
+    self.script << javascript
+  end
+  
+  # Returns the name of +var+
   def to_s
-    @script.generate
+  #  @script.generate
+    self.var.to_s
   end
 
   alias to_js to_s
@@ -47,17 +56,17 @@ class JavascriptObject
   # Any other JavascriptObject used within the passed in block will have their script generated into this object.
   # This provides and easy way to redirect generated output to this object.
   def as_global_script
-    JavascriptObject.global_script = self.script
+    #JavascriptObject.global_script = self.script
     
     yield
     
-    JavascriptObject.global_script = nil
+    #JavascriptObject.global_script = nil
   end
   
   protected
     # Returns either the global script generator(if one is set) or this objects script generator.
     def script
-      JavascriptObject.global_script || @script
+      @script || JavascriptObject.global_script
     end
     
   private

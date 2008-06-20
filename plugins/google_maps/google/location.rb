@@ -1,3 +1,4 @@
+# TODO - Change behaviour of this to use var
 module Google
 
   class Location < MapObject
@@ -10,7 +11,7 @@ module Google
       
       @longitude, @latitude = options[:longitude], options[:latitude]
     
-      script << "new GLatLng(#{self.latitude}, #{self.longitude})"
+      self.inline_script << "new GLatLng(#{self.latitude}, #{self.longitude})"
     end
     
     # This method provides compatibility with Hash#to_location and in this case returns self.
@@ -19,9 +20,11 @@ module Google
     end
     
     def to_s
-      self.script.generate(:inline => true)
+      self.inline_script.generate(:inline => true)
     end
-  
+    
+    alias to_js to_s
+    alias to_json to_s
   end
   
 end

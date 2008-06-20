@@ -1,6 +1,6 @@
 class ActionView::Base    
-  alias javascript update_page
-  alias run_javascript update_page_tag
+  #alias javascript update_page
+  #alias run_javascript update_page_tag
   
   def self.extend_with_plugin(extention_module)
     include extention_module
@@ -13,5 +13,17 @@ class ActionView::Base
   def collect(*args)
     args.join("\n")
   end
+  
+  def javascript(&block)
+    update_page do |page|
+      with_global_script page, &block
+    end
+  end
 
+  def run_javascript(&block)
+    update_page_tag do |page|
+      Eschaton.with_global_script page, &block
+    end
+  end
+  
 end

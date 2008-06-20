@@ -7,7 +7,7 @@ module JqueryGeneratorExt
   #    script << "alert(i);"
   #    script.alert('hello world!')
   #  end
-  def when_document_ready    
+  def when_document_ready
     self << "jQuery(document).ready(function() {"
     yield
     self << "})"
@@ -19,5 +19,5 @@ module JqueryGeneratorExt
     yield :data
     self <<  "});"    
   end
-  
+    
 end
