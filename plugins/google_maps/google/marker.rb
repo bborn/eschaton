@@ -31,12 +31,12 @@ module Google
           options[:icon] = self.icon
         end
 
-        script << "#{self.var} = new GMarker(#{location}, #{options.to_google_options});"
+        self << "#{self.var} = new GMarker(#{location}, #{options.to_google_options});"
       end
     end
     
-    def change_icon(image)
-      "#{self.var}.setImage('#{image}')"
+    def change_image(image)
+      self << "#{self.var}.setImage('#{image}');"
     end
     
     def click(&block)

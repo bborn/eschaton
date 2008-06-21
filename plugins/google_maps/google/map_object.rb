@@ -27,11 +27,11 @@ module Google
       js_arguments = with_arguments.join(', ')
 
       self.as_global_script do
-        self.script << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
+        self << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
         
         yield *(self.script.arify + with_arguments)
         
-        self.script <<  "});"
+        self <<  "});"
       end
     end
     

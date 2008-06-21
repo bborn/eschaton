@@ -10,8 +10,6 @@ module Google
       super
       
       @longitude, @latitude = options[:longitude], options[:latitude]
-    
-      self.inline_script << "new GLatLng(#{self.latitude}, #{self.longitude})"
     end
     
     # This method provides compatibility with Hash#to_location and in this case returns self.
@@ -20,7 +18,7 @@ module Google
     end
     
     def to_s
-      self.inline_script.generate(:inline => true)
+      "new GLatLng(#{self.latitude}, #{self.longitude})"
     end
     
     alias to_js to_s

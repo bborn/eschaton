@@ -66,7 +66,7 @@ module Google
       marker_objects = markers.collect{|marker_or_options| marker_or_options.to_marker}
       
       marker_objects.each do |marker|
-        self.script << "#{self.var}.addOverlay(#{marker.var});"
+        self << "#{self.var}.addOverlay(#{marker.var});"
       end
       
       if marker_objects.size == 1
@@ -116,10 +116,10 @@ module Google
 
       if options[:url]
         self.script.get(options[:url]) do |data|
-          self.script << "#{self.var}.openInfoWindow(#{at}, #{data});"
+          self << "#{self.var}.openInfoWindow(#{at}, #{data});"
         end
       else
-        self.script << "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_js});"
+        self << "#{self.var}.openInfoWindow(#{at}, #{options[:content].to_js});"
       end
     end
 

@@ -4,7 +4,7 @@ module GoogleGeneratorExt
   def if_google_compatible(&block)
     self << "if (GBrowserIsCompatible()) {"
     yield
-    self << "} else { alert('your browser be old!');}"
+    self << "} else { alert('Your browser be old, it cannot run google maps!');}"
   end
   
   # Any script that is added within the block will execute if the browser is compatible with google maps 

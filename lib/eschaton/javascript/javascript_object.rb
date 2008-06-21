@@ -32,7 +32,7 @@ class JavascriptObject
 
   # Converts the given +method+ and +args+ to a javascript method call with arguments.  
   def method_to_js(method, *args)
-    self.script << "#{self.var}.#{method.to_js_method}(#{args.to_js_arguments});"
+    self << "#{self.var}.#{method.to_js_method}(#{args.to_js_arguments});"
   end
 
   alias method_missing method_to_js
@@ -46,7 +46,6 @@ class JavascriptObject
   
   # Returns the name of +var+
   def to_s
-  #  @script.generate
     self.var.to_s
   end
 
@@ -71,5 +70,4 @@ class JavascriptObject
     
   private
     cattr_accessor :global_script
-    attr_writer :script
 end

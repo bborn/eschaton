@@ -47,5 +47,17 @@ module GoogleViewExt
     
     content_tag :div, nil, options
   end
+
+  # Works in the same way as run_javascript but code is treated as google map script.
+  #
+  #  run_map_script do |script|
+  #    map = Google::Map.new(:controls => [:small_map, :map_type],
+  #                          :center => {:latitude => -33.947, :longitude => 18.462})
+  #  end
+  def run_map_script(&block)
+    run_javascript do |script|
+      script.google_map_script {yield script}
+    end
+  end
   
 end
