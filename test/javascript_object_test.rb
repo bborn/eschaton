@@ -28,20 +28,22 @@ class JavascriptObjectTest < Test::Unit::TestCase
   end
 
   def test_method_to_js
-    obj = JavascriptObject.new(:var => 'map')
+    Eschaton.with_global_script do |script|
+      obj = JavascriptObject.new(:var => 'map')
 
-    obj.zoom = 12
-    obj.set_zoom 12
-    obj.zoom_in
-    obj.zoom_out
-    obj.return_to_saved_position
-    obj.open_info_window(:location, "Howdy!")
-    obj.update_markers [1, 2, 3]
-    obj.set_options_on('map', {:zoom => 15, :controls => :small_map})
+      obj.zoom = 12
+      obj.set_zoom 12
+      obj.zoom_in
+      obj.zoom_out
+      obj.return_to_saved_position
+      obj.open_info_window(:location, "Howdy!")
+      obj.update_markers [1, 2, 3]
+      obj.set_options_on('map', {:zoom => 15, :controls => :small_map})
     
-    assert obj.create_var
-    assert obj.create_var?
-    assert_output_fixture obj, :method_to_js
+      assert obj.create_var
+      assert obj.create_var?
+      assert_output_fixture script, :method_to_js
+    end
   end
 
   def test_existing
@@ -57,24 +59,6 @@ class JavascriptObjectTest < Test::Unit::TestCase
     obj = JavascriptObject.existing(:var => 'map', :script => script)
     
     assert script, obj.script
-  end
-  
-  def test_as_global_script
-    map = JavascriptObject.new(:var => 'map')
-    marker = JavascriptObject.new(:var => 'marker')
-    icon = JavascriptObject.new(:var => 'icon')
-
-    map.before && marker.before && icon.before
-
-    map.as_global_script do
-      map.within && marker.within && icon.within
-    end
-
-    map.after && marker.after && icon.after
-
-    assert_output_fixture map, :map_as_global_script
-    assert_output_fixture marker, :marker_as_global_script
-    assert_output_fixture icon, :icon_as_global_script
   end
     
 end

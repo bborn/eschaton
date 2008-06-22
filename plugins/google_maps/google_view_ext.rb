@@ -1,6 +1,12 @@
 # All methods noted here become available on all rails views and provide helpers relating to google maps.
 module GoogleViewExt
 
+  # Works in exactly the same was as rails form_remote_tag but provides readability. This would be used to create a 
+  # remote form tag within a info window.
+  def info_window_form(options, &block)
+    form_remote_tag options, &block
+  end
+  
   # Includes the required google maps javascript as well as jquery. This must be called in the view or layout 
   # to enable google maps functionality.
   #

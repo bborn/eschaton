@@ -31,7 +31,7 @@ class Hash
   def to_google_options
     args = self.collect do |key, value|
       key = key.to_js_method.to_sym
-      "#{key}:#{value.to_js}"
+      "#{key}: #{value.to_js}"
     end
 
     "{#{args.join(', ')}}"

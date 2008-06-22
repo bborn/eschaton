@@ -1,4 +1,3 @@
-# TODO - Change behaviour of this to use var
 module Google
 
   class Location < MapObject

@@ -26,20 +26,18 @@ module Google
       with_arguments = options[:with]
       js_arguments = with_arguments.join(', ')
 
-      self.as_global_script do
-        # Wrap the GEvent closure in a method to prevent the non-closure bug of javascript and google maps.
-        self.script.comment("Wrap in method to prevent closure bug.")
-        wrap_method = "#{self.var}_#{options[:event]}(#{self.var})"
+      # Wrap the GEvent closure in a method to prevent the non-closure bug of javascript and google maps.
+      wrap_method = "#{self.var}_#{options[:event]}(#{self.var})"
 
-        self << "function #{wrap_method}{"
-        self << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
+      self << "function #{wrap_method}{"
+      self << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
 
-        yield *(self.script.arify + with_arguments)
+      yield *(self.script.arify + with_arguments)
 
-        self <<  "});"
-        self << "}"
-        script << "#{wrap_method};"
-      end
+      self <<  "});"
+      self << "}"
+      
+      script << "#{wrap_method};"
     end
     
     protected
