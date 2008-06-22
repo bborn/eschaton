@@ -9,7 +9,6 @@ class Eschaton
     url_with_javascript self.current_view.url_for(options)
   end
 
-  
   # Returns a JavascriptGenerator which is extended by all eschaton plugins.
   def self.javascript_generator
     ActionView::Helpers::PrototypeHelper::JavaScriptGenerator.new(self.current_view){}
@@ -17,9 +16,9 @@ class Eschaton
 
   def self.with_global_script(script)
     JavascriptObject.global_script = script
-    
+
     yield script
-    
+
     JavascriptObject.global_script = nil
   end
 

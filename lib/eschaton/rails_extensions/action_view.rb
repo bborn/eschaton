@@ -16,7 +16,7 @@ class ActionView::Base
   
   def javascript(&block)
     update_page do |page|
-      with_global_script page, &block
+      Eschaton.with_global_script page, &block
     end
   end
 
