@@ -44,7 +44,10 @@ class EschatonMockView
   include ActionView::Helpers::CaptureHelper
   include ActionView::Helpers::RecordIdentificationHelper
   include ActionController::PolymorphicRoutes
-  
+  include ActionController::RequestForgeryProtection
+    
+  include AuthenticatedSystem  
+    
   def url_for(options)
     options.merge!(:only_path => true)
     ActionController::UrlRewriter.new(ActionController::TestRequest.new, nil).rewrite(options)
@@ -55,5 +58,7 @@ class EschatonMockView
   end
   
 end
+
+  include AuthenticatedSystem
 
 Eschaton.current_view = EschatonMockView.new

@@ -3,7 +3,6 @@ class Eschaton
   cattr_accessor :current_view
   
   # works like rails url for only with more options!!!!
-  #
   def self.url_for_javascript(options)
     url = self.current_view.url_for(options)
 
@@ -24,7 +23,7 @@ class Eschaton
   def self.javascript_generator
     ActionView::Helpers::PrototypeHelper::JavaScriptGenerator.new(self.current_view){}
   end
-
+  
   def self.with_global_script(script = Eschaton.javascript_generator)
     JavascriptObject.global_script = script
     

@@ -2,6 +2,8 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
+require File.dirname(__FILE__) + '/../../../config/environment'
+
 desc 'Default: run unit tests.'
 task :default => :test
 
@@ -21,11 +23,10 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-
-# Generate a rake task for each plugin seperatly
+# Generate a rake task for each plugin separately
 #  - rdocs
 #  - run all tests
-Dir["plugins/*"].each do |plugin_directory|
+PluginLoader.plugin_locations.each do |plugin_directory|
   plugin_name = File.basename(plugin_directory)
         
   desc "Test the '#{plugin_name}' eschaton plugin."
@@ -50,7 +51,7 @@ end
 
 desc 'Generate documentation for all the eschaton plugins'
 task :doc_plugins do 
-  Dir["plugins/*"].each do |plugin_directory|
+  PluginLoader.plugin_locations.each do |plugin_directory|
     Rake::Task["doc_#{File.basename(plugin_directory)}"].invoke
   end
 end

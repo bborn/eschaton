@@ -9,14 +9,14 @@ class JavascriptObjectTest < Test::Unit::TestCase
     assert_equal 'false', false.to_js
     assert_equal '{"controls": "small_map", "zoom": 15}', ( {:zoom => 15, :controls => :small_map}).to_js
   end
-  
+
   def test_to_js_method
     assert_equal "setZoom", "set_zoom".to_js_method
     assert_equal "setZoom", "zoom=".to_js_method
     assert_equal "setZoomControl", "set_zoom_control".to_js_method
     assert_equal "openInfoWindowHtml", "open_info_window_html".to_js_method    
   end
-  
+
   def test_to_js_arguments
    assert_equal '1, 2', [1, 2].to_js_arguments
    assert_equal '1.5, "Hello"', [1.5, "Hello"].to_js_arguments
@@ -59,6 +59,16 @@ class JavascriptObjectTest < Test::Unit::TestCase
     obj = JavascriptObject.existing(:var => 'map', :script => script)
     
     assert script, obj.script
+  end
+  
+  def test_add_to_script
+    Eschaton.with_global_script do |script|
+      obj = JavascriptObject.new
+      
+      obj << "var i = 1;"
+      
+      assert_equal "var i = 1;", script.generate
+    end
   end
     
 end

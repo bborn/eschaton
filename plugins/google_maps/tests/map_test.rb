@@ -21,7 +21,7 @@ class MapObjectTest < Test::Unit::TestCase
                                   :include_location => true)
               
             end
-            
+
    puts script.generate
   end
 

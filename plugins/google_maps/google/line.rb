@@ -14,7 +14,7 @@ module Google
         options[:points] = nil
         arguments = [options[:points], options[:color], options[:thickness]].compact.to_js_arguments
 
-        self << "#{self.var} = new GPolyline([new GLatLng(-34.947, 18.462), new GLatLng(-33.947, 18.562)],#{arguments})"
+        self << "#{self.var} = new GPolyline([new GLatLng(-34.947, 18.462), new GLatLng(-34.967, 18.562)],#{arguments})"
       end
     end
  

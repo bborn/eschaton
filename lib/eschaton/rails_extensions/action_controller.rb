@@ -1,5 +1,5 @@
 class ActionController::Base
-  before_filter :set_global
+  before_filter :set_current_view
   
   # Create a presentation model using the given +model_name+
   def presentation_model(model_name)
@@ -18,7 +18,7 @@ class ActionController::Base
     end
   end
 
-  def set_global
+  def set_current_view
     Eschaton.current_view = @template
   end
 

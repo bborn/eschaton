@@ -28,7 +28,11 @@ module JqueryGeneratorExt
   def post(options)
     options.assert_valid_keys :url, :form, :params
     options.default! :form => nil, :params => {}
-    
+
+    if Eschaton.current_view.protect_against_forgery?
+      options[:url][:authenticity_token] = Eschaton.current_view.form_authenticity_token
+    end
+
     form_fields = if options[:form]
                     "jQuery('##{options[:form]}').serialize()"
                   else
