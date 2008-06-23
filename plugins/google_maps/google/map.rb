@@ -63,6 +63,7 @@ module Google
     
     # Adds markers to the map. Each marker in +markers+ can be a Marker or whatever Marker#new supports.
     def add_markers(*markers)
+      markers.flatten!
       marker_objects = markers.collect{|marker_or_options| marker_or_options.to_marker}
       
       marker_objects.each do |marker|

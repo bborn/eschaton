@@ -45,7 +45,7 @@ class JavascriptObjectTest < Test::Unit::TestCase
       assert_output_fixture script, :method_to_js
     end
   end
-
+  
   def test_existing
     obj = JavascriptObject.existing(:var => 'map')
 

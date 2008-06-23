@@ -6,13 +6,13 @@ class JavascriptObject
   attr_reader :var, :create_var
 
   # Options:
-  # :var::        => Required. The name of the javascript variable.
+  # :var::        => Optional. The name of the javascript variable, defaulted to a random name.
   # :create_var:: => Optional. Indicates whether the javascript variable should be created and assigned, defaulted to +true+.
   # :script::     => Optional. The script object to use for generation.
   def initialize(options = {})
-    options.default! :create_var => true
+    options.default! :var => :random, :create_var => true
     
-    @var = options.extract_and_remove(:var)
+    self.var = options.extract_and_remove(:var)
     @create_var = options.extract_and_remove(:create_var)
     @script = options.extract_and_remove(:script)
   end
@@ -59,4 +59,15 @@ class JavascriptObject
 
   private
     cattr_accessor :global_script
+    
+    # Sets the name of the local variable that respresents this object.
+    # If :random is supplied as +name+, a random name is assigned to avoid conflicts.
+    def var=(name)
+      @var = if name == :random
+               "_#{rand(2000)}"
+             else
+               name
+             end
+    end
+    
 end
