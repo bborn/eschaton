@@ -41,7 +41,7 @@ module JqueryGeneratorExt
 
     url = Eschaton.url_for_javascript(options[:url])
     self << "jQuery.post(#{url}, #{form_fields}, function(data) {"
-    yield :data
+    yield :data if block_given?
     self <<  "});"    
   end
 

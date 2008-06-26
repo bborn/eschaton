@@ -2,23 +2,25 @@ module Google
   
   # Represents a google map[http://code.google.com/apis/maps/documentation/reference.html#GMap2]
   class Map < MapObject
-    attr_reader :center, :zoom
+    attr_reader :center, :zoom, :type
     
     Control_types = [:small_map, :large_map, :small_zoom, 
                      :scale, 
                      :map_type, :menu_map_type, :hierarchical_map_type,
                      :overview_map]
+    Map_types = [:normal, :satellite, :hybrid]
     
     # Options: 
     # :center::   => Optional. Centers the map at this location, see center=.
     # :controls:: => Optional. Which controls will be added to the map, see Control_types for valid controls.
     # :zoom::     => Optional. The zoom level of the map defaulted to 6, see zoom=.
+    # :type::       => Optional. The type of map, see type=
     def initialize(options = {})
       options.default! :var => 'map', :zoom => 6
       
       super
             
-      options.assert_valid_keys :controls, :center, :zoom
+      options.assert_valid_keys :controls, :type, :center, :zoom
 
       if self.create_var?
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
@@ -26,7 +28,14 @@ module Google
         self.center = options[:center] if options[:center]
         self.zoom = options[:zoom] if options[:zoom]        
         self.add_control(options[:controls]) if options[:controls]
+        self.type = options[:type] if options[:type]
       end
+    end
+    
+    # Sets the type of map to display, see Map_types of valid map types.
+    def type=(value)
+      @type = value
+      self << "#{self.var}.setMapType(#{value.to_map_type})"
     end
     
     # Centers the map at the given +location+ which can be a Location or whatever Location#new supports.
@@ -48,7 +57,7 @@ module Google
       self.set_zoom(self.zoom)
     end
 
-    # Adds a control or controls to the map
+    # Adds a control or controls to the map, see Control_types of valid controls.
     #   add_control :small_zoom, :map_type
     def add_control(*controls)
       controls.flatten.each do |control|
