@@ -16,7 +16,7 @@ module Google
     #
     #   map.listen_to :event => :click, :with => [:overlay, :within] do |script, overlay, location|
     #     script.alert('hello')
-    #     map.open_info_window(:at => location, :content => 'A window is open!')
+    #     map.open_info_window(:at => location, :text => 'A window is open!')
     #     # other code that will occur when this event happens...
     #   end
     def listen_to(options = {})
