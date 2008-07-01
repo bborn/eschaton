@@ -1,15 +1,12 @@
 Helps with google maps, see googles online[http://code.google.com/apis/maps/documentation/reference.html] reference.
 
-The best way to get to know the google maps plugin is to pull our mapping samples
-  git clone git://quiver.cuspcode.net/repos/mapping_samples
-
 === In your layout
   include_google_javascript :key => YOUR_GOOGLE_MAPS_KEY
 
 === In your view or layout
   google_map :width => 600, :height => 600
 
-=== In your Helper or View
+=== In your View Helper or View
   run_map_script do
     map = Google::Map.new(:controls => [:small_map, :map_type],
                           :center => {:latitude => -33.947, :longitude => 18.462},
