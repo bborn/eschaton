@@ -7,16 +7,24 @@ module GoogleViewExt
     form_remote_tag options, &block
   end
   
-  # Includes the required google maps javascript as well as jquery. This must be called in the view or layout 
+  # Includes the required google maps javascript files. This must be called in the view or layout 
   # to enable google maps functionality.
   #
   # Options:
-  # key:: => Required. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with.
-  def include_google_javascript(options)
-    options.assert_valid_keys :key
+  # key::            => Optional. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with, defaulted to GOOGLE_MAPS_API_KEY.
+  # include_jquery:: => Optional. Indicates if the jquery file should be included, defaulted to +true+.
+  def include_google_javascript(options = {})
+    options.assert_valid_keys :key, :include_jquery
+    
+    options.default! :key => GOOGLE_MAPS_API_KEY if defined?(GOOGLE_MAPS_API_KEY)
+    options.default! :include_jquery => true
+  
+    jquery = if options[:include_jquery] == true
+               javascript_include_tag('jquery') 
+             end
     
     collect javascript_src_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}),
-            javascript_include_tag('jquery')
+            jquery
   end
     
   # Creates a google map div with the given +options+, this is used in the view to display the map.

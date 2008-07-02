@@ -1,6 +1,6 @@
 module Google
   
-  # see http://code.google.com/apis/maps/documentation/reference.html#GMarker
+  # Represents a google marker[http://code.google.com/apis/maps/documentation/reference.html#GMarker]
   class Marker < MapObject
     attr_accessor :icon
     attr_reader :location

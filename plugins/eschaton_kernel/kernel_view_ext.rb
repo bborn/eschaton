@@ -5,7 +5,7 @@ module KernelViewExt
   #           javascript_include_tag('jquery'),
   #           some_other_stuff
   def collect(*args)
-    args.join("\n")
+    args.compact.join("\n")
   end
   
   def javascript(&block)

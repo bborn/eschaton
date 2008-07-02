@@ -1,24 +1,7 @@
 Helps with google maps, see googles online[http://code.google.com/apis/maps/documentation/reference.html] reference.
 
-== Short way:
-
-Generate a sample map and look at the code...
+Generate a map and look at the files the generator created.
   script/generate map 
+Then visit the map at http://localhost:3000/map
 
-
-==Long way:
-
-=== In your layout
-  include_google_javascript :key => GOOGLE_MAPS_API_KEY
-
-=== In your view or layout
-  google_map :fullscreen => true
-
-=== In your View Helper or View
-  def init_map
-    run_map_script do
-      map = Google::Map.new(:controls => [:small_map, :map_type],
-                            :center => {:latitude => -33.947, :longitude => 18.462},
-                            :zoom => 12)
-    end
-  end
+Check out the Google::Map and Google::Marker as these are the most commonly used mapping objects.
