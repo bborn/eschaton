@@ -1,4 +1,4 @@
-Helps with google maps, see googles online[http://code.google.com/apis/maps/documentation/reference.html] reference.
+Helps with writing google map[http://code.google.com/apis/maps/documentation/reference.html] mashups in rails.
 
 Generate a map and look at the files the generator created.
   script/generate map 
