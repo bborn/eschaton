@@ -1,20 +1,42 @@
 module Google
-  
-  # see http://code.google.com/apis/maps/documentation/reference.html#GPolyline
+
+  # Represents a poly line that can be added to a Map. If a method or event is not documented here please 
+  # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GPolyline] docs for details.
   class Line < MapObject
 
-    # :points
+    # :vertices
     def initialize(options = {})
       options.default! :var => 'line'
 
       super
-      
+
       if create_var?
-        points = options[:points].collect(&:to_location)
+        vertices = options[:vertices].arify.collect(&:to_location)
                 
-        self << "#{self.var} = new GPolyline(#{points.to_js});"
+        self << "#{self.var} = new GPolyline(#{vertices.to_js});"
       end
     end
- 
+
+    # Adds a vertex at the given +location+ and updates the shape of the line.
+    def add_vertex(location)
+      self << "#{self.var}.insertVertex(#{self.var}.getVertexCount(), #{location})"
+    end
+
+    # The length of the line along the surface of a spherical earth.
+    # The +format+ can be +meters+ or +kilometers+, defaulted to +meters+.
+    def length(format = :meters)
+      options.assert_valid_keys :format, :round
+      options.default! :format => :meters
+
+      length = "#{self.var}.getLength()"
+      length = "#{length} / 1000" if options[:format] == :kilometers
+
+      length
+    end
+
+    def click(&block)
+      self.listen_to :event => :click, :with => :location, &block
+    end
+
   end
 end

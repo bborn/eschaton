@@ -1,7 +1,21 @@
 Helps with writing google map[http://code.google.com/apis/maps/documentation/reference.html] mashups in rails.
 
-Generate a map and look at the files the generator created.
+== Get it...
+
+For Rails 2.1 and up
+  script/plugin install git://quiver.cuspcode.net/eschaton.git
+  script/plugin install git://quiver.cuspcode.net/quiver_core.git
+
+Older versions of Rails
+  cd vendor/plugins
+  git clone git://quiver.cuspcode.net/eschaton.git
+  git clone git://quiver.cuspcode.net/quiver_core.git
+
+== Get going...
+
+Generate a map, look at the files the generator created and play a bit
   script/generate map 
+
 Then visit the map at http://localhost:3000/map
 
 Check out the Google::Map and Google::Marker as these are the most commonly used mapping objects.

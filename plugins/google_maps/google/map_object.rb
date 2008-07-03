@@ -14,7 +14,7 @@ module Google
     #
     # A JavascriptGenerator along with the +with+ option will be yielded to the block.
     #
-    #   map.listen_to :event => :click, :with => [:overlay, :within] do |script, overlay, location|
+    #   map.listen_to :event => :click, :with => [:overlay, :location] do |script, overlay, location|
     #     script.alert('hello')
     #     map.open_info_window(:at => location, :text => 'A window is open!')
     #     # other code that will occur when this event happens...
@@ -23,7 +23,7 @@ module Google
       options.default! :on => self.var, :with => []            
       options.assert_valid_keys :event, :on, :with
       
-      with_arguments = options[:with]
+      with_arguments = options[:with].arify
       js_arguments = with_arguments.join(', ')
 
       # Wrap the GEvent closure in a method to prevent the non-closure bug of javascript and google maps.
