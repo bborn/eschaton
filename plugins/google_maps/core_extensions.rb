@@ -3,11 +3,7 @@ class String
   def to_icon
     Google::Icon.new(:image => self)
   end
-
-  def to_google_control_class
-    "G#{self.classify}Control"
-  end
-  
+    
 end
 
 class Symbol
@@ -19,13 +15,13 @@ class Symbol
   def to_location
     self
   end
-  
+
   def to_google_control_class
-    self.to_s.to_google_control_class
+    "G#{self.to_s.classify}Control".to_sym
   end
-  
+
   def to_map_type
-    "G_#{self.to_s.upcase}_MAP"
+    "G_#{self.to_s.upcase}_MAP".to_sym
   end
     
 end

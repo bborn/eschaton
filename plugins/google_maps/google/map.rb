@@ -122,7 +122,7 @@ module Google
       end
     end
 
-    # Opens a information window on the map at the given +location+. Either a +url+ or +text+ option can be supplied 
+    # Opens an info window on the map at the given +location+. Either a +url+ or +text+ option can be supplied 
     # to place within the info window.
     #
     # :location::         => Required. A Location, whatever Location#new supports or :center which indicates where the info window must be placed on the map.
@@ -157,6 +157,19 @@ module Google
       else
         self << "#{self.var}.openInfoWindow(#{location}, #{options[:text].to_js});"
       end
+    end
+
+    # Opens an info window at the given +location+ that contains a blowup view of the map around this point.
+    #
+    # Options:
+    # :location   => Required. The location at which the the blowup must be placed.
+    # :zoom_level => Optional. Sets the blowup to a particular zoom level.
+    # :map_type   => Optional. Set the type of map shown in the blowup.
+    def show_map_blowup(options = {}) 
+      options[:map_type] = options[:map_type].to_map_type if options[:map_type]
+      location = options.extract_and_remove(:location).to_location
+      
+      self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options})" 
     end
 
   end

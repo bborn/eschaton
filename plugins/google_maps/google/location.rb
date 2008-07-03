@@ -21,7 +21,9 @@ module Google
     end
     
     alias to_js to_s
-    alias to_json to_s
+    def to_json(options = nil)
+      to_js
+    end
   end
   
 end

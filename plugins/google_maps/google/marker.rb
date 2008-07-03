@@ -1,24 +1,23 @@
 module Google
   
   # Represents a marker that can be added to a Map. If a method or event is not documented here please 
-  # see googles online[[http://code.google.com/apis/maps/documentation/reference.html#GMarker] docs for details.
+  # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GMarker] docs for details.
   #
   # You will most likely use click and open_info_window to get some basic functionality going.
   #
   # Examples:
   #
   #  Google::Marker.new(:location => {:latitude => -34, :longitude => 18.5})
-  #
-  #  location = Google::Location.new(:latitude => -34, :longitude => 18.5)
-  #  Google::Marker.new(:location => location)
-  #
-  #  Google::Marker.new(:location => :existing_location)  
+  #  
+  #  Google::Marker.new(:location => {:latitude => -34, :longitude => 18.5}, 
+  #                     :draggable => true,
+  #                     :title => "This is a marker!")
   class Marker < MapObject
     attr_accessor :icon
     attr_reader :location
     
     # Options:
-    # :location:: => Required. An existing variable(represented by a symbol), Location object or hash which indicates where the marker should be placed.
+    # :location:: => Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
     # :icon::     => Optional. The Icon that should be used for the marker otherwise the default marker icon will be used.
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
@@ -41,6 +40,17 @@ module Google
     
     def change_image(image)
       self << "#{self.var}.setImage('#{image}');"
+    end
+    
+    # Opens an info window that contains a blowup view of the map around this marker.
+    #
+    # Options:
+    # :zoom_level => Optional. Sets the blowup to a particular zoom level.
+    # :map_type   => Optional. Set the type of map shown in the blowup.
+    def show_map_blowup(options = {})
+     options[:map_type] = options[:map_type].to_map_type if options[:map_type]
+
+     self << "#{self.var}.showMapBlowup(#{options.to_google_options})" 
     end
     
     # Opens a information window on the marker. Either a +url+ or +text+ option can be supplied to place 
