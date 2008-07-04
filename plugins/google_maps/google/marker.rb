@@ -69,9 +69,15 @@ module Google
         self << "#{self.var}.openInfoWindow(#{options[:text].to_js});"
       end
     end
-    
-    def click(&block)
-      self.listen_to :event => :click, &block
+
+    def click(options = {}, &block)
+      if block_given?
+        self.listen_to :event => :click, &block
+      else
+        self.click do
+          self.open_info_window options
+        end
+      end
     end
     
     def when_drag_starts(&block)
