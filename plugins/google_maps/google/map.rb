@@ -111,14 +111,20 @@ module Google
     # This will only run if the map is clicked, not an info window or overlay.
     #
     # :yields [:script, :overlay, :location]
-    def click    
-      self.listen_to :event => :click, :with => [:overlay, :location] do |*args|
-        script = args.first               
-        script << "if(location){"
+    def click(info_window_options = {})
+      if block_given?
+        self.listen_to :event => :click, :with => [:overlay, :location] do |*args|
+          script = args.first               
+          script << "if(location){"
 
-        yield *args
+          yield *args
 
-        script << "}"
+          script << "}"
+        end
+      else
+        self.click do |script, overlay, location|
+          self.open_info_window info_window_options.merge(:location => location)
+        end
       end
     end
 
