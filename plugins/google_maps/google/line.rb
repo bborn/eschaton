@@ -25,11 +25,8 @@ module Google
     # The length of the line along the surface of a spherical earth.
     # The +format+ can be +meters+ or +kilometers+, defaulted to +meters+.
     def length(format = :meters)
-      options.assert_valid_keys :format, :round
-      options.default! :format => :meters
-
       length = "#{self.var}.getLength()"
-      length = "#{length} / 1000" if options[:format] == :kilometers
+      length = "#{length} / 1000" if format == :kilometers
 
       length
     end
