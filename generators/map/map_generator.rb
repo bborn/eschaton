@@ -1,4 +1,5 @@
 class MapGenerator < Rails::Generator::Base
+  attr_reader :plugin_class
   
   def manifest
     record do |m|
@@ -8,8 +9,18 @@ class MapGenerator < Rails::Generator::Base
       m.file "map_helper.rb", "app/helpers/map_helper.rb"
 
       m.directory "app/views/map"
-      m.file "map.erb", "app/views/layouts/map.erb"  
+      m.file "map.erb", "app/views/layouts/map.erb"
       m.file "index.erb", "app/views/map/index.erb"
+
+      # Eschaton plugin
+      plugin_name = File.basename(RAILS_ROOT).singularize.downcase
+      @plugin_class = plugin_name.classify
+      plugin_dir = "lib/eschaton_plugins/#{plugin_name}"
+
+      m.directory plugin_dir
+
+      m.template "generator_ext.rb", "#{plugin_dir}/#{plugin_name}_generator_ext.rb" 
+      m.template "view_ext.rb", "#{plugin_dir}/#{plugin_name}_view_ext.rb"
     end
   end
 

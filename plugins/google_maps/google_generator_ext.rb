@@ -10,11 +10,11 @@ module GoogleGeneratorExt
   # Any script that is added within the block will execute if the browser is compatible with google maps 
   # and when the document is ready.
   def google_map_script
-    self.when_document_ready do
+    self.when_document_ready do      
       self << "window.onunload = GUnload;"
       self.if_google_compatible do
         yield
-      end
+      end      
     end
   end
    

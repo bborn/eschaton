@@ -1,5 +1,11 @@
 module JqueryGeneratorExt
-
+  
+  # Gives control of the $ variable back to whichever library first implemented it.
+  # This helps to make sure that jQuery doesn't conflict with the $ object of other libraries
+  def avoid_conflicts!
+    self << "jQuery.noConflict();"
+  end
+  
   # Any script that is added within the block will execute when the document is ready.
   #
   #  when_document_ready do
@@ -9,7 +15,7 @@ module JqueryGeneratorExt
   #  end
   def when_document_ready
     self << "jQuery(document).ready(function() {"
-    yield
+    yield self
     self << "})"
   end
 
