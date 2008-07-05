@@ -70,13 +70,17 @@ module Google
       end
     end
 
-    def click(options = {}, &block)
-      if block_given?
-        self.listen_to :event => :click, &block
-      else
+    # If called with a block it will attach the block to the "click" event of the marker.
+    # If +info_window_options+ are supplied an info window will be opened with those options and the block will be ignored.
+    #
+    # :yields :script
+    def click(info_window_options = nil, &block)
+      if info_window_options
         self.click do
-          self.open_info_window options
+          self.open_info_window info_window_options
         end
+      elsif block_given?
+        self.listen_to :event => :click, &block        
       end
     end
     

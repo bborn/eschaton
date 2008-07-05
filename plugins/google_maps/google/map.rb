@@ -112,7 +112,7 @@ module Google
     #
     # This will only run if the map is clicked, not an info window or overlay.
     #
-    # :yields [:script, :location, :overlay]
+    # :yields :script, :location, :overlay
     def click(info_window_options = nil)
       if info_window_options
         self.click do |script, location, overlay|
