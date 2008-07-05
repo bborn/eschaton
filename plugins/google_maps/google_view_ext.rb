@@ -1,9 +1,20 @@
 # All methods noted here become available on all rails views and provide helpers relating to google maps.
 module GoogleViewExt
 
-  # Works in exactly the same was as rails form_remote_tag but provides readability. This would be used to create a 
-  # remote form tag within a info window.
+  # Works in exactly the same way as rails +form_remote_tag+ but provides some extra options. This would be used 
+  # to create a remote form tag within an info window.
+  #
+  # Extra options:
+  # :include_location:: => Optional. If +true+ and latitude and longitude are present in +params+ they will be include in the +url+, defaulted to +true+.
   def info_window_form(options, &block)
+    options.default! :include_location => false
+    
+    include_location = options.extract_and_remove(:include_location)
+    if include_location && params[:latitude].not_blank? && params[:longitude].not_blank?
+      options[:url][:latitude] = params[:latitude]
+      options[:url][:longitude] = params[:longitude]
+    end
+    
     form_remote_tag options, &block
   end
   

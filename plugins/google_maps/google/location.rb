@@ -25,5 +25,5 @@ module Google
       to_js
     end
   end
-  
+
 end
