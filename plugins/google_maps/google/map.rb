@@ -115,7 +115,7 @@ module Google
     # :yields [:script, :location, :overlay]
     def click(info_window_options = nil)
       if info_window_options
-        self.click do |script, overlay, location|
+        self.click do |script, location, overlay|
           self.open_info_window info_window_options.merge(:location => location)
         end
       elsif block_given?
