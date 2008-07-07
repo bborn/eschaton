@@ -1,7 +1,7 @@
 class String
   
   def to_icon
-    Google::Icon.new(:image => self)
+    Google::Icon.new :image => self
   end
     
 end
@@ -9,7 +9,7 @@ end
 class Symbol
 
   def to_icon
-    Google::Icon.new(:image => self)
+    Google::Icon.new :image => self
   end
   
   def to_location
@@ -42,11 +42,15 @@ class Hash
   end
   
   def to_location
-    Google::Location.new(self)
+    Google::Location.new self
   end
   
   def to_marker
-    Google::Marker.new(self)
+    Google::Marker.new self
+  end
+  
+  def to_line
+    Google::Line.new self
   end
   
 end
