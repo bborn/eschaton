@@ -2,6 +2,6 @@ require 'eschaton'
     
 # Make sure we reinclude for dev
 require 'dispatcher' unless defined? ::ActionController::Dispatcher
-Dispatcher.to_prepare(:eschaton) do 
+ActionController::Dispatcher.to_prepare(:eschaton) do 
   Dependencies.require_or_load 'eschaton'
 end

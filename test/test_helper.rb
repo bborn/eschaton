@@ -10,6 +10,7 @@ require 'action_view'
 require 'test/unit'
 
 # Load up the entire host rails enviroment
+require File.dirname(__FILE__) + '/../../../../config/boot'
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
 class Test::Unit::TestCase

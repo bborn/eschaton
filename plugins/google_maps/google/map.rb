@@ -77,7 +77,7 @@ module Google
     #   add_control :small_zoom, :map_type
     def add_control(*controls)
       controls.flatten.each do |control|
-        script << "#{self.var}.addControl(new #{control.to_google_control_class}());"
+        script << "#{self.var}.addControl(new #{control.to_google_control}());"
       end
     end
 
