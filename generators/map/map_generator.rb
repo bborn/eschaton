@@ -11,6 +11,12 @@ class MapGenerator < Rails::Generator::Base
       m.directory "app/views/map"
       m.file "map.erb", "app/views/layouts/map.erb"
       m.file "index.erb", "app/views/map/index.erb"
+      
+      # Marker icons
+      m.file "blue.png", "public/images/blue.png"
+      m.file "green.png", "public/images/green.png"
+      m.file "orange.png", "public/images/orange.png"
+      m.file "red.png", "public/images/red.png"
 
       # Eschaton plugin
       plugin_name = File.basename(RAILS_ROOT).singularize.downcase

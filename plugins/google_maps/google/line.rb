@@ -12,13 +12,15 @@ module Google
 
       if create_var?
         if options[:from] && options[:to]
-          options[:vertices] << options[:from]  
-          options[:vertices] << options[:to]
+          options[:vertices] << options.extract_and_remove(:from)
+          options[:vertices] << options.extract_and_remove(:to)
         end
 
-        vertices = options[:vertices].arify.collect(&:to_location)
+        vertices = options.extract_and_remove(:vertices).arify.collect(&:to_location)
                 
         self << "#{self.var} = new GPolyline(#{vertices.to_js});"
+        
+        self.style = options unless options.empty?
       end
     end
 
@@ -36,17 +38,14 @@ module Google
       length
     end
 
+    # :color, :weight, :opacity
+    def style=(options)
+      self << "#{self.var}.setStrokeStyle(#{options.to_google_options});"
+    end
+
     def click(&block)
       self.listen_to :event => :click, :with => :location, &block
     end
-    
-    def mouse_over(&block)
-      self.listen_to :event => :mouseover, &block
-    end
-    
-    def mouse_out(&block)
-      self.listen_to :event => :mouseout, &block
-    end
-    
+
   end
 end
