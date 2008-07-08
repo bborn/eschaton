@@ -8,10 +8,8 @@ module Google
       super
       
       options.assert_valid_keys :image, :size, :anchor, :info_window_anchor
-      
-      options.default! :size => '24x24',
-                       :anchor => '12x12',
-                       :info_window_anchor => '12x12'
+
+      options.default! :anchor => '12x12', :info_window_anchor => '12x12'
             
       script << "#{self.var} = new GIcon();"
     
