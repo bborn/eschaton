@@ -108,8 +108,9 @@ module Google
     # Adds a +line+ to the map which can be a Line or whatever Line#new supports.     
     def add_line(line)
       line = line.to_line
-      
       self.add_overlay line
+
+      line
     end
     
     # Clears all overlays(info windows, markers, lines etc) from the map.

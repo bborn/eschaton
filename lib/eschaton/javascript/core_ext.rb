@@ -11,10 +11,10 @@ class Object
   # Returns the lower camelCase method name.
   #  'zoom=' #=> 'setZoom'
   #  'set_zoom' #=> 'setZoom'
-  #  'open_info_window' #=> 'openInfoWindow'  
+  #  'open_info_window' #=> 'openInfoWindow'
   def to_js_method
     method_name = self.to_s
-    method_name = "set_#{method_name.chop}" if method_name =~ /=$/ 
+    method_name = "set_#{method_name.chop}" if method_name =~ /=$/
 
     method_name.camelize.gsub(/\b\w/){$&.downcase}
   end
