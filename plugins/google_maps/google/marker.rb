@@ -50,7 +50,7 @@ module Google
     def show_map_blowup(options = {})
      options[:map_type] = options[:map_type].to_map_type if options[:map_type]
 
-     self << "#{self.var}.showMapBlowup(#{options.to_google_options})" 
+     self << "#{self.var}.showMapBlowup(#{options.to_google_options});" 
     end
     
     # Opens a information window on the marker. Either a +url+ or +text+ option can be supplied to place 
@@ -95,7 +95,7 @@ module Google
     
     def when_drag_ends(&block)
       self.listen_to :event => :dragend, :with => [:location] do |*args|
-        script = args.first               
+        script = args.first             
         script << "location = #{self.var}.getLatLng();"
 
         yield *args

@@ -1,0 +1,3 @@
+jQuery.get('/location/create?latitude=-33.947&longitude=18.462', function(data) {
+map.openInfoWindow(new GLatLng(-33.947, 18.462), data);
+});

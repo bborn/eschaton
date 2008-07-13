@@ -1,0 +1,8 @@
+function test_object_click(test_object){
+GEvent.addListener(test_object, "click", function(location) {
+/* This is some test code! */
+var current_location = location;
+alert("Hello from test Object!");
+});
+}
+test_object_click(test_object);

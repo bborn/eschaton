@@ -15,18 +15,27 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 
 class Test::Unit::TestCase
 
-  def output_fixture(name)
-    File.read("output_fixtures/#{name}")
-  end
-
-  def assert_output_fixture(output, fixture, message = nil)
+  def assert_output_fixture(fixture, output, message = nil)
     output = if output.generator?
                output.generate
              else
                output.to_s
              end
 
-    assert_equal output, output_fixture(fixture), message
+    fixture_file = "output_fixtures/#{fixture}"
+    fixture_contents = File.read fixture_file
+
+    if fixture_contents != output
+      Tempfile.open "output" do |file|
+        file << output
+        file.flush
+
+        diff = `diff -u #{fixture_file} #{file.path}`
+        flunk "Output difference, please review the below diff.\n\n#{diff}"
+      end
+    else
+      assert true
+    end
   end
 
 end
@@ -52,7 +61,7 @@ class EschatonMockView
   end
   
   def render(options)
-    "test output"
+    "test output for render"
   end
   
 end

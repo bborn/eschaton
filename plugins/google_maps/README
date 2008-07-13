@@ -1,4 +1,7 @@
-Helps with writing google map[http://code.google.com/apis/maps/documentation/reference.html] mashups in rails.
+== Eschaton => Google Maps on Rails
+
+Helps with writing google map[http://code.google.com/apis/maps/documentation/reference.html] mashups in rails,
+brining together the power of Google Maps and Rails.
 
 Check out our blog[http://eschatonmaps.blogspot.com/] for updates.
 

@@ -41,6 +41,8 @@ class JavascriptObject
   # self << "var i = 10;"
   def <<(javascript)
     self.script << javascript
+    
+    javascript
   end
 
   # Returns the name of +var+

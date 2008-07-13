@@ -23,14 +23,20 @@ class Eschaton
   def self.javascript_generator
     ActionView::Helpers::PrototypeHelper::JavaScriptGenerator.new(self.current_view){}
   end
-  
-  def self.with_global_script(script = Eschaton.javascript_generator)
+
+  def self.with_global_script(script = Eschaton.javascript_generator, options = {})
+    options.default! :reset_after => false
+
+    previous_script = unless options[:reset_after]
+                        JavascriptObject.global_script
+                      end
+    
     JavascriptObject.global_script = script
-    
+
     yield script
-    
-    JavascriptObject.global_script = nil
-    
+
+    JavascriptObject.global_script = previous_script
+
     script
   end
 

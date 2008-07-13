@@ -48,5 +48,6 @@ module Google
         match = size.match /(\d+)x(\d+)/
         return match.group(0).to_i, match.group(1).to_i
       end
+
   end
 end

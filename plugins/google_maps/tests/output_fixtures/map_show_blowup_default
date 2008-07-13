@@ -1,0 +1,1 @@
+map.showMapBlowup(new GLatLng(-33.947, 18.462), {})

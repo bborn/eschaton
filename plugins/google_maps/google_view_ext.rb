@@ -5,10 +5,10 @@ module GoogleViewExt
   # to create a remote form tag within an info window.
   #
   # Extra options:
-  # :include_location:: => Optional. If +true+ and latitude and longitude are present in +params+ they will be include in the +url+, defaulted to +true+.
+  # :include_location:: => Optional. Indicates if latitude and longitude +params+(if present) should be include in the +url+, defaulted to +true+.
   def info_window_form(options, &block)
     options.default! :include_location => true
-    
+
     include_location = options.extract_and_remove(:include_location)
     if include_location && params[:latitude].not_blank? && params[:longitude].not_blank?
       options[:url][:latitude] = params[:latitude]

@@ -1,0 +1,6 @@
+map = new GMap2(document.getElementById('map'));
+map.setMapType(G_SATELLITE_MAP)
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.setCenter(new GLatLng(-33.947, 18.462));
+map.setZoom(12);

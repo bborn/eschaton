@@ -1,0 +1,2 @@
+map = new GMap2(document.getElementById('map'));
+map.setZoom(6);

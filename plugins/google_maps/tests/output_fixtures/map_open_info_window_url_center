@@ -1,0 +1,4 @@
+center = map.getCenter();
+jQuery.get('/location/create?latitude=' + center.lat() + '&longitude=' + center.lng() + '', function(data) {
+map.openInfoWindow(center, data);
+});

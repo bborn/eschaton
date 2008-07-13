@@ -1,0 +1,7 @@
+function map_click(map){
+GEvent.addListener(map, "click", function(overlay, location) {
+if(location){
+}
+});
+}
+map_click(map);

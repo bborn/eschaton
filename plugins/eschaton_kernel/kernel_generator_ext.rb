@@ -1,5 +1,5 @@
 module KernelGeneratorExt
-  
+
   # Evaluates the +script+ as javascript on the client.
   def eval(script)
     self << "eval(#{script.to_js});"
@@ -11,7 +11,7 @@ module KernelGeneratorExt
   def comment(message)
     self << "/* #{message} */"
   end
-  
+    
   # Returns script that has been generated and allows for addtional +options+ regarding generation than the default +to_s+ method.
   #
   # Options:

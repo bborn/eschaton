@@ -5,6 +5,8 @@ module Google
   class Line < MapObject
 
     # :vertices, :from, :to
+    #
+    #
     def initialize(options = {})
       options.default! :var => 'line', :vertices => []
 
@@ -24,7 +26,8 @@ module Google
       end
     end
 
-    # Adds a vertex at the given +location+ and updates the shape of the line.
+    # Adds a vertex at the given +location+ which can be a Location or whatever Location#new supports 
+    # and updates the shape of the line.
     def add_vertex(location)
       self << "#{self.var}.insertVertex(#{self.var}.getVertexCount(), #{location})"
     end

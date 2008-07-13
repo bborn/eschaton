@@ -2,51 +2,72 @@ require File.dirname(__FILE__) + '/../../../test/test_helper'
 
 class MapObjectTest < Test::Unit::TestCase
 
-  def test_open_info_window
-   script = Eschaton.with_global_script do
-              map = Google::Map.new
-              #location = Google::Location.new(:latitude => 34.6, :longitude => 18.4)
-              map.open_info_window(:location => {:latitude => 34.6, :longitude => 18.4}, 
-                                   :url => {:controller => :posts, :action => :show, :id => 1})
-                                   
-              map.open_info_window(:location => {:latitude => 34.6, :longitude => 18.4}, 
-                                   :url => {:controller => :posts, :action => :show, :id => 1},
-                                   :include_location => true)
-                                  
-             map.open_info_window(:location => :client_location, 
-                                  :url => {:controller => :posts, :action => :show, :id => 1})
+  def setup
+    @script = Eschaton.javascript_generator
+    JavascriptObject.global_script = @script
 
-             map.open_info_window(:location => :client_location, 
-                                  :url => {:controller => :posts, :action => :show, :id => 1},
-                                  :include_location => true)
-
-            end
-            
-   puts script.generate
+    @map_object = Google::MapObject.new(:var => 'test_object')
   end
 
-  def test_listen_to
-    Eschaton.with_global_script do
-      map = Google::MapObject.new(:var => 'map')
-      map.listen_to :event => :click, :with => [:overlay, :location] do |script, overlay, location|
-
-        assert_not_nil script
-        assert_not_nil overlay
-        assert_not_nil location
-      
-        assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, 
-                     script.class
-        assert_equal Symbol, overlay.class
-        assert_equal Symbol, location.class      
-      end
-    
-      map.listen_to :event => :drag do |script|
-        assert_not_nil script
-        assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, 
-                     script.class
-      
-      end
+  def teardown
+    JavascriptObject.global_script = nil
+  end
+  
+  def test_listen_to_with
+    # With no parameters in :with
+    @map_object.listen_to :event => :dragging do |*args|
+      assert_equal 1, args.length
+      assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, args.first.class
     end
+
+    # With a single parameter in :with
+    @map_object.listen_to :event => :drag_end, :with => [:end_location] do |*args|
+      assert_equal 2, args.length
+      assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, args.first.class      
+      assert_equal :end_location, args.second
+    end
+
+    # With multiple parameters in :with    
+    @map_object.listen_to :event => :drag_end, :with => [:start_location, :end_location] do |*args|
+      assert_equal 3, args.length
+      assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, args.first.class      
+      assert_equal :start_location, args.second
+      assert_equal :end_location, args.third
+    end
+  end
+
+  def test_listen_to_with_yield_order
+    @map_object.listen_to :event => :click, :with => [:overlay, :location],
+                               :yield_order => [:location, :overlay] do |*args|
+      assert_equal 3, args.length
+      assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, args.first.class      
+      assert_equal :location, args.second
+      assert_equal :overlay, args.third
+    end
+  end
+  
+  def test_map_object_listen_to_no_args
+    @map_object.listen_to :event => :click do
+    end
+
+    assert_output_fixture :map_object_listen_to_no_args, @script
+  end
+
+  def test_map_object_listen_to_with_args
+    @map_object.listen_to :event => :click, :with => [:overlay, :location] do
+    end
+
+    assert_output_fixture :map_object_listen_to_with_args, @script
+  end
+
+  def test_map_object_listen_to_with_body
+    @map_object.listen_to :event => :click, :with => [:location] do |script, location|
+      script.comment "This is some test code!"
+      script << "var current_location = #{location};"
+      script.alert("Hello from test Object!")
+    end
+    
+    assert_output_fixture :map_object_listen_to_with_body, @script
   end
 
 end
