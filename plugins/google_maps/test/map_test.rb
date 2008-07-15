@@ -1,9 +1,11 @@
 require File.dirname(__FILE__) + '/../../../test/test_helper'
 
-class MapObjectTest < Test::Unit::TestCase
+Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
+    
+class MapTest < Test::Unit::TestCase
   
   def test_map_initialize
-    map = Google::Map.new :script => Eschaton.javascript_generator
+    map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}, :script => Eschaton.javascript_generator
 
     assert_output_fixture :map_default, map.send(:script)
 
@@ -18,7 +20,7 @@ class MapObjectTest < Test::Unit::TestCase
 
   def test_open_info_window_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       # With :url and :include_location params
       test_output = script.start_recording do
@@ -72,7 +74,7 @@ class MapObjectTest < Test::Unit::TestCase
   
   def test_click_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462} 
 
       # without body
       test_output = script.start_recording do
@@ -103,7 +105,7 @@ class MapObjectTest < Test::Unit::TestCase
   
   def test_add_marker
     Eschaton.with_global_script do
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       first_marker_location = {:latitude => -33.947, :longitude => 18.462}
       marker = map.add_marker :location => first_marker_location
@@ -116,7 +118,7 @@ class MapObjectTest < Test::Unit::TestCase
     
     # Now add multiple markers
     Eschaton.with_global_script do
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       first_marker_location = {:latitude => -33.947, :longitude => 18.462}
       second_marker_location = {:latitude => -34.947, :longitude => 18.462}
@@ -145,25 +147,26 @@ class MapObjectTest < Test::Unit::TestCase
   
   def test_add_marker_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
-      map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      assert_output_fixture :map_add_marker, script
-    end
-    
-    # Now add multiple markers
-    Eschaton.with_global_script do |script|
-      map = Google::Map.new
-      map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
-                      {:location => {:latitude => -34.947, :longitude => 19.462}})
+      test_output = script.start_recording do
+                      map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
+                    end
 
-      assert_output_fixture :map_add_markers, script
+      assert_output_fixture :map_add_marker, test_output
+
+      test_output = script.start_recording do
+        map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
+                        {:location => {:latitude => -34.947, :longitude => 19.462}})
+      end
+      
+      assert_output_fixture :map_add_markers, test_output
     end
   end
 
   def test_add_line
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       line = map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
       
       assert line.is_a?(Google::Line)
@@ -172,32 +175,38 @@ class MapObjectTest < Test::Unit::TestCase
 
   def test_add_line_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
-      map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      assert_output_fixture :map_add_line, script
+      test_output = script.start_recording do 
+                      map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
+                    end
+
+      assert_output_fixture :map_add_line, test_output
     end
   end
 
   def test_clear_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
-      map.clear
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      assert_output_fixture :map_clear, script
+      test_output = script.start_recording do 
+                      map.clear
+                    end
+      
+      assert_equal 'map.clearOverlays();', test_output.generate
     end
   end
 
   def test_show_map_blowup_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       # Default with hash location
       test_output = script.start_recording do
                       map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462}
                     end
       
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {})', 
+      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {});', 
                    test_output.generate
                    
      # Default with existing_location
@@ -205,7 +214,7 @@ class MapObjectTest < Test::Unit::TestCase
                      map.show_blowup :location => :existing_location
                    end
 
-     assert_equal 'map.showMapBlowup(existing_location, {})', 
+     assert_equal 'map.showMapBlowup(existing_location, {});', 
                   test_output.generate
       
       # With :zoom_level
@@ -214,7 +223,7 @@ class MapObjectTest < Test::Unit::TestCase
                                       :zoom_level => 12
                     end
 
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12})', 
+      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12});', 
                    test_output.generate
 
       # With :map_type
@@ -223,7 +232,7 @@ class MapObjectTest < Test::Unit::TestCase
                                       :map_type => :satellite
                     end
 
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {mapType: G_SATELLITE_MAP})', 
+      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {mapType: G_SATELLITE_MAP});', 
                    test_output.generate
 
       # With :zoom_level and :map_type
@@ -233,7 +242,7 @@ class MapObjectTest < Test::Unit::TestCase
                                       :map_type => :satellite
                     end
 
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12, mapType: G_SATELLITE_MAP})', 
+      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12, mapType: G_SATELLITE_MAP});', 
                    test_output.generate
     end
   end

@@ -1,11 +1,15 @@
 class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
   
   module GeneratorMethods
-    alias old_javascript_writer <<
+    
+    #unless defined? :old_javascript_writer
+    #  alias old_javascript_writer <<
+    #end
+
     def <<(javascript)
       @recorder << javascript if @recorder
-    
-      old_javascript_writer javascript
+      @lines << javascript
+      #old_javascript_writer javascript
     end
   end
 
@@ -26,10 +30,9 @@ class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
   #  script << "// This is after recording"
   def start_recording(&block)
     recorder = Eschaton.javascript_generator
+
     @recorder = recorder
-    
-    Eschaton.with_global_script @recorder, &block
-    
+    yield self
     @recorder = nil
 
     recorder

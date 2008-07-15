@@ -16,10 +16,8 @@ module Google
       options_to_fields options
     end
   
-    def image=(image)
-      image = "/images/#{image}.png" if image.is_a?(Symbol)
-      
-      self << "#{self.var}.image = '#{image}';"
+    def image=(image)      
+      self << "#{self.var}.image = #{image.to_image.to_js};"
     end
   
     def size=(size)

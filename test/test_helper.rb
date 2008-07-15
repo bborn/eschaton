@@ -14,15 +14,18 @@ require File.dirname(__FILE__) + '/../../../../config/boot'
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
 class Test::Unit::TestCase
-
+  cattr_accessor :output_fixture_base
+  
   def assert_output_fixture(fixture, output, message = nil)
     output = if output.generator?
                output.generate
              else
                output.to_s
              end
-
-    fixture_file = "output_fixtures/#{fixture}"
+    
+    fixture_base = self.output_fixture_base || '.'
+    
+    fixture_file = "#{fixture_base}/output_fixtures/#{fixture}"
     fixture_contents = File.read fixture_file
 
     if fixture_contents != output

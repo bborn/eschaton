@@ -9,7 +9,12 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   def teardown
     JavascriptObject.global_script = nil
   end
-
+  
+  def test_to_image
+    assert_equal "/images/green.png", :green.to_image
+    assert_equal "/images/green.png", "/images/green.png".to_image
+  end
+  
   def test_to_icon
     assert_equal Google::Icon, "green".to_icon.class
     assert_equal Google::Icon, :green.to_icon.class    

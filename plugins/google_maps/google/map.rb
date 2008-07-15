@@ -32,7 +32,7 @@ module Google
     # * +center+ - Optional. Centers the map at this location, see center=.
     # * +controls+ - Optional. Which controls will be added to the map, see Control_types for valid controls.
     # * +zoom+ - Optional. The zoom level of the map defaulted to 6, see zoom=.
-    # * +type+ - Optional. The type of map, see type=
+    # * +type+ - Optional. The type of map, see type=.
     def initialize(options = {})
       options.default! :var => 'map', :zoom => 6
 
@@ -42,11 +42,13 @@ module Google
 
       if self.create_var?
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
+        
+        self.center = options.extract_and_remove(:center)
 
         self.options_to_fields options
       end
     end
-    
+
     # Sets the type of map to display, see Map_types of valid map types.
     def type=(value)
       @type = value
@@ -195,7 +197,7 @@ module Google
       options[:map_type] = options[:map_type].to_map_type if options[:map_type]
       location = options.extract_and_remove(:location).to_location
       
-      self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options})" 
+      self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end
 
   end

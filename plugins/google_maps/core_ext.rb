@@ -3,6 +3,10 @@ class String
   def to_icon
     Google::Icon.new :image => self
   end
+  
+  def to_image
+    self
+  end
     
 end
 
@@ -26,6 +30,10 @@ class Symbol
   
   def to_google_anchor
     "G_ANCHOR_#{self.to_s.upcase}".to_sym
+  end
+  
+  def to_image
+    "/images/#{self}.png"
   end
     
 end

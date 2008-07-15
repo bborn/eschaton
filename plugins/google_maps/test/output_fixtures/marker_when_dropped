@@ -1,0 +1,8 @@
+function marker_dragend(marker){
+GEvent.addListener(marker, "dragend", function() {
+drop_location = marker.getLatLng();
+/* This is some test code! */
+alert("Hello from marker drop!");
+});
+}
+marker_dragend(marker);

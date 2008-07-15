@@ -1,0 +1,5 @@
+icon = new GIcon();
+icon.iconAnchor = new GPoint(12, 12);
+icon.image = "/images/blue.png";
+icon.infoWindowAnchor = new GPoint(12, 12);
+marker = new GMarker(existing_location, {icon: icon});

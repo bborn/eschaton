@@ -1,0 +1,3 @@
+jQuery.get('/location/show/1', function(data) {
+marker.openInfoWindow(data);
+});
