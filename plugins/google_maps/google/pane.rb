@@ -5,12 +5,16 @@ module Google
     # :style, :text
     #
     def initialize(options = {})
-      options.default! :var => 'pane', :style => {}
+      options.default! :var => 'pane', :style => {}, :anchor => :top_left,
+                       :position_offset => [10, 10]
       
       style = options[:style]
       style.default! :width => :auto, :height => :auto, :background_color => "#fff",
                      :border => "1px solid gray", :opacity => 1
-
+                     
+      anchor = options[:anchor].to_google_anchor
+      position_offset = options[:position_offset].to_google_size
+      
       super
       
       text = if options[:partial]
@@ -18,7 +22,6 @@ module Google
              else
                options[:text]
              end
-      
 
       if create_var?
         self << "
@@ -43,7 +46,7 @@ module Google
         };
 
         MyPane.prototype.getDefaultPosition = function() {
-          return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10, 10));
+          return new GControlPosition(#{anchor}, #{position_offset});
         };
 
         MyPane.prototype.getPanel = function() {

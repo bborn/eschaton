@@ -2,6 +2,7 @@ module Google
 
   # Represents a poly line that can be added to a Map. If a method or event is not documented here please 
   # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GPolyline] docs for details.
+  # See MapObject#listen_to on how to use events not listed on this object.
   class Line < MapObject
 
     # :vertices, :from, :to

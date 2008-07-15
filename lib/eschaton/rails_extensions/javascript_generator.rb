@@ -1,15 +1,12 @@
 class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
   
   module GeneratorMethods
-    
-    #unless defined? :old_javascript_writer
-    #  alias old_javascript_writer <<
-    #end
 
     def <<(javascript)
       @recorder << javascript if @recorder
       @lines << javascript
-      #old_javascript_writer javascript
+      
+      javascript
     end
   end
 

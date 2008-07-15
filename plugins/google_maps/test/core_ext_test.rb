@@ -10,6 +10,12 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     JavascriptObject.global_script = nil
   end
   
+  def test_array_to_google_size
+    assert_equal "new GSize(10, 10)", [10, 10].to_google_size
+    assert_equal "new GSize(100, 50)", [100, 50].to_google_size
+    assert_equal "new GSize(200, 150)", [200, 150].to_google_size    
+  end
+  
   def test_to_image
     assert_equal "/images/green.png", :green.to_image
     assert_equal "/images/green.png", "/images/green.png".to_image
@@ -53,13 +59,13 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
 
   def test_to_google_options
-   assert_equal '{draggable: true, title: "My title!", bounceGravity: 12}',
+   assert_equal '{bounceGravity: 12, title: "My title!", draggable: true}',
                 {:draggable => true, :bounce_gravity => 12, :title => "My title!"}.to_google_options
 
    assert_equal '{dragCrossMove: true, icon: local_icon}', 
                 {:drag_cross_move => true, :icon => :local_icon}.to_google_options
 
-   assert_equal '{color: "red", weight: 10, opacity: 0.7}', 
+   assert_equal '{opacity: 0.7, color: "red", weight: 10}', 
                 {:color => 'red', :weight => 10, :opacity => 0.7}.to_google_options
   end
   

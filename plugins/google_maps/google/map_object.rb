@@ -7,12 +7,12 @@ module Google
       super
     end
 
-    # Listens for events on the client.
+    # Listens for events on a map object.
     # 
-    # :event::       => Required. The event that should be listened to.
-    # :on::          => Optional. The object on which the event occurs, defaulted to +JavascriptObject#var+
-    # :with::        => Optional. Arguments that are passed along when the event is fired, these will also be yielded to the supplied block.
-    # :yield_order:: => Optional. The order in which the +with+ options should be yielded to the ruby block.
+    # * +event+ - Required. The event that should be listened to.
+    # * +on+ - Optional. The object on which the event occurs, defaulted to +JavascriptObject#var+
+    # * +with+ - Optional. Arguments that are passed along when the event is fired, these will also be yielded to the supplied block.
+    # * +yield_order+ - Optional. The order in which the +with+ options should be yielded to the ruby block.
     #
     # A JavascriptGenerator along with the +with+ option will be yielded to the block.
     #

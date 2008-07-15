@@ -1,13 +1,12 @@
 module Google
 
   class Location < MapObject
-  
     attr_reader :latitude, :longitude
   
     # :latitude, :longitude
     def initialize(options)
       super
-      
+
       @longitude, @latitude = options[:longitude], options[:latitude]
     end
     

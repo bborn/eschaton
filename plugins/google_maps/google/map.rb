@@ -1,7 +1,7 @@
 module Google
   
   # Represents a map. If a method or event is not documented here please see googles online[http://code.google.com/apis/maps/documentation/reference.html#GMap2] 
-  # docs for details.
+  # docs for details. See MapObject#listen_to on how to use events not listed on this object.
   #
   # You will most likely use click, open_info_window, add_marker and add_markers to get some basic functionality going.
   #

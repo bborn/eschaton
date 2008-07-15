@@ -1,3 +1,19 @@
+class Array
+
+  # Converts the array to a google size[http://code.google.com/apis/maps/documentation/reference.html#GSize]. The +first+ element of the array 
+  # represents the +width+ and the +second+ element represents the +height+.
+  #
+  # ==== Examples:
+  #
+  #  [10, 10].to_google_size #=> "new GSize(10, 10)"
+  #  [100, 50].to_google_size #=> "new GSize(100, 50)"
+  #  [200, 150].to_google_size #=> "new GSize(200, 150)"
+  def to_google_size
+    "new GSize(#{self.first}, #{self.second})"
+  end
+  
+end
+
 class String
   
   def to_icon
@@ -51,6 +67,10 @@ class Hash
   def to_location
     Google::Location.new self
   end
+  
+  #def to_google_location
+  #  "new GLatLng(#{self[:latitude]}, #{self[:longitude]})"
+  #end
   
   def to_marker
     Google::Marker.new self
