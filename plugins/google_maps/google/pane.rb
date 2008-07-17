@@ -2,7 +2,7 @@ module Google
   
   class Pane < MapObject
 
-    # :style, :text
+    # :style, :text, :partial
     #
     def initialize(options = {})
       options.default! :var => 'pane', :style => {}, :anchor => :top_left,
@@ -12,8 +12,8 @@ module Google
       style.default! :width => :auto, :height => :auto, :background_color => "#fff",
                      :border => "1px solid gray", :opacity => 1
                      
-      anchor = options[:anchor].to_google_anchor
-      position_offset = options[:position_offset].to_google_size
+      anchor = options.extract_and_remove(:anchor).to_google_anchor
+      position_offset = options.extract_and_remove(:position_offset).to_google_size
       
       super
       
