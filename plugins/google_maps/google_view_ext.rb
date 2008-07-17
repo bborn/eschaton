@@ -4,8 +4,8 @@ module GoogleViewExt
   # Works in exactly the same way as rails +form_remote_tag+ but provides some extra options. This would be used 
   # to create a remote form tag within an info window.
   #
-  # Extra options:
-  # :include_location:: => Optional. Indicates if latitude and longitude +params+(if present) should be include in the +url+, defaulted to +true+.
+  # ==== Options:
+  # * +include_location+ - Optional. Indicates if latitude and longitude +params+(if present) should be include in the +url+, defaulted to +true+.
   def info_window_form(options, &block)
     options.default! :include_location => true
 
@@ -21,9 +21,9 @@ module GoogleViewExt
   # Includes the required google maps javascript files. This must be called in the view or layout 
   # to enable google maps functionality.
   #
-  # Options:
-  # key::            => Optional. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with, defaulted to GOOGLE_MAPS_API_KEY.
-  # include_jquery:: => Optional. Indicates if the jquery file should be included, defaulted to +true+, set this to +false+ if you have already include jQuery.
+  # ==== Options:
+  # * +key+ - Optional. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with, defaulted to GOOGLE_MAPS_API_KEY.
+  # * +include_jquery+ - Optional. Indicates if the jquery file should be included, defaulted to +true+, set this to +false+ if you have already include jQuery.
   def include_google_javascript(options = {})
     options.assert_valid_keys :key, :include_jquery
 
@@ -38,14 +38,14 @@ module GoogleViewExt
     
   # Creates a google map div with the given +options+, this is used in the view to display the map.
   #
-  # Options:
-  # :id::         => Optional. The id of the map the default being +map+
-  # :fullscreen:: => Optional. A value indicating if the map should be fullscreen and take up all the space in the browser window.
-  # :width::      => Optional. The width of the map in pixels.
-  # :height::     => Optional. The height of the map in pixels.
-  # :style::      => Optional. Extra style attributes to be added to the map provided as standard CSS.
+  # ==== Options:
+  # * +id+ - Optional. The id of the map the default being +map+
+  # * +fullscreen+ - Optional. A value indicating if the map should be fullscreen and take up all the space in the browser window.
+  # * +width+ - Optional. The width of the map in pixels.
+  # * +height+ - Optional. The height of the map in pixels.
+  # * +style+ - Optional. Extra style attributes to be added to the map provided as standard CSS.
   #
-  # Examples:
+  # ==== Examples:
   #   google_map :fullscreen => true
   #   google_map :width => 600, :height => 650
   #   google_map :width => 600, :height => 650, :style => 'border: 1px dashed black; margin: 10px'

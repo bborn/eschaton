@@ -6,6 +6,17 @@ class EschatonTest < Test::Unit::TestCase
     assert_not_nil Eschaton.current_view
   end
   
+  def test_interpolate_javascript_vars
+    assert_equal "'There is no interpolation in this string.'", 
+                 "There is no interpolation in this string.".interpolate_javascript_vars
+
+    assert_equal "'This is my ' + name + ''", "This is my #name".interpolate_javascript_vars
+    assert_equal "'Latitude is ' + location.lat() + ' and Logitude is ' + location.lng() + ''", 
+                 "Latitude is #location.lat() and Logitude is #location.lng()".interpolate_javascript_vars
+    assert_equal "'From hash ' + hash.field_one + ' and ' + hash.field_two + ''", 
+                 "From hash #hash.field_one and #hash.field_two".interpolate_javascript_vars
+  end
+  
   def test_javascript_generator
     generator = Eschaton.javascript_generator
 

@@ -5,7 +5,7 @@ module Google
 
     # Writes the given +html+ to the log window.
     def self.write(html)
-      JavascriptObject.global_script << "GLog.writeHtml(#{html.to_js});"
+      JavascriptObject.global_script << "GLog.writeHtml(#{html.interpolate_javascript_vars});"
     end
 
   end

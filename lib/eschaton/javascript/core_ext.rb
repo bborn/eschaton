@@ -1,3 +1,18 @@
+class String
+
+  def interpolate_javascript_vars
+    interpolated_string = self
+    interpolated_string.scan(/#[\w\.()]+/).each do |javascript_variable|
+      interpolation = javascript_variable.gsub('#', '')
+
+      interpolated_string.gsub!(javascript_variable, "' + #{interpolation} + '")
+    end
+
+    "'#{interpolated_string}'"
+  end
+
+end
+
 class Object
 
   def to_js
