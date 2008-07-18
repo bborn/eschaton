@@ -19,13 +19,13 @@ class ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
   #  script << "// This is before recording"
   #
   #  # record will containin the script generated within the block
-  #  record = script.start_recording do
+  #  record = script.record_for_test do
   #             script << "// This is within recording"    
   #             script << "// Again, this is within a record"
   #           end
   #
   #  script << "// This is after recording"
-  def start_recording(&block)
+  def record_for_test(&block)
     recorder = Eschaton.javascript_generator
 
     @recorder = recorder

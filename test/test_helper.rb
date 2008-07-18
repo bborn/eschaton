@@ -15,27 +15,31 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 
 class Test::Unit::TestCase
   cattr_accessor :output_fixture_base
-  
-  def assert_output_fixture(fixture, output, message = nil)
-    output = if output.generator?
-               output.generate
-             else
-               output.to_s
-             end
-    
-    fixture_base = self.output_fixture_base || '.'
-    
-    fixture_file = "#{fixture_base}/output_fixtures/#{fixture}"
-    fixture_contents = File.read fixture_file
 
-    if fixture_contents != output
-      Tempfile.open "output" do |file|
-        file << output
-        file.flush
+  def assert_output_fixture(output_to_compare, generator, message = nil)  
+    if output_to_compare.is_a?(Symbol)
+      fixture_base = self.output_fixture_base || '.'
+      fixture_file = "#{fixture_base}/output_fixtures/#{output_to_compare}"
 
-        diff = `diff -u #{fixture_file} #{file.path}`
-        flunk "Output difference, please review the below diff.\n\n#{diff}"
-      end
+      output_to_compare = File.read fixture_file
+    end
+      
+    output = generator.generate
+    
+    if output_to_compare != output
+      left_file = Tempfile.open "left_output"
+      left_file << output_to_compare
+      left_file.flush
+
+      right_file = Tempfile.open "right_output"
+      right_file << output
+      right_file.flush
+
+      diff = `diff -u #{left_file.path} #{right_file.path}`
+      
+      left_file.delete && right_file.delete
+        
+      flunk "Output difference, please review the below diff.\n\n#{diff}"
     else
       assert true
     end

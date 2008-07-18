@@ -14,7 +14,7 @@ class MapTest < Test::Unit::TestCase
                           :zoom => 12,
                           :type => :satellite,
                           :script => Eschaton.javascript_generator
-    
+
     assert_output_fixture :map_with_args, map.send(:script)
   end
 
@@ -23,52 +23,46 @@ class MapTest < Test::Unit::TestCase
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       # With :url and :include_location params
-      test_output = script.start_recording do
-                      map.open_info_window :url => {:controller => :location, :action => :create}
-                    end
+      assert_output_fixture :map_open_info_window_url_center, 
+                            script.record_for_test {
+                              map.open_info_window :url => {:controller => :location, :action => :create}
+                            }
 
-      assert_output_fixture :map_open_info_window_url_center, test_output
+      assert_output_fixture :map_open_info_window_url_center,
+                            script.record_for_test {
+                              map.open_info_window :location => :center, 
+                                                   :url => {:controller => :location, :action => :create}
+                            }
 
-      test_output = script.start_recording do
-                      map.open_info_window :location => :center, 
-                                           :url => {:controller => :location, :action => :create}
-                    end
 
-      assert_output_fixture :map_open_info_window_url_center, test_output
+      assert_output_fixture :map_open_info_window_url_existing_location,
+                            script.record_for_test {
+                              map.open_info_window :location => :existing_location, 
+                                                   :url => {:controller => :location, :action => :create}
+                            }
 
-      test_output = script.start_recording do
-                      map.open_info_window :location => :existing_location, 
-                                           :url => {:controller => :location, :action => :create}
-                    end
+      assert_output_fixture :map_open_info_window_url_location,
+                            script.record_for_test {
+                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
+                                                   :url => {:controller => :location, :action => :create}
+                            }
 
-      assert_output_fixture :map_open_info_window_url_existing_location, test_output
+      assert_output_fixture :map_open_info_window_url_no_location,
+                            script.record_for_test {
+                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
+                                                   :url => {:controller => :location, :action => :show, :id => 1},
+                                                   :include_location => false
+                            }
 
-      test_output = script.start_recording do
-                      map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
-                                           :url => {:controller => :location, :action => :create}
-                    end
+      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "test output for render");', 
+                            script.record_for_test {
+                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :partial => 'create'
+                            }
 
-      assert_output_fixture :map_open_info_window_url_location, test_output
-
-      test_output = script.start_recording do
-                      map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
-                                           :url => {:controller => :location, :action => :show, :id => 1},
-                                           :include_location => false
-                    end
-
-      assert_output_fixture :map_open_info_window_url_no_location, test_output
-
-      test_output = script.start_recording do
-                      map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :partial => 'create'
-                    end
-
-      assert_equal 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "test output for render");', test_output.generate                          
-
-      test_output = script.start_recording do
-                      map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :text => "Testing text!"
-                    end
-
-      assert_equal 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "Testing text!");', test_output.generate
+      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "Testing text!");',
+                            script.record_for_test {
+                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :text => "Testing text!"
+                            }
     end    
   end
   
@@ -77,29 +71,26 @@ class MapTest < Test::Unit::TestCase
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462} 
 
       # without body
-      test_output = script.start_recording do
-                      map.click {}
-                    end
-
-      assert_output_fixture :map_click_no_body, test_output
+      assert_output_fixture :map_click_no_body,
+                            script.record_for_test {
+                              map.click {}
+                            }
     
       # With body
-      test_output = script.start_recording do
-                      map.click do |script, location|
-                        script.comment "This is some test code!"
-                        script.comment "'#{location}' is where the map was clicked!"
-                        script.alert("Hello from map click!")
-                      end
-                    end
+      assert_output_fixture :map_click_with_body, 
+                            script.record_for_test {
+                              map.click do |script, location|
+                                script.comment "This is some test code!"
+                                script.comment "'#{location}' is where the map was clicked!"
+                                script.alert("Hello from map click!")
+                              end
+                            }
 
-      assert_output_fixture :map_click_with_body, test_output
-    
       # Info window convention
-      test_output = script.start_recording do
-                      map.click :text => "This is a info window!"
-                    end
-
-      assert_output_fixture :map_click_info_window, test_output
+      assert_output_fixture :map_click_info_window,
+                            script.record_for_test {
+                              map.click :text => "This is a info window!"
+                            }
     end    
   end
   
@@ -149,18 +140,16 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do
-                      map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
-                    end
+      assert_output_fixture :map_add_marker,
+                            script.record_for_test {
+                              map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
+                            }
 
-      assert_output_fixture :map_add_marker, test_output
-
-      test_output = script.start_recording do
-        map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
-                        {:location => {:latitude => -34.947, :longitude => 19.462}})
-      end
-      
-      assert_output_fixture :map_add_markers, test_output
+      assert_output_fixture :map_add_markers,
+                            script.record_for_test {
+                              map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
+                                              {:location => {:latitude => -34.947, :longitude => 19.462}})
+                            }
     end
   end
 
@@ -177,7 +166,7 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do 
+      test_output = script.record_for_test do 
                       map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
                     end
 
@@ -189,7 +178,7 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do 
+      test_output = script.record_for_test do 
                       map.clear
                     end
       
@@ -202,48 +191,38 @@ class MapTest < Test::Unit::TestCase
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
       # Default with hash location
-      test_output = script.start_recording do
-                      map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462}
-                    end
-      
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {});', 
-                   test_output.generate
-                   
-     # Default with existing_location
-     test_output = script.start_recording do
-                     map.show_blowup :location => :existing_location
-                   end
+      assert_output_fixture 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {});', 
+                            script.record_for_test {
+                              map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462}
+                            }
 
-     assert_equal 'map.showMapBlowup(existing_location, {});', 
-                  test_output.generate
+     # Default with existing_location
+     assert_output_fixture 'map.showMapBlowup(existing_location, {});', 
+                   script.record_for_test {
+                     map.show_blowup :location => :existing_location
+                   }
       
       # With :zoom_level
-      test_output = script.start_recording do
-                      map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
-                                      :zoom_level => 12
-                    end
-
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12});', 
-                   test_output.generate
+      assert_output_fixture 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12});', 
+                            script.record_for_test {
+                              map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
+                                              :zoom_level => 12
+                            }
 
       # With :map_type
-      test_output = script.start_recording do
-                      map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
-                                      :map_type => :satellite
-                    end
-
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {mapType: G_SATELLITE_MAP});', 
-                   test_output.generate
+      assert_output_fixture 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {mapType: G_SATELLITE_MAP});', 
+                            script.record_for_test {
+                              map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
+                                              :map_type => :satellite
+                            }
 
       # With :zoom_level and :map_type
-      test_output = script.start_recording do
-                      map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
-                                      :zoom_level => 12,
-                                      :map_type => :satellite
-                    end
-
-      assert_equal 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {zoomLevel: 12, mapType: G_SATELLITE_MAP});', 
-                   test_output.generate
+      assert_output_fixture 'map.showMapBlowup(new GLatLng(-33.947, 18.462), {mapType: G_SATELLITE_MAP, zoomLevel: 12});', 
+                            script.record_for_test {
+                              map.show_blowup :location => {:latitude => -33.947, :longitude => 18.462},
+                                              :zoom_level => 12,
+                                              :map_type => :satellite
+                            }
     end
   end
 

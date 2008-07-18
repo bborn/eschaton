@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/test_helper'
 
+Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
+
 class JavascriptObjectTest < Test::Unit::TestCase
       
   def test_to_js
@@ -8,6 +10,7 @@ class JavascriptObjectTest < Test::Unit::TestCase
     assert_equal 'true', true.to_js
     assert_equal 'false', false.to_js
     assert_equal '{"controls": "small_map", "zoom": 15}', ( {:zoom => 15, :controls => :small_map}).to_js
+    assert_equal '{"a": "a", "b": "b", "c": "c"}', ( {:a => 'a', :b => 'b', :c => 'c'}).to_js
   end
 
   def test_to_js_method
@@ -42,7 +45,7 @@ class JavascriptObjectTest < Test::Unit::TestCase
     
       assert obj.create_var
       assert obj.create_var?
-      assert_output_fixture script, :method_to_js
+      assert_output_fixture :method_to_js, script
     end
   end
   

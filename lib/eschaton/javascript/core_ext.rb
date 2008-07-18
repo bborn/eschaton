@@ -1,3 +1,16 @@
+class Hash
+  
+  def to_js
+    string_keys = self.stringify_keys
+    args = string_keys.keys.sort.collect do |key|
+             "#{key.to_json}: #{string_keys[key].to_json}"
+           end
+
+    "{#{args.join(', ')}}"
+  end
+  
+end
+
 class String
 
   def interpolate_javascript_vars
@@ -5,10 +18,10 @@ class String
     interpolated_string.scan(/#\[[\w\.()]+\]/).each do |javascript_variable|
       interpolation = javascript_variable.gsub(/#|\[|\]/, '')
 
-      interpolated_string.gsub!(javascript_variable, "' + #{interpolation} + '")
+      interpolated_string.gsub!(javascript_variable, "\" + #{interpolation} + \"")
     end
 
-    "'#{interpolated_string}'"
+    "\"#{interpolated_string}\""
   end
 
 end

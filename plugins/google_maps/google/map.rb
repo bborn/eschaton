@@ -44,6 +44,7 @@ module Google
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
         
         self.center = options.extract_and_remove(:center)
+        self.zoom = options.extract_and_remove(:zoom) if options[:zoom]
 
         self.options_to_fields options
       end

@@ -62,11 +62,12 @@ module Google
       script << "#{wrap_method};"
     end
     
-    protected
+    protected    
       def options_to_fields(options)
-        options.each do |key, value|
-          method = "#{key}="
-          self.send(method, value) if self.respond_to?(method)
+        string_hash = options.stringify_keys
+        string_hash.keys.sort.each do |key|
+          method, value = "#{key}=", string_hash[key]
+          self.send(method, value) if value.not_blank? && self.respond_to?(method)
         end
       end
 

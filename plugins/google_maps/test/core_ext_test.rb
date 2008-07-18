@@ -59,13 +59,13 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
 
   def test_to_google_options
-   assert_equal '{bounceGravity: 12, title: "My title!", draggable: true}',
+   assert_equal '{bounceGravity: 12, draggable: true, title: "My title!"}',
                 {:draggable => true, :bounce_gravity => 12, :title => "My title!"}.to_google_options
 
    assert_equal '{dragCrossMove: true, icon: local_icon}', 
                 {:drag_cross_move => true, :icon => :local_icon}.to_google_options
 
-   assert_equal '{opacity: 0.7, color: "red", weight: 10}', 
+   assert_equal '{color: "red", opacity: 0.7, weight: 10}', 
                 {:color => 'red', :weight => 10, :opacity => 0.7}.to_google_options
   end
   

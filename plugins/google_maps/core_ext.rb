@@ -57,8 +57,9 @@ end
 class Hash
   
   def to_google_options
-    args = self.collect do |key, value|
-             "#{key.to_js_method}: #{value.to_js}"
+    string_keys = self.stringify_keys
+    args = string_keys.keys.sort.collect do |key|
+             "#{key.to_js_method}: #{string_keys[key].to_js}"
            end
 
     "{#{args.join(', ')}}"

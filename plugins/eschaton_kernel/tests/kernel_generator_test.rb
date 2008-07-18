@@ -2,11 +2,11 @@ require File.dirname(__FILE__) + '/../../../test/test_helper'
 
 class KernelGeneratorTest < Test::Unit::TestCase
 
-  def test_start_recording
+  def test_record
     script = Eschaton.javascript_generator
 
     script << "// This is before recording"
-    record = script.start_recording do
+    record = script.record_for_test do
                script << "// This is within recording"
              end
 

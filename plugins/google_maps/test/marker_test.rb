@@ -6,38 +6,30 @@ class MarkerTest < Test::Unit::TestCase
 
   def test_marker_initialize
     Eschaton.with_global_script do |script|
-      test_output = script.start_recording do
-                      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
-                    end
+      assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {});', 
+                             script.record_for_test {
+                                marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+                              }
 
-      assert_equal 'marker = new GMarker(new GLatLng(-33.947, 18.462), {});', 
-                    test_output.generate
+      assert_output_fixture 'marker = new GMarker(existing_location, {});', 
+                             script.record_for_test {
+                               marker = Google::Marker.new :location => :existing_location  
+                             }
 
-      test_output = script.start_recording do
-                      marker = Google::Marker.new :location => :existing_location  
-                    end
+      assert_output_fixture :marker_with_icon,
+                            script.record_for_test {
+                              marker = Google::Marker.new :location => :existing_location, :icon => :blue
+                            }
 
-      assert_equal 'marker = new GMarker(existing_location, {});', test_output.generate
+      assert_output_fixture 'marker = new GMarker(existing_location, {title: "Marker title!"});',
+                            script.record_for_test {
+                              marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!'
+                            }
 
-      test_output = script.start_recording do
-                      marker = Google::Marker.new :location => :existing_location, :icon => :blue
-                    end
-
-      assert_output_fixture :marker_with_icon, test_output
-
-      test_output = script.start_recording do
-                      marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!'
-                    end
-
-      assert_equal 'marker = new GMarker(existing_location, {title: "Marker title!"});',
-                   test_output.generate
-
-      test_output = script.start_recording do
-                     marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!', :draggable => true
-                   end
-
-      assert_equal 'marker = new GMarker(existing_location, {draggable: true, title: "Marker title!"});',
-                    test_output.generate
+      assert_output_fixture 'marker = new GMarker(existing_location, {draggable: true, title: "Marker title!"});',
+                            script.record_for_test {
+                              marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!', :draggable => true
+                            }
     end
   end
 
@@ -45,23 +37,20 @@ class MarkerTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
 
-      test_output = script.start_recording do
-                      marker.open_info_window :url => {:controller => :location, :action => :show, :id => 1}
-                    end
+      assert_output_fixture :marker_open_info_window_with_url,
+                            script.record_for_test {
+                              marker.open_info_window :url => {:controller => :location, :action => :show, :id => 1}
+                            }
 
-      assert_output_fixture :marker_open_info_window_with_url, test_output
+      assert_output_fixture 'marker.openInfoWindow("test output for render");', 
+                             script.record_for_test {
+                               marker.open_info_window :partial => 'create'
+                             }
 
-      test_output = script.start_recording do
-                      marker.open_info_window :partial => 'create'
-                    end
-
-      assert_equal 'marker.openInfoWindow("test output for render");', test_output.generate                          
-
-      test_output = script.start_recording do
-                      marker.open_info_window :text => "Testing text!"
-                    end
-
-      assert_equal 'marker.openInfoWindow("Testing text!");', test_output.generate      
+      assert_output_fixture 'marker.openInfoWindow("Testing text!");', 
+                             script.record_for_test {
+                               marker.open_info_window :text => "Testing text!"
+                             }
     end
   end
 
@@ -70,28 +59,25 @@ class MarkerTest < Test::Unit::TestCase
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
 
       # without body
-      test_output = script.start_recording do
-                      marker.click {}
-                    end
-
-      assert_output_fixture :marker_click_no_body, test_output
+      assert_output_fixture :marker_click_no_body, 
+                            script.record_for_test {
+                                            marker.click {}
+                                          }
     
       # With body
-      test_output = script.start_recording do
-                      marker.click do |script|
-                        script.comment "This is some test code!"
-                        script.alert("Hello from marker click!")
-                      end
-                    end
-
-      assert_output_fixture :marker_click_with_body, test_output
+      assert_output_fixture :marker_click_with_body,
+                            script.record_for_test {
+                              marker.click do |script|
+                                script.comment "This is some test code!"
+                                script.alert("Hello from marker click!")
+                              end
+                            }
 
       # Info window convention
-      test_output = script.start_recording do
-                      marker.click :text => "This is a info window!"
-                    end
-
-      assert_output_fixture :marker_click_info_window, test_output
+      assert_output_fixture :marker_click_info_window,
+                            script.record_for_test {
+                              marker.click :text => "This is a info window!"
+                            }
     end    
   end
 
@@ -100,36 +86,28 @@ class MarkerTest < Test::Unit::TestCase
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
       
       # Default with hash location
-      test_output = script.start_recording do
-                      marker.show_map_blowup
-                    end
-
-      assert_equal 'marker.showMapBlowup({});', 
-                   test_output.generate
+      assert_output_fixture 'marker.showMapBlowup({});', 
+                            script.record_for_test {
+                              marker.show_map_blowup
+                            }
       
       # With :zoom_level
-      test_output = script.start_recording do
-                      marker.show_map_blowup :zoom_level => 12
-                    end
-
-      assert_equal 'marker.showMapBlowup({zoomLevel: 12});', 
-                   test_output.generate
+      assert_output_fixture 'marker.showMapBlowup({zoomLevel: 12});', 
+                            script.record_for_test {
+                              marker.show_map_blowup :zoom_level => 12
+                            }
 
       # With :marker_type
-      test_output = script.start_recording do
-                      marker.show_map_blowup :map_type => :satellite
-                    end
-
-      assert_equal 'marker.showMapBlowup({mapType: G_SATELLITE_MAP});', 
-                   test_output.generate
+      assert_output_fixture 'marker.showMapBlowup({mapType: G_SATELLITE_MAP});', 
+                            script.record_for_test {
+                              marker.show_map_blowup :map_type => :satellite
+                            }
 
       # With :zoom_level and :marker_type
-      test_output = script.start_recording do
-                      marker.show_map_blowup :zoom_level => 12, :map_type => :satellite
-                    end
-
-      assert_equal 'marker.showMapBlowup({mapType: G_SATELLITE_MAP, zoomLevel: 12});', 
-                   test_output.generate
+      assert_output_fixture 'marker.showMapBlowup({mapType: G_SATELLITE_MAP, zoomLevel: 12});', 
+                            script.record_for_test {
+                              marker.show_map_blowup :zoom_level => 12, :map_type => :satellite
+                            }
     end
   end
   
@@ -137,17 +115,15 @@ class MarkerTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do
-                      marker.change_icon :green
-                    end
+      assert_output_fixture 'marker.setImage("/images/green.png");', 
+                             script.record_for_test {
+                               marker.change_icon :green
+                             }
 
-      assert_equal 'marker.setImage("/images/green.png");', test_output.generate
-
-      test_output = script.start_recording do
-                      marker.change_icon "/images/blue.png"
-                    end
-
-      assert_equal 'marker.setImage("/images/blue.png");', test_output.generate      
+      assert_output_fixture 'marker.setImage("/images/blue.png");', 
+                            script.record_for_test {
+                              marker.change_icon "/images/blue.png"
+                            }
     end
   end
   
@@ -163,7 +139,7 @@ class MarkerTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do 
+      test_output = script.record_for_test do 
         marker.when_dropped do |script, drop_location|
           assert script.generator?
           assert_equal :drop_location, drop_location
@@ -181,7 +157,7 @@ class MarkerTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.start_recording do 
+      test_output = script.record_for_test do 
         marker.when_picked_up do |script|
           assert script.generator?
           
