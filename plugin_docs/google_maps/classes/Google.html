@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Google</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Google</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/icon_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/icon.rb
+                </a>
+        <br />
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/line_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/line.rb
+                </a>
+        <br />
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/location_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/location.rb
+                </a>
+        <br />
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/map_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/map.rb
+                </a>
+        <br />
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/map_object_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/map_object.rb
+                </a>
+        <br />
+                <a href="../files/Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/__/__/plugins/google_maps/google/marker_rb.html">
+                /Users/admin/Documents/Projects/cusp/apps/transmute/mob_meet/vendor/plugins/eschaton/lib/eschaton/../../plugins/google_maps/google/marker.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="Google/Icon.html" class="link">Google::Icon</a><br />
+Class <a href="Google/Line.html" class="link">Google::Line</a><br />
+Class <a href="Google/Location.html" class="link">Google::Location</a><br />
+Class <a href="Google/Map.html" class="link">Google::Map</a><br />
+Class <a href="Google/MapObject.html" class="link">Google::MapObject</a><br />
+Class <a href="Google/Marker.html" class="link">Google::Marker</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -139,6 +139,16 @@ module Google
       end
     end
 
+    def get_location(location) #TODO ? move to Map::Location ?
+      if location.is_a?(Symbol)
+        self << "center = #{self.var}.getCenter();" if location == :center
+        
+        {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
+      else
+        {:latitude => location.latitude, :longitude => location.longitude}
+      end      
+    end
+      
     # Opens an info window on the map at the given +location+ using either +url+, +partial+ or +text+ options as content.
     #
     # ==== Options:
@@ -155,22 +165,11 @@ module Google
       # TODO - some of this is sharable between map and marker!!!!!!
       #
       options.default! :location => :center, :include_location => true
-
       location = options[:location].to_location
       
-      if location == :center
-        self << "center = #{self.var}.getCenter();"
-      end
-      
       if options[:url]
-        if options[:include_location]
-          if location.is_a?(Symbol)
-            options[:url][:latitude] = "##{location}.lat()"
-            options[:url][:longitude] = "##{location}.lng()"
-          else
-            options[:url][:latitude] = location.latitude
-            options[:url][:longitude] = location.longitude
-          end
+        if options[:include_location] == true
+          options[:url][:location] = get_location(location)
         end
 
         self.script.get(options[:url]) do |data|
