@@ -7,11 +7,11 @@ module Google
     def initialize(options = {})
       options.default! :var => 'pane', :style => {}, :anchor => :top_left,
                        :position_offset => [10, 10]
-      
+
       style = options[:style]
       style.default! :width => :auto, :height => :auto, :background_color => "#fff",
-                     :border => "1px solid gray", :opacity => 1
-                     
+                     :border => "1px solid #808080", :opacity => 1
+
       anchor = options.extract_and_remove(:anchor).to_google_anchor
       position_offset = options.extract_and_remove(:position_offset).to_google_size
       

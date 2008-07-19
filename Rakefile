@@ -34,7 +34,7 @@ PluginLoader.plugin_locations.each do |plugin_directory|
   desc "Test the '#{plugin_name}' eschaton plugin."
   Rake::TestTask.new("test_#{plugin_name}") do |t|
 
-    t.libs << 'lib'
+    #t.libs << 'lib'
     t.pattern = "#{plugin_directory}/test/*_test.rb"
     t.verbose = true
   end

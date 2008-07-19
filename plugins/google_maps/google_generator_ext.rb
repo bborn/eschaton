@@ -17,5 +17,20 @@ module GoogleGeneratorExt
       end      
     end
   end
+
+  # Used when working on google map objects in RJS templates, makes this generator global to all mapping objects.
+  #
+  # RJS template:
+  #   page.alert("before mapping")
+  #
+  #   page.mapping_script do
+  #     marker = page.map.add_marker :location => {:latitude => 33.4, :longitude => 18.5}
+  #     marker.click {page.alert("marker clicked!")}
+  #   end
+  #
+  #   page.alert("after mapping")
+  def mapping_script(&block)
+    Eschaton.with_global_script self, &block
+  end
    
 end

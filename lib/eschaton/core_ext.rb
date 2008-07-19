@@ -12,10 +12,6 @@ class Object
     RAILS_DEFAULT_LOGGER.warn("eschaton: #{message}") if RAILS_DEFAULT_LOGGER
   end
   
-  def generator?
-    self.is_a?(ActionView::Helpers::PrototypeHelper::JavaScriptGenerator)
-  end
-  
 end
 
 class String

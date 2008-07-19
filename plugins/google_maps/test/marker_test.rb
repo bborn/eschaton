@@ -141,7 +141,7 @@ class MarkerTest < Test::Unit::TestCase
       
       test_output = script.record_for_test do 
         marker.when_dropped do |script, drop_location|
-          assert script.generator?
+          assert script.is_a?(ActionView::Helpers::PrototypeHelper::JavaScriptGenerator)
           assert_equal :drop_location, drop_location
           
           script.comment "This is some test code!"
@@ -159,7 +159,7 @@ class MarkerTest < Test::Unit::TestCase
       
       test_output = script.record_for_test do 
         marker.when_picked_up do |script|
-          assert script.generator?
+          assert script.is_a?(ActionView::Helpers::PrototypeHelper::JavaScriptGenerator)
           
           script.comment "This is some test code!"
           script.alert("Hello from marker drop!")

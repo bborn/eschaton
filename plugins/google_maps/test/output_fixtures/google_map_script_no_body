@@ -1,0 +1,5 @@
+jQuery(document).ready(function() {
+window.onunload = GUnload;
+if (GBrowserIsCompatible()) {
+} else { alert('Your browser be old, it cannot run google maps!');}
+})

@@ -1,0 +1,2 @@
+if (GBrowserIsCompatible()) {
+} else { alert('Your browser be old, it cannot run google maps!');}
