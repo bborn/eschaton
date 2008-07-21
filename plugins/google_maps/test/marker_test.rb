@@ -4,6 +4,43 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 
 class MarkerTest < Test::Unit::TestCase
 
+  def test_gravatar
+    Eschaton.with_global_script do |script|
+      assert_output_fixture :marker_gravatar, 
+                             script.record_for_test {
+                               Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                  :gravatar => 'karadanais@gmail.com'
+                             }
+
+     assert_output_fixture :marker_gravatar, 
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :gravatar => {:email_address => 'karadanais@gmail.com'}
+                            }
+
+      assert_output_fixture :marker_gravatar_with_size, 
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :gravatar => {:email_address => 'karadanais@gmail.com', :size => 50}
+                            }
+
+      assert_output_fixture :marker_gravatar_with_default_icon, 
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :gravatar => {:email_address => 'karadanais@gmail.com', 
+                                                               :default => 'http://localhost:3000/images/blue.png'}
+                            }
+
+      assert_output_fixture :marker_gravatar_with_size_and_default_icon, 
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                  :gravatar => {:email_address => 'karadanais@gmail.com', 
+                                                                :default => 'http://localhost:3000/images/blue.png',
+                                                                :size => 50}
+                            }
+    end 
+  end
+
   def test_marker_initialize
     Eschaton.with_global_script do |script|
       assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {});', 

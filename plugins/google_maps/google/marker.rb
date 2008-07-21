@@ -19,6 +19,13 @@ module Google
   #
   #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
   #                              :icon => '/images/red_dot.gif'
+  #
+  #  # Using a gravatar
+  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                              :gravatar => 'karadanais@gmail.com'
+  #
+  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                              :gravatar => {:email_address => 'karadanais@gmail.com', :size => 50}
   class Marker < MapObject
     attr_accessor :icon
     attr_reader :location
@@ -26,6 +33,8 @@ module Google
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
     # * +icon+ - Optional. The Icon that should be used for the marker otherwise the default marker icon will be used.
+    # * +gravatar+ - Optional. Uses a gravatar as the icon. If a string is supplied it will be used for the +email_address+ 
+    #   option, see Gravatar#new for other valid options.
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
     def initialize(options = {})
@@ -36,11 +45,14 @@ module Google
       if create_var?
         @location = options.extract_and_remove(:location).to_location
 
-        if icon = options.extract_and_remove(:icon)
-          self.icon = icon.to_icon
-          options[:icon] = self.icon
-        end
+        self.icon = if icon = options.extract_and_remove(:icon)
+                      icon.to_icon
+                    elsif gravatar = options.extract_and_remove(:gravatar)
+                      gravatar.to_gravatar_icon  
+                    end
 
+        options[:icon] = self.icon if self.icon
+        
         self << "#{self.var} = new GMarker(#{self.location}, #{options.to_google_options});"
       end
     end

@@ -23,6 +23,10 @@ class String
   def to_image
     self
   end
+  
+  def to_gravatar_icon
+    Google::GravatarIcon.new :email_address => self
+  end
     
 end
 
@@ -68,10 +72,14 @@ class Hash
   def to_location
     Google::Location.new self
   end
-  
-  #def to_google_location
-  #  "new GLatLng(#{self[:latitude]}, #{self[:longitude]})"
-  #end
+
+  def to_icon
+    Google::Icon.new self
+  end
+
+  def to_gravatar_icon
+    Google::GravatarIcon.new self
+  end
   
   def to_marker
     Google::Marker.new self
@@ -80,5 +88,5 @@ class Hash
   def to_line
     Google::Line.new self
   end
-  
+
 end

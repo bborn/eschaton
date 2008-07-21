@@ -23,7 +23,13 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   
   def test_to_icon
     assert_equal Google::Icon, "green".to_icon.class
-    assert_equal Google::Icon, :green.to_icon.class    
+    assert_equal Google::Icon, :green.to_icon.class
+    assert_equal Google::Icon, ({:image => :green}).to_icon.class
+  end
+
+  def test_to_gravatar_icon
+    assert_equal Google::GravatarIcon, ({:email_address => 'joesoap@email.com'}).to_gravatar_icon.class
+    assert_equal Google::GravatarIcon, 'joesoap@email.com'.to_gravatar_icon.class    
   end
 
   def test_to_location
