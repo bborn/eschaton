@@ -59,7 +59,13 @@ class Symbol
 end
 
 class Hash
-  
+
+  def to_google_position
+    self.default! :offset => [0, 0]
+
+    "new GControlPosition(#{self[:anchor].to_google_anchor}, #{self[:offset].to_google_size})"
+  end
+
   def to_google_options
     string_keys = self.stringify_keys
     args = string_keys.keys.sort.collect do |key|

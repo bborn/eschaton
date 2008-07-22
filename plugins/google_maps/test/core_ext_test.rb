@@ -10,6 +10,15 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     JavascriptObject.global_script = nil
   end
   
+  def test_to_google_position
+    assert_equal 'new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(0, 0))',
+                 ({:anchor => :top_left}).to_google_position
+    assert_equal 'new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10, 50))',
+                 ({:anchor => :top_left, :offset => [10, 50]}).to_google_position
+    assert_equal 'new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(10, 10))',
+                 ({:anchor => :top_right, :offset => [10, 10]}).to_google_position
+  end
+  
   def test_array_to_google_size
     assert_equal "new GSize(10, 10)", [10, 10].to_google_size
     assert_equal "new GSize(100, 50)", [100, 50].to_google_size

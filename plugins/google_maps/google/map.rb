@@ -75,19 +75,38 @@ module Google
       self.set_zoom(self.zoom)
     end
 
-    # Adds a control or controls to the map, see Control_types of valid controls.
+    # Adds the +control+ to the map, see Control_types of valid controls.
     #
-    #   add_control :small_zoom, :map_type
-    def add_control(*controls)
+    # ==== Options:
+    # * +position+ - Optional. The position that the control should be placed.
+    #
+    # ==== Examples:
+    #  add_control :small_zoom
+    #  add_control Google::Pane.new(:text => 'This is a pane')
+    #  add_control :small_zoom, :position => {:anchor => :top_right}
+    #  add_control :map_type, :position => {:anchor => :top_left}
+    #  add_control :map_type, :position => {:anchor => :top_left, :offset => [10, 10]}
+    def add_control(control, options = {})
+      control = "new #{control.to_google_control}()" if control.is_a?(Symbol)
+      position = options[:position].to_google_position if options[:position]
+      arguments = [control, position].compact
+
+      script << "#{self.var}.addControl(#{arguments.join(', ')});"
+    end
+
+    # Adds a control or controls to the map, see Control_types of valid controls.
+    # The controls will all be placed at their default positions, if you need control over the position use add_control.   
+    #
+    # ==== Examples:
+    #  controls = :small_zoom
+    #  controls = :small_zoom, :map_type
+    #  controls = :small_zoom, Google::Pane.new(:text => 'This is a pane')    
+    def controls=(*controls)
       controls.flatten.each do |control|
-        control = "new #{control.to_google_control}()" if control.is_a?(Symbol)
-        
-        script << "#{self.var}.addControl(#{control});"
+        self.add_control control
       end
     end
-    
-    alias controls= add_control
-  
+
     # Adds a single +marker+ to the map which can be a Marker or whatever Marker#new supports.     
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker

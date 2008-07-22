@@ -18,6 +18,37 @@ class MapTest < Test::Unit::TestCase
     assert_output_fixture :map_with_args, map.send(:script)
   end
 
+  def test_add_control
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+
+      assert_output_fixture 'map.addControl(new GSmallMapControl());', 
+                             script.record_for_test {
+                               map.add_control :small_map
+                             }
+
+      assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(0, 0)));', 
+                            script.record_for_test {
+                              map.add_control :small_map, :position => {:anchor => :top_right}
+                            }
+
+      assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(50, 10)));',
+                            script.record_for_test {
+                              map.add_control :small_map, :position => {:anchor => :top_right, :offset => [50, 10]}
+                            }
+
+      assert_output_fixture 'map.addControl(new GSmallMapControl());', 
+                             script.record_for_test {
+                               map.controls = :small_map
+                             }
+
+      assert_output_fixture :map_controls, 
+                             script.record_for_test {
+                               map.controls = :small_map, :map_type
+                             }
+    end
+  end
+
   def test_open_info_window_output
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
