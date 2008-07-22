@@ -141,9 +141,7 @@ module Google
     end
 
     def get_location(location) #TODO ? move to Map::Location ?
-      if location.is_a?(Symbol)
-        self << "center = #{self.var}.getCenter();" if location == :center
-        
+      if location.is_a?(Symbol)        
         {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
       else
         {:latitude => location.latitude, :longitude => location.longitude}
@@ -167,6 +165,8 @@ module Google
       #
       options.default! :location => :center, :include_location => true
       location = options[:location].to_location
+      
+      self << "center = #{self.var}.getCenter();" if location == :center
       
       if options[:url]
         if options[:include_location] == true
