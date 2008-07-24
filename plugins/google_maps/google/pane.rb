@@ -31,7 +31,7 @@ module Google
         MyPane.prototype.initialize = function(map) {
           var me = this;          
           me.panel = document.createElement('div');
-
+          me.panel.id = '#{self.var}';
           me.panel.style.width = '#{style[:width]}';
           me.panel.style.height = '#{style[:height]}';
           me.panel.style.backgroundColor = '#{style[:background_color]}';

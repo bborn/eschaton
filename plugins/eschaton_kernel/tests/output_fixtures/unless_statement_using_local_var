@@ -1,0 +1,3 @@
+if(!(local_var)){
+alert("there was a local var");
+}

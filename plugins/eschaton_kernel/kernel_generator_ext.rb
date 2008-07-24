@@ -11,6 +11,34 @@ module KernelGeneratorExt
   def comment(message)
     self << "/* #{message} */"
   end
+  
+  # Writes out a javascript "if" statement using the given +condition+. Any code generated within the block will be placed
+  # inside the "if" statement.
+  #
+  #  ==== Examples:
+  #
+  #  script.if("x == 1") do
+  #    script.alert("x is 1!")
+  #  end
+  def if(condition)
+    self << "if(#{condition}){"
+    yield self
+    self << "}"
+  end
+    
+  # Writes out a javascript "unless" statement using the given +condition+. Any code generated within the block will be placed
+  # inside the "unless" statement.
+  #
+  #  ==== Examples:
+  #
+  #  script.unless("x == 1") do
+  #    script.alert("x is not 1!")
+  #  end
+  def unless(condition)
+    self << "if(!(#{condition})){"
+    yield self
+    self << "}"
+  end
     
   # Returns script that has been generated and allows for addtional +options+ regarding generation than the default +to_s+ method.
   #

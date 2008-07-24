@@ -44,6 +44,7 @@ module Google
 
       if create_var?
         @location = options.extract_and_remove(:location).to_location
+        #@location = OptionsHandler.to_location!(options) #:extract => true
 
         self.icon = if icon = options.extract_and_remove(:icon)
                       icon.to_icon
