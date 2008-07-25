@@ -14,9 +14,9 @@ class MapGenerator < Rails::Generator::Base
       
       # Marker icons
       m.file "blue.png", "public/images/blue.png"
-      m.file "green.png", "public/images/green.png"
-      m.file "orange.png", "public/images/orange.png"
       m.file "red.png", "public/images/red.png"
+      m.file "yellow.png", "public/images/yellow.png"
+      m.file "shadow.png", "public/images/shadow.png"
 
       # Eschaton plugin
       plugin_name = File.basename(RAILS_ROOT).singularize.downcase

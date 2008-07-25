@@ -82,8 +82,8 @@ module GoogleViewExt
                     height: 100%; width: 100%;
                     overflow: hidden;"
     else
-      map_style << "width: #{options.extract_and_remove(:width)}px;" if options[:width]
-      map_style << "height: #{options.extract_and_remove(:height)}px;" if options[:height]
+      map_style << "width: #{map_size(options.extract_and_remove(:width))};" if options[:width]
+      map_style << "height: #{map_size(options.extract_and_remove(:height))};" if options[:height]
     end
     
     options[:style] = map_style
@@ -102,5 +102,14 @@ module GoogleViewExt
       script.google_map_script {yield script}
     end
   end
+  
+  private
+    def map_size(size)
+      if size.is_a?(Numeric)
+        "#{size}px"
+      else
+        size
+      end
+    end
   
 end
