@@ -106,8 +106,14 @@ module Google
         self.add_control control
       end
     end
+    
+    # Replaces an existing marker on the map
+    def replace_marker(marker_or_options)
+      remove_marker marker_or_options
+      add_marker marker_or_options
+    end
 
-    # Adds a single +marker+ to the map which can be a Marker or whatever Marker#new supports.     
+    # Adds a single marker to the map which can be a Marker or whatever Marker#new supports.     
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
@@ -122,6 +128,17 @@ module Google
       end
     end
     
+    def remove_marker(marker_or_options)
+      # TODO - Refactor out!      
+      marker_id = if marker_or_options.is_a?(Hash)
+                    marker_or_options[:var] || :marker
+                  else
+                    marker_or_options.var.to_sym
+                  end
+
+      self.remove_overlay marker_id      
+    end
+    
     # Adds a +line+ to the map which can be a Line or whatever Line#new supports.
     def add_line(line)
       line = line.to_line
@@ -130,6 +147,11 @@ module Google
       line
     end
     
+    # Removes the given +overlay+ from the map.
+    def remove_overlay(overlay)
+      self << "#{self}.removeOverlay(#{overlay.to_sym});"
+    end
+
     # Clears all overlays(info windows, markers, lines etc) from the map.
     def clear
       self.clear_overlays

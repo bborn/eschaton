@@ -4,10 +4,8 @@ module Google
     # :image, :size, :anchor, :info_window_anchor
     def initialize(options = {})
       options.default! :var => 'icon'
-            
+
       super
-      
-      options.assert_valid_keys :image, :size, :anchor, :info_window_anchor
 
       options.default! :anchor => '12x12', :info_window_anchor => '12x12'
             
@@ -18,6 +16,10 @@ module Google
   
     def image=(image)      
       self << "#{self.var}.image = #{image.to_image.to_js};"
+    end
+  
+    def shadow=(image)      
+      self << "#{self.var}.shadow = #{image.to_image.to_js};"
     end
   
     def size=(size)

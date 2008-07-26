@@ -16,6 +16,7 @@ class MapGenerator < Rails::Generator::Base
       m.file "blue.png", "public/images/blue.png"
       m.file "red.png", "public/images/red.png"
       m.file "yellow.png", "public/images/yellow.png"
+      m.file "green.png", "public/images/green.png"      
       m.file "shadow.png", "public/images/shadow.png"
 
       # Eschaton plugin
