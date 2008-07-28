@@ -128,8 +128,9 @@ module Google
       end
     end
     
+    # Removes marker that has already been placed on the map
     def remove_marker(marker_or_options)
-      # TODO - Refactor out!      
+      # TODO - Refactor out!
       marker_id = if marker_or_options.is_a?(Hash)
                     marker_or_options[:var] || :marker
                   else
