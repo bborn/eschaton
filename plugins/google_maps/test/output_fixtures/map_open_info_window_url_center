@@ -1,4 +1,4 @@
 center = map.getCenter();
 jQuery.get('/location/create?location%5Blatitude%5D=' + center.lat() + '&location%5Blongitude%5D=' + center.lng() + '', function(data) {
-map.openInfoWindow(center, data);
+map.openInfoWindow(center, "<div id='info_window_content'>" + data + "</div>");
 });

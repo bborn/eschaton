@@ -85,16 +85,27 @@ class MapTest < Test::Unit::TestCase
                                                    :include_location => false
                             }
 
-      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "test output for render");', 
+      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "test output for render" + "</div>");', 
                             script.record_for_test {
                               map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :partial => 'create'
                             }
 
-      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "Testing text!");',
+      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
                             script.record_for_test {
                               map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :text => "Testing text!"
                             }
     end    
+  end
+  
+  def test_update_info_window
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}    
+      
+      assert_output_fixture 'map.openInfoWindow(map.getInfoWindow().getPoint(), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
+                             script.record_for_test {
+                               map.update_info_window :text => "Testing text!"
+                             }
+    end
   end
   
   def test_click_output

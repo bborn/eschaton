@@ -1,6 +1,6 @@
 function marker_click(marker){
 GEvent.addListener(marker, "click", function() {
-marker.openInfoWindow("This is a info window!");
+marker.openInfoWindow("<div id='info_window_content'>" + "This is a info window!" + "</div>");
 });
 }
 marker_click(marker);

@@ -210,13 +210,15 @@ module Google
       
       self << "center = #{self.var}.getCenter();" if location == :center
       
+      info_window = InfoWindow.new(:var => self.var)
+      
       if options[:url]
         if options[:include_location] == true
           options[:url][:location] = get_location(location)
         end
 
         self.script.get(options[:url]) do |data|
-          self << "#{self.var}.openInfoWindow(#{location}, #{data});"
+          info_window.open(:location => location, :content => data)
         end
       else
         text = if options[:partial]
@@ -224,11 +226,17 @@ module Google
                else
                  options[:text]
                end
-        
-        self << "#{self.var}.openInfoWindow(#{location}, #{text.to_js});"
+        info_window.open(:location => location, :content => text)
       end
     end
+    
+    # Updates the contents of an existing info window. This supports the relevant content options of open_info_window. 
+    def update_info_window(options)
+      options[:location] = "#{self}.getInfoWindow().getPoint()"
 
+      self.open_info_window options
+    end
+    
     # Opens an info window at the given +location+ that contains a blowup view of the map around the +location+.
     #
     # ==== Options:

@@ -9,7 +9,7 @@ module Google
     #
     #
     def initialize(options = {})
-      options.default! :var => 'line', :vertices => [], :editable => false
+      options.default! :var => 'line', :vertices => []
 
       super
 
@@ -21,7 +21,6 @@ module Google
         
         self << "#{self.var} = new GPolyline(#{vertices.to_js});"
         
-        self.enable_drawing! if options.extract_and_remove(:drawable)
         self.style = options unless options.empty?
       end
     end
@@ -45,12 +44,6 @@ module Google
     # options[http://code.google.com/apis/maps/documentation/reference.html#GPolyStyleOptions]that are supported.
     def style=(options)
       self << "#{self.var}.setStrokeStyle(#{options.to_google_options});"
-    end
-
-    # Allows a user to construct (or modify) a line by clicking on additional points on the map.
-    # options[http://code.google.com/apis/maps/documentation/reference.html#GPolyEditingOptions] that are supported.
-    def enable_drawing!(options = {})
-      self << "#{self.var}.enableDrawing(#{options.to_google_options})"
     end
     
     def click(&block)

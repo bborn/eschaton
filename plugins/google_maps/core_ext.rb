@@ -27,6 +27,10 @@ class String
   def to_gravatar_icon
     Google::GravatarIcon.new :email_address => self
   end
+  
+  def to_location
+    self
+  end
     
 end
 

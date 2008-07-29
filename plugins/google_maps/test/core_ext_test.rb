@@ -42,6 +42,8 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
 
   def test_to_location
+    assert_equal "location", "location".to_location
+    assert_equal "map.getCenter()", "map.getCenter()".to_location
     assert_equal :location, :location.to_location
     assert_equal :marker_location, :marker_location.to_location
 

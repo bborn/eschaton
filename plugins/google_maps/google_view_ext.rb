@@ -13,12 +13,14 @@ module GoogleViewExt
   end
 
   def prepare_info_window_options(options)
-    options.default! :include_location => true
+    options.default! :include_location => true, :html => {}
 
     include_location = options.extract_and_remove(:include_location)
     if include_location && params[:location].not_blank?
       options[:url][:location] = params[:location]
     end
+
+    options[:html][:class] = :info_window_form
   end
   
   # Works in exactly the same way as rails +form_remote_tag+ but provides some extra options. This would be used 
