@@ -292,4 +292,20 @@ class MapTest < Test::Unit::TestCase
     end
   end
 
+  def test_remove_type
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+      
+      assert_output_fixture 'map.removeMapType(G_SATELLITE_MAP);', 
+                            script.record_for_test {
+                              map.remove_type :satellite
+                            }
+
+      assert_output_fixture :map_remove_type,
+                            script.record_for_test {
+                              map.remove_type :normal, :satellite
+                            }
+   end
+  end
+
 end

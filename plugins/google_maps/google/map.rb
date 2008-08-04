@@ -51,11 +51,26 @@ module Google
     end
 
     # Sets the type of map to display, see Map_types of valid map types.
+    #
+    # ==== Examples:
+    #  map.type = :satellite
+    #  map.type = :hybrid
     def type=(value)
       @type = value
-      self << "#{self.var}.setMapType(#{value.to_map_type})"
+      self << "#{self.var}.setMapType(#{value.to_map_type});"
     end
     
+    # Removes map +types+ from the map, see Map_types of valid map types.
+    #
+    # ==== Examples:
+    #   map.remove_type :satellite
+    #   map.remove_type :normal, :satellite    
+    def remove_type(*types)
+      types.each do |type|
+        self.remove_map_type type.to_map_type
+      end
+    end    
+
     # Centers the map at the given +location+ which can be a Location or whatever Location#new supports.
     #
     # ==== Examples:

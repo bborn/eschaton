@@ -3,4 +3,4 @@ map.setCenter(new GLatLng(-33.947, 18.462));
 map.setZoom(12);
 map.addControl(new GSmallMapControl());
 map.addControl(new GMapTypeControl());
-map.setMapType(G_SATELLITE_MAP)
+map.setMapType(G_SATELLITE_MAP);
