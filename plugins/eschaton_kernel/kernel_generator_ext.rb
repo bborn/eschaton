@@ -39,7 +39,7 @@ module KernelGeneratorExt
     yield self
     self << "}"
   end
-    
+
   # Returns script that has been generated and allows for addtional +options+ regarding generation than the default +to_s+ method.
   #
   # Options:
@@ -55,6 +55,7 @@ module KernelGeneratorExt
     ActionView::Base.debug_rjs = options[:error_wrapping]
     
     output = self.to_s
+
     output.gsub!(/^\s+|\s+$/, '') if options[:compact]
     output.gsub!("\n", ' ') if options[:inline]
 

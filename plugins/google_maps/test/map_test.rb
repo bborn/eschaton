@@ -307,5 +307,31 @@ class MapTest < Test::Unit::TestCase
                             }
    end
   end
+  
+  def test_best_fit_center
+    Eschaton.with_global_script do |script|
+      script.google_map_script do
+        map = Google::Map.new :center => :best_fit
+
+        map.add_marker :location => {:latitude => -33.0, :longitude => 18.0}
+        map.add_marker :location => {:latitude => -33.5, :longitude => 18.5}      
+      end
+      
+      assert_output_fixture :map_best_fit_center, script      
+    end
+  end
+
+  def test_best_fit_center_and_zoom
+    Eschaton.with_global_script do |script|
+      script.google_map_script do
+        map = Google::Map.new :center => :best_fit, :zoom => :best_fit
+
+        map.add_marker :location => {:latitude => -33.0, :longitude => 18.0}
+        map.add_marker :location => {:latitude => -33.5, :longitude => 18.5}
+      end
+
+      assert_output_fixture :map_best_fit_center_and_zoom, script
+    end
+  end
 
 end

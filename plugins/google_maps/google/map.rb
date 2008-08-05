@@ -42,7 +42,9 @@ module Google
 
       if self.create_var?
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
-        
+
+        self.track_bounds = options[:center] == :best_fit || options[:zoom] == :best_fit
+
         self.center = options.extract_and_remove(:center)
         self.zoom = options.extract_and_remove(:zoom) if options[:zoom]
 
@@ -80,14 +82,22 @@ module Google
     def center=(location)
       @center = location.to_location
 
-      self.set_center(self.center)
+      if location == :best_fit
+        MappingEvents.end_of_map_script << "#{self}.setCenter(track_bounds.getCenter());"
+      else
+        self.set_center(self.center)
+      end
     end
     
     # Sets the zoom level of the map.
     def zoom=(zoom)
       @zoom = zoom
 
-      self.set_zoom(self.zoom)
+      if zoom == :best_fit
+        MappingEvents.end_of_map_script << "#{self}.setZoom(#{self}.getBoundsZoomLevel(track_bounds));"
+      else
+        self.set_zoom(self.zoom)        
+      end
     end
 
     # Adds the +control+ to the map, see Control_types of valid controls.
@@ -132,6 +142,10 @@ module Google
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
+      
+      if self.track_bounds?
+        self << "track_bounds.extend(#{marker}.getLatLng());"
+      end
 
       marker      
     end
@@ -218,7 +232,7 @@ module Google
     # * +text+ - Optional. The html content that will be placed inside the info window.
     def open_info_window(options)
       #
-      # TODO - some of this is sharable between map and marker!!!!!!
+      # TODO - some of this is sharable between map and marker, use InfoWindow object.
       #
       options.default! :location => :center, :include_location => true
       location = options[:location].to_location
@@ -264,6 +278,15 @@ module Google
       
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end
-
+    
+    def track_bounds=(value)
+      @track_bounds = value
+      
+      self << "track_bounds = new GLatLngBounds();" if @track_bounds
+    end
+    
+    def track_bounds?
+      @track_bounds
+    end
   end
 end

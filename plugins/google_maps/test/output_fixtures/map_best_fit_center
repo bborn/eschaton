@@ -1,0 +1,15 @@
+jQuery(document).ready(function() {
+window.onunload = GUnload;
+if (GBrowserIsCompatible()) {
+map = new GMap2(document.getElementById('map'));
+track_bounds = new GLatLngBounds();
+map.setZoom(6);
+marker = new GMarker(new GLatLng(-33.0, 18.0), {});
+map.addOverlay(marker);
+track_bounds.extend(marker.getLatLng());
+marker = new GMarker(new GLatLng(-33.5, 18.5), {});
+map.addOverlay(marker);
+track_bounds.extend(marker.getLatLng());
+map.setCenter(track_bounds.getCenter());
+} else { alert('Your browser be old, it cannot run google maps!');}
+})
