@@ -1,9 +1,4 @@
-jQuery(document).ready(function() {
-window.onunload = GUnload;
-if (GBrowserIsCompatible()) {
 map = new GMap2(document.getElementById('map'));
 track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));
-map.setZoom(map.getBoundsZoomLevel(track_bounds));
-} else { alert('Your browser be old, it cannot run google maps!');}
-})
+map.setZoom(8);

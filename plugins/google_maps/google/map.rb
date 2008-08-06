@@ -34,7 +34,7 @@ module Google
     # * +zoom+ - Optional. The zoom level of the map defaulted to :best_fit, see zoom=.
     # * +type+ - Optional. The type of map, see type=.
     def initialize(options = {})
-      options.default! :var => 'map', :center => :best_fit, :zoom => :best_fit
+      options.default! :var => 'map', :center => :best_fit, :zoom => 8
 
       super
 
