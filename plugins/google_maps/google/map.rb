@@ -103,8 +103,8 @@ module Google
     # Sets the zoom level of the map, +zoom+ can be a number(1 - 22) or <tt>:best_fit</tt>. If set to <tt>:best_fit</tt> 
     # google maps will determine an appropriate zoom level.
     #
-    # map.zoom = :best_fit
-    # map.zoom = 12
+    #  map.zoom = :best_fit
+    #  map.zoom = 12
     def zoom=(zoom)
       @zoom = zoom
 
