@@ -1,4 +1,4 @@
-== Eschaton => Google Maps on Rails
+== eschaton => google maps on rails with hotness
 
 Helps with writing google map[http://code.google.com/apis/maps/documentation/reference.html] mashups in rails,
 brining together the power of Google Maps and Rails.
