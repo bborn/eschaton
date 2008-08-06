@@ -29,12 +29,12 @@ module Google
     Map_types = [:normal, :satellite, :hybrid]
 
     # ==== Options: 
-    # * +center+ - Optional. Centers the map at this location, see center=.
+    # * +center+ - Optional. Centers the map at this location defaulted to :best_fit, see center= for valid options.
     # * +controls+ - Optional. Which controls will be added to the map, see Control_types for valid controls.
-    # * +zoom+ - Optional. The zoom level of the map defaulted to 6, see zoom=.
+    # * +zoom+ - Optional. The zoom level of the map defaulted to :best_fit, see zoom=.
     # * +type+ - Optional. The type of map, see type=.
     def initialize(options = {})
-      options.default! :var => 'map', :zoom => 6
+      options.default! :var => 'map', :center => :best_fit, :zoom => :best_fit
 
       super
 
@@ -43,10 +43,10 @@ module Google
       if self.create_var?
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
 
-        self.track_bounds = options[:center] == :best_fit || options[:zoom] == :best_fit
+        self.track_bounds!
 
         self.center = options.extract_and_remove(:center)
-        self.zoom = options.extract_and_remove(:zoom) if options[:zoom]
+        self.zoom = options.extract_and_remove(:zoom)
 
         self.options_to_fields options
       end
@@ -83,6 +83,8 @@ module Google
       @center = location.to_location
 
       if location == :best_fit
+        # For now we must set a default center otherwise google maps gives an error
+        self.center = self.default_center
         MappingEvents.end_of_map_script << "#{self}.setCenter(track_bounds.getCenter());"
       else
         self.set_center(self.center)
@@ -142,10 +144,8 @@ module Google
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
-      
-      if self.track_bounds?
-        self << "track_bounds.extend(#{marker}.getLatLng());"
-      end
+
+      self << "track_bounds.extend(#{marker}.getLatLng());"
 
       marker      
     end
@@ -278,15 +278,13 @@ module Google
       
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end
-    
-    def track_bounds=(value)
-      @track_bounds = value
-      
-      self << "track_bounds = new GLatLngBounds();" if @track_bounds
+
+    def track_bounds!
+      self << "track_bounds = new GLatLngBounds();"
     end
-    
-    def track_bounds?
-      @track_bounds
+
+    def default_center # cape town in the hizzy
+      {:latitude => -33.947, :longitude => 18.462}
     end
   end
 end

@@ -11,7 +11,7 @@ module Google
 
     # TODO - Figure out and document   
     def self.clear_end_of_map_script
-      end_script = @@end_of_map_script
+      end_script = @@end_of_map_script.reverse.join("\n")
 
       @@end_of_map_script = nil
 

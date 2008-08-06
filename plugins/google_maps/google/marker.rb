@@ -66,9 +66,12 @@ module Google
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
     def open_info_window(options)
+      # TODO - use InfoWindow in full!
+      info_window = InfoWindow.new(:var => self.var)
+      
       if options[:url]
         self.script.get(options[:url]) do |data|
-          self << "#{self.var}.openInfoWindow(#{data});"
+          info_window.open_on_marker(:content => data)
         end
       else
         text = if options[:partial]
@@ -77,7 +80,7 @@ module Google
                  options[:text]
                end
 
-        self << "#{self.var}.openInfoWindow(#{text.to_js});"
+        info_window.open_on_marker(:content => text)
       end
     end
 

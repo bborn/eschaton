@@ -15,9 +15,9 @@ module GoogleGeneratorExt
       self.if_google_compatible do
         yield
 
-        #if MappingEvents.end_of_map_script.not_nil?
+        if Google::MappingEvents.end_of_map_script.not_nil?
           self << Google::MappingEvents.clear_end_of_map_script
-        #end
+        end
       end      
     end
   end

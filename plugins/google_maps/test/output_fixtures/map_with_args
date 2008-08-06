@@ -1,4 +1,5 @@
 map = new GMap2(document.getElementById('map'));
+track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));
 map.setZoom(12);
 map.addControl(new GSmallMapControl());

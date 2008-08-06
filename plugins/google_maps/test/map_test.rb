@@ -5,10 +5,14 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 class MapTest < Test::Unit::TestCase
   
   def test_map_initialize
-    map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}, :script => Eschaton.javascript_generator
-
-    assert_output_fixture :map_default, map.send(:script)
-
+    Eschaton.with_global_script do |script|
+      script.google_map_script do
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}  
+      end
+      
+      assert_output_fixture :map_default, script      
+    end
+    
     map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462},
                           :controls => [:small_map, :map_type],
                           :zoom => 12,
@@ -20,119 +24,127 @@ class MapTest < Test::Unit::TestCase
 
   def test_add_control
     Eschaton.with_global_script do |script|
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+      script.google_map_script do
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
 
-      assert_output_fixture 'map.addControl(new GSmallMapControl());', 
-                             script.record_for_test {
-                               map.add_control :small_map
-                             }
+        assert_output_fixture 'map.addControl(new GSmallMapControl());', 
+                               script.record_for_test {
+                                 map.add_control :small_map
+                               }
 
-      assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(0, 0)));', 
-                            script.record_for_test {
-                              map.add_control :small_map, :position => {:anchor => :top_right}
-                            }
+        assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(0, 0)));', 
+                              script.record_for_test {
+                                map.add_control :small_map, :position => {:anchor => :top_right}
+                              }
 
-      assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(50, 10)));',
-                            script.record_for_test {
-                              map.add_control :small_map, :position => {:anchor => :top_right, :offset => [50, 10]}
-                            }
+        assert_output_fixture 'map.addControl(new GSmallMapControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(50, 10)));',
+                              script.record_for_test {
+                                map.add_control :small_map, :position => {:anchor => :top_right, :offset => [50, 10]}
+                              }
 
-      assert_output_fixture 'map.addControl(new GSmallMapControl());', 
-                             script.record_for_test {
-                               map.controls = :small_map
-                             }
+        assert_output_fixture 'map.addControl(new GSmallMapControl());', 
+                               script.record_for_test {
+                                 map.controls = :small_map
+                               }
 
-      assert_output_fixture :map_controls, 
-                             script.record_for_test {
-                               map.controls = :small_map, :map_type
-                             }
+        assert_output_fixture :map_controls, 
+                               script.record_for_test {
+                                 map.controls = :small_map, :map_type
+                               }
+      end
     end
   end
 
   def test_open_info_window_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+      script.google_map_script do
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      # With :url and :include_location params
-      assert_output_fixture :map_open_info_window_url_center, 
-                            script.record_for_test {
-                              map.open_info_window :url => {:controller => :location, :action => :create}
-                            }
+        # With :url and :include_location params
+        assert_output_fixture :map_open_info_window_url_center, 
+                              script.record_for_test {
+                                map.open_info_window :url => {:controller => :location, :action => :create}
+                              }
 
-      assert_output_fixture :map_open_info_window_url_center,
-                            script.record_for_test {
-                              map.open_info_window :location => :center, 
-                                                   :url => {:controller => :location, :action => :create}
-                            }
+        assert_output_fixture :map_open_info_window_url_center,
+                              script.record_for_test {
+                                map.open_info_window :location => :center, 
+                                                     :url => {:controller => :location, :action => :create}
+                              }
 
 
-      assert_output_fixture :map_open_info_window_url_existing_location,
-                            script.record_for_test {
-                              map.open_info_window :location => :existing_location, 
-                                                   :url => {:controller => :location, :action => :create}
-                            }
+        assert_output_fixture :map_open_info_window_url_existing_location,
+                              script.record_for_test {
+                                map.open_info_window :location => :existing_location, 
+                                                     :url => {:controller => :location, :action => :create}
+                              }
 
-      assert_output_fixture :map_open_info_window_url_location,
-                            script.record_for_test {
-                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
-                                                   :url => {:controller => :location, :action => :create}
-                            }
+        assert_output_fixture :map_open_info_window_url_location,
+                              script.record_for_test {
+                                map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
+                                                     :url => {:controller => :location, :action => :create}
+                              }
 
-      assert_output_fixture :map_open_info_window_url_no_location,
-                            script.record_for_test {
-                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
-                                                   :url => {:controller => :location, :action => :show, :id => 1},
-                                                   :include_location => false
-                            }
+        assert_output_fixture :map_open_info_window_url_no_location,
+                              script.record_for_test {
+                                map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, 
+                                                     :url => {:controller => :location, :action => :show, :id => 1},
+                                                     :include_location => false
+                              }
 
-      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "test output for render" + "</div>");', 
-                            script.record_for_test {
-                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :partial => 'create'
-                            }
+        assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "test output for render" + "</div>");', 
+                              script.record_for_test {
+                                map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :partial => 'create'
+                              }
 
-      assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
-                            script.record_for_test {
-                              map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :text => "Testing text!"
-                            }
+        assert_output_fixture 'map.openInfoWindow(new GLatLng(-33.947, 18.462), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
+                              script.record_for_test {
+                                map.open_info_window :location => {:latitude => -33.947, :longitude => 18.462}, :text => "Testing text!"
+                              }
+      end
     end    
   end
   
   def test_update_info_window
     Eschaton.with_global_script do |script|
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}    
+      script.google_map_script do      
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}    
       
-      assert_output_fixture 'map.openInfoWindow(map.getInfoWindow().getPoint(), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
-                             script.record_for_test {
-                               map.update_info_window :text => "Testing text!"
-                             }
+        assert_output_fixture 'map.openInfoWindow(map.getInfoWindow().getPoint(), "<div id=\'info_window_content\'>" + "Testing text!" + "</div>");',
+                               script.record_for_test {
+                                 map.update_info_window :text => "Testing text!"
+                               }
+      end
     end
   end
   
   def test_click_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462} 
+      script.google_map_script do
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462} 
 
-      # without body
-      assert_output_fixture :map_click_no_body,
-                            script.record_for_test {
-                              map.click {}
-                            }
+        # without body
+        assert_output_fixture :map_click_no_body,
+                              script.record_for_test {
+                                map.click {}
+                              }
     
-      # With body
-      assert_output_fixture :map_click_with_body, 
-                            script.record_for_test {
-                              map.click do |script, location|
-                                script.comment "This is some test code!"
-                                script.comment "'#{location}' is where the map was clicked!"
-                                script.alert("Hello from map click!")
-                              end
-                            }
+        # With body
+        assert_output_fixture :map_click_with_body, 
+                              script.record_for_test {
+                                map.click do |script, location|
+                                  script.comment "This is some test code!"
+                                  script.comment "'#{location}' is where the map was clicked!"
+                                  script.alert("Hello from map click!")
+                                end
+                              }
 
-      # Info window convention
-      assert_output_fixture :map_click_info_window,
-                            script.record_for_test {
-                              map.click :text => "This is a info window!"
-                            }
+        # Info window convention
+        assert_output_fixture :map_click_info_window,
+                              script.record_for_test {
+                                map.click :text => "This is a info window!"
+                              }
+      end
     end    
   end
   
@@ -179,18 +191,20 @@ class MapTest < Test::Unit::TestCase
 
   def test_add_marker_output
     Eschaton.with_global_script do |script|
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+      script.google_map_script do
+        map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      assert_output_fixture :map_add_marker,
-                            script.record_for_test {
-                              map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
-                            }
+        assert_output_fixture :map_add_marker,
+                              script.record_for_test {
+                                map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
+                              }
 
-      assert_output_fixture :map_add_markers,
-                            script.record_for_test {
-                              map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
-                                              {:location => {:latitude => -34.947, :longitude => 19.462}})
-                            }
+        assert_output_fixture :map_add_markers,
+                              script.record_for_test {
+                                map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
+                                                {:location => {:latitude => -34.947, :longitude => 19.462}})
+                              }
+      end
     end
   end
 

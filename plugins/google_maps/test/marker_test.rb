@@ -79,12 +79,12 @@ class MarkerTest < Test::Unit::TestCase
                               marker.open_info_window :url => {:controller => :location, :action => :show, :id => 1}
                             }
 
-      assert_output_fixture 'marker.openInfoWindow("test output for render");', 
+      assert_output_fixture 'marker.openInfoWindow("<div id=\'info_window_content\'>" + "test output for render" + "</div>");', 
                              script.record_for_test {
                                marker.open_info_window :partial => 'create'
                              }
 
-      assert_output_fixture 'marker.openInfoWindow("Testing text!");', 
+      assert_output_fixture 'marker.openInfoWindow("<div id=\'info_window_content\'>" + "Testing text!" + "</div>");', 
                              script.record_for_test {
                                marker.open_info_window :text => "Testing text!"
                              }
