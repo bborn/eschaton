@@ -6,6 +6,11 @@ module Google
   # You will most likely use click, open_info_window, add_marker and add_markers to get some basic functionality going.
   #
   # ==== Examples:
+  #
+  #  map = Google::Map.new # Africa, we love you!
+  #
+  #  map = Google::Map.new :center => :best_fit
+  #
   #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462})
   # 
   #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
@@ -29,12 +34,12 @@ module Google
     Map_types = [:normal, :satellite, :hybrid]
 
     # ==== Options: 
-    # * +center+ - Optional. Centers the map at this location defaulted to :best_fit, see center= for valid options.
+    # * +center+ - Optional. Centers the map at this location defaulted to <tt>:best_fit</tt>, see center= for valid options.
     # * +controls+ - Optional. Which controls will be added to the map, see Control_types for valid controls.
-    # * +zoom+ - Optional. The zoom level of the map defaulted to :best_fit, see zoom=.
+    # * +zoom+ - Optional. The zoom level of the map defaulted to <tt>:best_fit</tt>, see zoom=.
     # * +type+ - Optional. The type of map, see type=.
     def initialize(options = {})
-      options.default! :var => 'map', :center => :best_fit, :zoom => 8
+      options.default! :var => 'map', :center => :best_fit, :zoom => :best_fit
 
       super
 
@@ -73,9 +78,12 @@ module Google
       end
     end    
 
-    # Centers the map at the given +location+ which can be a Location or whatever Location#new supports.
-    #
+    # Centers the map at the given +location+ which can be <tt>:best_fit</tt>, a Location or whatever Location#new supports.
+    # If set to <tt>:best_fit</tt> google maps will determine an appropriate center location.
+    # 
     # ==== Examples:
+    #  map.center = :best_fit
+    #
     #  map.center = {:latitude => -34, :longitude => 18.5}
     #
     #  map.center = Google::Location.new(:latitude => -34, :longitude => 18.5)
@@ -83,15 +91,20 @@ module Google
       @center = location.to_location
 
       if location == :best_fit
-        # For now we must set a default center otherwise google maps gives an error
         self.center = self.default_center
-        MappingEvents.end_of_map_script << "#{self}.setCenter(track_bounds.getCenter());"
+        MappingEvents.end_of_map_script << "if(!track_bounds.isEmpty()){
+                                             #{self}.setCenter(track_bounds.getCenter()); 
+                                            }"
       else
         self.set_center(self.center)
       end
     end
     
-    # Sets the zoom level of the map.
+    # Sets the zoom level of the map, +zoom+ can be a number(1 - 22) or <tt>:best_fit</tt>. If set to <tt>:best_fit</tt> 
+    # google maps will determine an appropriate zoom level.
+    #
+    # map.zoom = :best_fit
+    # map.zoom = 12
     def zoom=(zoom)
       @zoom = zoom
 
@@ -282,9 +295,11 @@ module Google
     def track_bounds!
       self << "track_bounds = new GLatLngBounds();"
     end
-
-    def default_center # cape town in the hizzy
+    
+    # The default center for the map which is Mzanzi.
+    def default_center
       {:latitude => -33.947, :longitude => 18.462}
     end
+    
   end
 end

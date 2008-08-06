@@ -5,12 +5,16 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 class MapTest < Test::Unit::TestCase
   
   def test_map_initialize
-    map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}, 
-                          :script => Eschaton.javascript_generator        
+    map = Google::Map.new :script => Eschaton.javascript_generator        
       
     assert_output_fixture :map_default, map.send(:script)
+
+    map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0}, 
+                          :script => Eschaton.javascript_generator        
+      
+    assert_output_fixture :map_with_center, map.send(:script)
     
-    map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462},
+    map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0},
                           :controls => [:small_map, :map_type],
                           :zoom => 12,
                           :type => :satellite,

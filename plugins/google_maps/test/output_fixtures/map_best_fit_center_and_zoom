@@ -11,6 +11,8 @@ marker = new GMarker(new GLatLng(-33.5, 18.5), {});
 map.addOverlay(marker);
 track_bounds.extend(marker.getLatLng());
 map.setZoom(map.getBoundsZoomLevel(track_bounds));
+if(!track_bounds.isEmpty()){
 map.setCenter(track_bounds.getCenter());
+}
 } else { alert('Your browser be old, it cannot run google maps!');}
 })
