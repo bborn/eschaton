@@ -7,7 +7,7 @@ module Google
 
       super
 
-      options.default! :anchor => '12x12', :info_window_anchor => '12x12'
+      options.default! :anchor => '9x34', :info_window_anchor => '9x2'
             
       script << "#{self.var} = new GIcon();"
     
