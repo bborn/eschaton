@@ -40,7 +40,7 @@ module GoogleViewExt
     remote_form_for model, model_instance, options, &block
   end
   
-  # Includes the required google maps javascript files. This must be called in the view or layout 
+  # Includes the required google maps and eschaton javascript files. This must be called in the view or layout 
   # to enable google maps functionality.
   #
   # ==== Options:
@@ -55,7 +55,8 @@ module GoogleViewExt
     jquery_script = self.include_jquery_javascript if options[:include_jquery] == true
 
     collect javascript_src_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}),
-            jquery_script
+            jquery_script,
+            javascript_include_tag('eschaton')
   end
     
   # Creates a google map div with the given +options+, this is used in the view to display the map.

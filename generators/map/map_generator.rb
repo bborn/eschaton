@@ -3,7 +3,9 @@ class MapGenerator < Rails::Generator::Base
   
   def manifest
     record do |m|
+      # Javascript
       m.file "jquery.js", "public/javascripts/jquery.js"
+      m.file "eschaton.js", "public/javascripts/eschaton.js"      
 
       m.file "map_controller.rb", "app/controllers/map_controller.rb"
       m.file "map_helper.rb", "app/helpers/map_helper.rb"

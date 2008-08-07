@@ -6,26 +6,33 @@ module Google
   #
   # You will most likely use click and open_info_window to get some basic functionality going.
   #
-  # ==== Examples:
+  # ==== General examples:
   #
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5}
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5}
   #
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5}, 
-  #                              :draggable => true,
-  #                              :title => "This is a marker!"
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5}, 
+  #                     :draggable => true,
+  #                     :title => "This is a marker!"
   #
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
-  #                              :icon => :green_circle #=> "/images/green_circle.png"
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                     :icon => :green_circle #=> "/images/green_circle.png"
   #
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
-  #                              :icon => '/images/red_dot.gif'
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                     :icon => '/images/red_dot.gif'
   #
-  #  # Using a gravatar
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
-  #                              :gravatar => 'karadanais@gmail.com'
+  # ==== Gravatar examples:
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                     :gravatar => 'yawningman@eschaton.com'
   #
-  #  marker = Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
-  #                              :gravatar => {:email_address => 'karadanais@gmail.com', :size => 50}
+  #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
+  #                     :gravatar => {:email_address => 'yawningman@eschaton.com', :size => 50}
+  #
+  # ==== Circle examples:
+  #  Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+  #                     :circle => true
+  #
+  #  Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+  #                     :circle => {:radius => 500, :border_width => 5}
   class Marker < MapObject
     attr_accessor :icon
     attr_reader :location
@@ -35,6 +42,7 @@ module Google
     # * +icon+ - Optional. The Icon that should be used for the marker otherwise the default marker icon will be used.
     # * +gravatar+ - Optional. Uses a gravatar as the icon. If a string is supplied it will be used for the +email_address+ 
     #   option, see Gravatar#new for other valid options.
+    # * +circle+ - Optional. Indicates if a circle should be drawn around the marker, also supports styling options(see Circle#new)
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
     def initialize(options = {})
@@ -54,7 +62,14 @@ module Google
 
         options[:icon] = self.icon if self.icon
         
+        circle_options = options.extract_and_remove(:circle)
+        
         self << "#{self.var} = new GMarker(#{self.location}, #{options.to_google_options});"
+        
+        if circle_options
+          circle_options = {} if circle_options == true
+          self.circle! circle_options
+        end
       end
     end
 
@@ -92,7 +107,7 @@ module Google
           self.open_info_window info_window_options
         end
       elsif block_given?
-        self.listen_to :event => :click, &block        
+        self.listen_to :event => :click, &block
       end
     end
 
@@ -135,7 +150,19 @@ module Google
     def change_icon(image)
       self << "#{self.var}.setImage(#{image.to_image.to_js});"
     end
-    
+
+    # Draws a circle around the marker, see Circle#new for valid styling options.
+    #
+    # ==== Examples:
+    #  marker.circle!
+    #
+    #  marker.circle! :radius => 500, :border_width => 5
+    def circle!(options = {})
+      options[:location] = self.location
+
+      Circle.new options
+    end
+
     def to_marker
       self
     end

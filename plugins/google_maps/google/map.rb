@@ -7,23 +7,25 @@ module Google
   #
   # ==== Examples:
   #
-  #  map = Google::Map.new # Africa, we love you!
+  #  Google::Map.new # Africa, we love you!
   #
-  #  map = Google::Map.new :center => :best_fit
+  #  Google::Map.new :center => :best_fit
   #
-  #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462})
+  #  Google::Map.new :zoom => 8
+  #
+  #  Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462})
   # 
-  #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
-  #                        :controls => [:small_map, :map_type])
+  #  Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
+  #                  :controls => [:small_map, :map_type])
   #
-  #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
-  #                        :controls => [:small_map, :map_type],
-  #                        :zoom => 12)
+  #  Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
+  #                  :controls => [:small_map, :map_type],
+  #                  :zoom => 12)
   #
-  #  map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
-  #                        :controls => [:small_map, :overview_map],
-  #                        :zoom => 12, 
-  #                        :type => :satellite)
+  #  Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462}, 
+  #                  :controls => [:small_map, :overview_map],
+  #                  :zoom => 12, 
+  #                  :type => :satellite)
   class Map < MapObject
     attr_reader :center, :zoom, :type
     
@@ -103,6 +105,7 @@ module Google
     # Sets the zoom level of the map, +zoom+ can be a number(1 - 22) or <tt>:best_fit</tt>. If set to <tt>:best_fit</tt> 
     # google maps will determine an appropriate zoom level.
     #
+    # ==== Examples:
     #  map.zoom = :best_fit
     #  map.zoom = 12
     def zoom=(zoom)

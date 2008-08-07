@@ -24,7 +24,6 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-
 # Generate a rake task for each plugin separately
 #  - rdocs
 #  - run all tests

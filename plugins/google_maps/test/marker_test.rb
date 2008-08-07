@@ -4,6 +4,39 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 
 class MarkerTest < Test::Unit::TestCase
 
+  def test_circle
+    Eschaton.with_global_script do |script|
+      assert_output_fixture :marker_with_default_circle, 
+                             script.record_for_test{
+                               Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                  :circle => true
+                             }
+ 
+      assert_output_fixture :marker_with_custom_circle, 
+                            script.record_for_test{
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :circle => {:radius => 500, :border_width => 5}
+                            }
+
+     marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+
+     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 1.5, 40, null, 2, null, "#0055ff", null);', 
+                            script.record_for_test{
+                              marker.circle!  
+                            }
+
+     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 500, 40, null, 5, null, "#0055ff", null);', 
+                           script.record_for_test{
+                             marker.circle! :radius => 500, :border_width => 5
+                           }
+
+     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 500, 40, null, 5, null, "black", null);', 
+                           script.record_for_test{
+                             marker.circle! :radius => 500, :border_width => 5, :fill_colour => 'black'
+                           }
+    end    
+  end
+
   def test_gravatar
     Eschaton.with_global_script do |script|
       assert_output_fixture :marker_gravatar, 
