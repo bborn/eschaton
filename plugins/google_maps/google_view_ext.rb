@@ -12,6 +12,16 @@ module GoogleViewExt
     end
   end
 
+  # Unless the +condition+ is +true+ this will have the same effect as link_to_map_script otherwise
+  # +name+ will be returned.
+  def link_to_map_script_unless(condition, name, *args, &block)
+    unless condition
+      link_to_map_script name, *args, &block
+    else
+      name
+    end
+  end
+
   def prepare_info_window_options(options)
     options.default! :include_location => true, :html => {}
 

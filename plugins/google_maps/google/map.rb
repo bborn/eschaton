@@ -228,7 +228,7 @@ module Google
     end
 
     def get_location(location) #TODO ? move to Map::Location ?
-      if location.is_a?(Symbol)        
+      if location.is_a?(Symbol) || location.is_a?(String)
         {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
       else
         {:latitude => location.latitude, :longitude => location.longitude}
