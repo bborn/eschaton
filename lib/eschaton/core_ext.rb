@@ -12,6 +12,10 @@ class Object
     RAILS_DEFAULT_LOGGER.warn("eschaton: #{message}") if RAILS_DEFAULT_LOGGER
   end
   
+  def presentation_modelify
+    "#{self.to_s.classify}PresentationModel".constantize
+  end
+
 end
 
 class String

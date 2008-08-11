@@ -7,7 +7,7 @@ class ActionController::Base
 
     render :update do |page|
       Eschaton.with_global_script page do
-        yield model.new(page)
+        yield model_name.presentation_modelify.new(page)
       end
     end
   end
