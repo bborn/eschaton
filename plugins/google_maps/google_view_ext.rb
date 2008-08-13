@@ -57,15 +57,15 @@ module GoogleViewExt
   # * +key+ - Optional. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with, defaulted to GOOGLE_MAPS_API_KEY.
   # * +include_jquery+ - Optional. Indicates if the jquery file should be included, defaulted to +true+, set this to +false+ if you have already include jQuery.
   def include_google_javascript(options = {})
-    options.assert_valid_keys :key, :include_jquery
-
     options.default! :key => GOOGLE_MAPS_API_KEY if defined?(GOOGLE_MAPS_API_KEY)
     options.default! :include_jquery => true
 
-    jquery_script = self.include_jquery_javascript if options[:include_jquery] == true
+    options.assert_valid_keys :key, :include_jquery
 
-    collect javascript_src_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}", {}),
-            jquery_script,
+    jquery_script = self.include_jquery_javascript if options[:include_jquery] == true
+    google_script = "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key=#{options[:key]}\" type=\"text/javascript\"></script>"
+
+    collect google_script, jquery_script,
             javascript_include_tag('eschaton')
   end
     
