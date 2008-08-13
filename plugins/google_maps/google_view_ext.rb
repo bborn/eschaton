@@ -101,7 +101,7 @@ module GoogleViewExt
     
     options[:style] = map_style
     
-    content_tag :div, nil, options
+    content_tag :div, 'loading map...', options
   end
 
   # Works in the same way as run_javascript but code is treated as google map script.

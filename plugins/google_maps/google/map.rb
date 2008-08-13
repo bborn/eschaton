@@ -227,13 +227,13 @@ module Google
       end
     end
 
-    def get_location(location) #TODO ? move to Map::Location ?
-      if location.is_a?(Symbol) || location.is_a?(String)
-        {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
-      else
-        {:latitude => location.latitude, :longitude => location.longitude}
-      end      
-    end
+    #def get_location(location) #TODO ? move to Map::Location ?
+    #  if location.is_a?(Symbol) || location.is_a?(String)
+    #    {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
+    #  else
+    #    {:latitude => location.latitude, :longitude => location.longitude}
+    #  end      
+    #end
       
     # Opens an info window on the map at the given +location+ using either +url+, +partial+ or +text+ options as content.
     #
@@ -247,34 +247,10 @@ module Google
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
     def open_info_window(options)
-      #
-      # TODO - some of this is sharable between map and marker, use InfoWindow object.
-      #
-      options.default! :location => :center, :include_location => true
-      location = options[:location].to_location
-      
-      self << "center = #{self.var}.getCenter();" if location == :center
-      
       info_window = InfoWindow.new(:var => self.var)
-      
-      if options[:url]
-        if options[:include_location] == true
-          options[:url][:location] = get_location(location)
-        end
-
-        self.script.get(options[:url]) do |data|
-          info_window.open(:location => location, :content => data)
-        end
-      else
-        text = if options[:partial]
-                 Eschaton.current_view.render options
-               else
-                 options[:text]
-               end
-        info_window.open(:location => location, :content => text)
-      end
+      info_window.open options
     end
-    
+
     # Updates the contents of an existing info window. This supports the relevant content options of open_info_window. 
     def update_info_window(options)
       options[:location] = "#{self}.getInfoWindow().getPoint()"

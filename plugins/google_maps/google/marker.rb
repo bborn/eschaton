@@ -81,22 +81,8 @@ module Google
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
     def open_info_window(options)
-      # TODO - use InfoWindow in full!
       info_window = InfoWindow.new(:var => self.var)
-      
-      if options[:url]
-        self.script.get(options[:url]) do |data|
-          info_window.open_on_marker(:content => data)
-        end
-      else
-        text = if options[:partial]
-                 Eschaton.current_view.render options
-               else
-                 options[:text]
-               end
-
-        info_window.open_on_marker(:content => text)
-      end
+      info_window.open_on_marker options
     end
 
     # If called with a block it will attach the block to the "click" event of the marker.

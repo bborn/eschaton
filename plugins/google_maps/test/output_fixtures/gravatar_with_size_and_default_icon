@@ -1,4 +1,4 @@
 icon = new GIcon();
 icon.iconAnchor = new GPoint(9, 34);
-icon.image = "http://www.gravatar.com/avatar/4761a1638aa18f8cb2d21d9340ce92b1?default=http://localhost:3000/images/blue.png&size=50";
+icon.image = "http://www.gravatar.com/avatar/4761a1638aa18f8cb2d21d9340ce92b1?default=http://localhost:3000/images/blue.png\u0026size=50";
 icon.infoWindowAnchor = new GPoint(9, 2);

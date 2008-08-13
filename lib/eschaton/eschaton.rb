@@ -39,5 +39,7 @@ class Eschaton
 
     script
   end
+  
+  # TODO - Add .global_script and remove JavascriptObject.global_script
 
 end
