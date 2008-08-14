@@ -2,7 +2,6 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
-require File.dirname(__FILE__) + '/../../../config/environment'
 require 'test/test_helper'
 
 desc 'Default: run unit tests.'
