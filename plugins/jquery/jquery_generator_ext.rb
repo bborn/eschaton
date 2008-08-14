@@ -28,9 +28,11 @@ module JqueryGeneratorExt
   end
 
   # Posts either the +form+ or the +params+ to the given +url+.
-  # :url::   => Required. The url to post to, see Escahton.url_for_javascript for supported options.
-  # :form::   => Optional. The id of the form to post.
-  # :params:: => Optional. Parameters to post
+  # 
+  # ==== Options:
+  # * +url+ - Required. The url to post to, see Escahton.url_for_javascript for supported options.
+  # * +form+ - Optional. The id of the form to post.
+  # * +params+ - Optional. Parameters to post
   def post(options)
     options.assert_valid_keys :url, :form, :params
     options.default! :form => nil, :params => {}

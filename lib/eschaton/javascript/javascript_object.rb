@@ -5,10 +5,10 @@
 class JavascriptObject
   attr_reader :var, :create_var
 
-  # Options:
-  # :var::        => Optional. The name of the javascript variable, defaulted to a random name.
-  # :create_var:: => Optional. Indicates whether the javascript variable should be created and assigned, defaulted to +true+.
-  # :script::     => Optional. The script object to use for generation.
+  # ==== Options:
+  # * +var+ - Optional. The name of the javascript variable, defaulted to a random name.
+  # * +create_var+ - Optional. Indicates whether the javascript variable should be created and assigned, defaulted to +true+.
+  # * +script+ - Optional. The script object to use for generation.
   def initialize(options = {})
     options.default! :var => :random, :create_var => true
     

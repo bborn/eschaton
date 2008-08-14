@@ -42,10 +42,10 @@ module KernelGeneratorExt
 
   # Returns script that has been generated and allows for addtional +options+ regarding generation than the default +to_s+ method.
   #
-  # Options:
-  # :error_wrapping:: => Optional. Indicates if the script should be wrapped in try..catch blocks, defaulted to +false+.
-  # :compact::        => Optional. Indicates if leading and trailing whitespace should be removed from each line, defaulted to +true+.
-  # :inline::         => Optional. Indicates if new lines should be stripped from the generated script, defaulted to +false+.
+  # ==== Options:
+  # * +error_wrapping+ - Optional. Indicates if the script should be wrapped in try..catch blocks, defaulted to +false+.
+  # * +compact+ - Optional. Indicates if leading and trailing whitespace should be removed from each line, defaulted to +true+.
+  # * +inline+ - Optional. Indicates if new lines should be stripped from the generated script, defaulted to +false+.
   def generate(options = {})
     options.default! :error_wrapping => false, :compact => true, :inline => false
     options.assert_valid_keys :error_wrapping, :compact, :inline,
