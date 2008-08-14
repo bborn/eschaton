@@ -1,4 +1,4 @@
-class Array
+class Array # :nodoc:
 
   # Converts the array to a google size[http://code.google.com/apis/maps/documentation/reference.html#GSize]. The +first+ element of the array 
   # represents the +width+ and the +second+ element represents the +height+.

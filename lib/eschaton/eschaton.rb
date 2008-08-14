@@ -1,5 +1,5 @@
 # Provides access to global objects of interest.
-class Eschaton
+class Eschaton # :nodoc:
   cattr_accessor :current_view
   
   # works like rails url for only with more options!!!!

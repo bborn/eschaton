@@ -1,4 +1,4 @@
-class Object
+class Object # :nodoc:
 
   def _logger_debug(message)
     RAILS_DEFAULT_LOGGER.debug("eschaton: #{message}") if RAILS_DEFAULT_LOGGER
@@ -18,7 +18,7 @@ class Object
 
 end
 
-class String
+class String # :nodoc:
   
   # Escapes +self+ and returns the escaped string.
   def escape

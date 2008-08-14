@@ -1,4 +1,4 @@
-class PluginLoader
+class PluginLoader # :nodoc:
   
   # Loads all plugins found using plugin_locations and extends relevant objects.
   def self.load

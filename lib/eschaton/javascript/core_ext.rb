@@ -1,4 +1,4 @@
-class Hash
+class Hash # :nodoc:
   
   def to_js
     string_keys = self.stringify_keys
@@ -11,7 +11,7 @@ class Hash
   
 end
 
-class String
+class String # :nodoc:
 
   def interpolate_javascript_vars
     interpolated_string = self
@@ -26,7 +26,7 @@ class String
 
 end
 
-class Object
+class Object # :nodoc:
 
   def to_js
     if self.is_a?(Symbol)
@@ -49,7 +49,7 @@ class Object
   
 end
 
-class Array
+class Array # :nodoc:
 
   # Returns an argument list that can be used when calling a javascript method.
   # Arguments will be converted to there javascript equivalents and seperated by a commas.

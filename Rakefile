@@ -21,7 +21,10 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.title    = 'eschaton'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
+
   rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.exclude("plugins/*/test/*.rb")
+  rdoc.rdoc_files.include("plugins/*/**/*.rb")  
 end
 
 # Generate a rake task for each plugin separately

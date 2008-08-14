@@ -1,4 +1,4 @@
-class PresentationModel
+class PresentationModel # :nodoc:
   attr_reader :script
   
   def initialize(script)
