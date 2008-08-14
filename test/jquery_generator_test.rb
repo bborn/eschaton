@@ -1,9 +1,8 @@
-require File.dirname(__FILE__) + '/../../../test/test_helper'
+require File.dirname(__FILE__) + '/test_helper'
 
-class GeneratorTest < Test::Unit::TestCase
+class JQueryGeneratorTest < Test::Unit::TestCase
 
   def test_post
-    
     gen = Eschaton.javascript_generator
     
     gen.post(:url => {:controller => :marker, :action => :update, :id => 1}, 
@@ -19,8 +18,6 @@ class GeneratorTest < Test::Unit::TestCase
       gen << "alert(#{data});"
       gen.alert("I am done!")
     end
-    
-    puts gen.generate
   end
 
 end
