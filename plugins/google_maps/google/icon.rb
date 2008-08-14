@@ -1,7 +1,7 @@
 module Google
   class Icon < MapObject
   
-    # :image, :size, :anchor, :info_window_anchor
+    # :image, :shadow, :size, :anchor, :info_window_anchor
     def initialize(options = {})
       options.default! :var => 'icon'
 

@@ -6,7 +6,7 @@ module Google
   #
   # You will most likely use click and open_info_window to get some basic functionality going.
   #
-  # ==== General examples:
+  # === General examples:
   #
   #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5}
   #
@@ -20,7 +20,7 @@ module Google
   #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
   #                     :icon => '/images/red_dot.gif'
   #
-  # ==== Gravatar examples:
+  # === Gravatar examples:
   #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
   #                     :gravatar => 'yawningman@eschaton.com'
   #
@@ -149,7 +149,7 @@ module Google
       Circle.new options
     end
 
-    def to_marker
+    def to_marker # :nodoc:
       self
     end
   

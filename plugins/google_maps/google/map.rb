@@ -5,7 +5,7 @@ module Google # :nodoc:
   #
   # You will most likely use click, open_info_window, add_marker and add_markers to get some basic functionality going.
   #
-  # ==== Examples:
+  # === Examples:
   #
   #  Google::Map.new # Africa, we love you!
   #
@@ -26,6 +26,47 @@ module Google # :nodoc:
   #                  :controls => [:small_map, :overview_map],
   #                  :zoom => 12, 
   #                  :type => :satellite)
+  #
+  # === Using the click event:
+  #
+  #  # When the map is clicked, add a marker and open an info window at that location   
+  #  map.click do |script, location|
+  #    map.add_marker :location => location
+  #    map.open_info_window :location => location, :text => 'Awesome, you added a marker!'
+  #  end
+  #
+  # === Adding markers using add_marker:
+  #
+  #  map.add_marker :location => {:latitude => -34, :longitude => 18.5}
+  #
+  #  map.add_marker :location => {:latitude => -34, :longitude => 18.5}, 
+  #                 :draggable => true,
+  #                 :title => "This is a marker!"
+  #
+  #  map.add_marker :location => {:latitude => -34, :longitude => 18.5},
+  #                 :icon => :green_circle
+  #
+  # === Info windows using open_info_window:
+  #
+  #  # At a specific location
+  #  map.open_info_window :location => {:latitude => -34, :longitude => 18.5},
+  #                       :text => 'Hello there...'
+  # 
+  #  # In the center of the map
+  #  map.open_info_window :location => :center, :text => 'Hello there...'
+  #  
+  #  # Now using partial
+  #  map.open_info_window :location => :center, :partial => 'spot_information',
+  #
+  #  map.open_info_window :location => :center, :partial => 'spot_information', :locals => {:information => information}
+  #
+  #  # Using a url, will include the location info in the url
+  #  # Use params[:location] or params[:location][:latitude] and params[:location][:longitude] in your action
+  #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot}
+  #
+  #  # Don't include the location in the params
+  #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot},
+  #                       :include_location => false
   class Map < MapObject
     attr_reader :center, :zoom, :type
     
@@ -107,6 +148,7 @@ module Google # :nodoc:
     #
     # ==== Examples:
     #  map.zoom = :best_fit
+    #
     #  map.zoom = 12
     def zoom=(zoom)
       @zoom = zoom
@@ -124,11 +166,11 @@ module Google # :nodoc:
     # * +position+ - Optional. The position that the control should be placed.
     #
     # ==== Examples:
-    #  add_control :small_zoom
-    #  add_control Google::Pane.new(:text => 'This is a pane')
-    #  add_control :small_zoom, :position => {:anchor => :top_right}
-    #  add_control :map_type, :position => {:anchor => :top_left}
-    #  add_control :map_type, :position => {:anchor => :top_left, :offset => [10, 10]}
+    #  map.add_control :small_zoom
+    #  map.add_control Google::Pane.new(:text => 'This is a pane')
+    #  map.add_control :small_zoom, :position => {:anchor => :top_right}
+    #  map.add_control :map_type, :position => {:anchor => :top_left}
+    #  map.add_control :map_type, :position => {:anchor => :top_left, :offset => [10, 10]}
     def add_control(control, options = {})
       control = "new #{control.to_google_control}()" if control.is_a?(Symbol)
       position = options[:position].to_google_position if options[:position]
@@ -141,22 +183,33 @@ module Google # :nodoc:
     # The controls will all be placed at their default positions, if you need control over the position use add_control.   
     #
     # ==== Examples:
-    #  controls = :small_zoom
-    #  controls = :small_zoom, :map_type
-    #  controls = :small_zoom, Google::Pane.new(:text => 'This is a pane')    
+    #  map.controls = :small_zoom
+    #  map.controls = :small_zoom, :map_type
+    #  map.controls = :small_zoom, Google::Pane.new(:text => 'This is a pane')    
     def controls=(*controls)
       controls.flatten.each do |control|
         self.add_control control
       end
     end
     
-    # Replaces an existing marker on the map
+    # Replaces an existing marker on the map.
     def replace_marker(marker_or_options)
       remove_marker marker_or_options
       add_marker marker_or_options
     end
 
-    # Adds a single marker to the map which can be a Marker or whatever Marker#new supports.     
+    # Adds a single marker to the map which can be a Marker or whatever Marker#new supports.
+    #
+    # ==== Examples:
+    #
+    #  map.add_marker :location => {:latitude => -34, :longitude => 18.5}
+    #
+    #  map.add_marker :location => {:latitude => -34, :longitude => 18.5}, 
+    #                 :draggable => true,
+    #                 :title => "This is a marker!"
+    #
+    #  map.add_marker :location => {:latitude => -34, :longitude => 18.5},
+    #                 :icon => :green_circle
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
@@ -173,7 +226,7 @@ module Google # :nodoc:
       end
     end
     
-    # Removes marker that has already been placed on the map
+    # Removes a marker that has already been placed on the map
     def remove_marker(marker_or_options)
       # TODO - Refactor out!
       marker_id = if marker_or_options.is_a?(Hash)
@@ -211,6 +264,17 @@ module Google # :nodoc:
     # ==== Yields:
     # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
     # * +location+ - The location at which the map was clicked.
+    #
+    # ==== Examples:
+    #
+    #  # When the map is clicked, add a marker and open an info window at that location   
+    #  map.click do |script, location|
+    #    map.add_marker :location => location
+    #    map.open_info_window :location => location, :text => 'Awesome, you added a marker!'
+    #  end
+    #
+    #  # Using the +info_window_options+ convenience
+    #  map.click :text => 'Awesome, an info window popped up!'
     def click(info_window_options = nil)
       if info_window_options
         self.click do |script, location|
@@ -226,14 +290,6 @@ module Google # :nodoc:
         end
       end
     end
-
-    #def get_location(location) #TODO ? move to Map::Location ?
-    #  if location.is_a?(Symbol) || location.is_a?(String)
-    #    {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
-    #  else
-    #    {:latitude => location.latitude, :longitude => location.longitude}
-    #  end      
-    #end
       
     # Opens an info window on the map at the given +location+ using either +url+, +partial+ or +text+ options as content.
     #
@@ -242,10 +298,32 @@ module Google # :nodoc:
     #   must be placed on the map, defaulted to +center+.
     # * +url+ - Optional. URL is generated by rails #url_for. Supports standard url arguments and javascript variable interpolation.
     # * +include_location+ - Optional. Works in conjunction with the +url+ option and indicates if latitude and longitude parameters of
-    #   +location+ should be sent through with the +url+, defaulted to +true+.
+    #   +location+ should be sent through with the +url+, defaulted to +true+. Use <tt>params[:location]</tt> or <tt>params[:location][:latitude]</tt> and <tt>params[:location][:longitude]</tt> in your action.
     # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be 
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
+    # 
+    # ==== Examples:
+    #
+    #  # At a specific location
+    #  map.open_info_window :location => {:latitude => -34, :longitude => 18.5},
+    #                       :text => 'Hello there...'
+    # 
+    #  # In the center of the map
+    #  map.open_info_window :location => :center, :text => 'Hello there...'
+    #  
+    #  # Now using partial
+    #  map.open_info_window :location => :center, :partial => 'spot_information',
+    #
+    #  map.open_info_window :location => :center, :partial => 'spot_information', :locals => {:information => information}
+    #
+    #  # Using a url, will include the location info in the url
+    #  # Use params[:location] or params[:location][:latitude] and params[:location][:longitude] in your action
+    #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot}
+    #
+    #  # Don't include the location in the params
+    #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot},
+    #                       :include_location => false
     def open_info_window(options)
       info_window = InfoWindow.new(:var => self.var)
       info_window.open options
@@ -271,7 +349,7 @@ module Google # :nodoc:
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end
 
-    def track_bounds!
+    def track_bounds! # :nodoc:
       self << "track_bounds = new GLatLngBounds();"
     end
     
