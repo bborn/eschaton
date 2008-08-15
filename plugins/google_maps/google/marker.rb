@@ -27,12 +27,30 @@ module Google
   #  Google::Marker.new :location => {:latitude => -34, :longitude => 18.5},
   #                     :gravatar => {:email_address => 'yawningman@eschaton.com', :size => 50}
   #
-  # ==== Circle examples:
+  # === Circle examples:
   #  Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
   #                     :circle => true
   #
   #  Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
   #                     :circle => {:radius => 500, :border_width => 5}
+  #
+  # === Info windows using open_info_window:
+  #
+  #  marker.open_info_window :text => 'Hello there...'
+  #
+  #  marker.open_info_window :partial => 'spot_information'
+  #
+  #  marker.open_info_window :partial => 'spot_information', :locals => {:information => information}
+  #
+  #  map.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
+  #
+  # === Using the click event:
+  #  
+  #  # Open a info window and circle the marker.
+  #  marker.click do |script|
+  #    marker.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
+  #    marker.circle!
+  #  end
   class Marker < MapObject
     attr_accessor :icon
     attr_reader :location
@@ -80,6 +98,16 @@ module Google
     # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be 
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
+    #
+    # ==== Examples:
+    #
+    #  marker.open_info_window :text => 'Hello there...'
+    #
+    #  marker.open_info_window :partial => 'spot_information'
+    #
+    #  marker.open_info_window :partial => 'spot_information', :locals => {:information => information}
+    #
+    #  map.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
     def open_info_window(options)
       info_window = InfoWindow.new(:var => self.var)
       info_window.open_on_marker options
@@ -87,6 +115,14 @@ module Google
 
     # If called with a block it will attach the block to the "click" event of the marker.
     # If +info_window_options+ are supplied an info window will be opened with those options and the block will be ignored.
+    #
+    # ==== Example:
+    #
+    #  # Open a info window and circle the marker.
+    #  marker.click do |script|
+    #    marker.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
+    #    marker.circle!
+    #  end
     def click(info_window_options = nil, &block) # :yields: script
       if info_window_options
         self.click do

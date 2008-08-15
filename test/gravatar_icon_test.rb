@@ -8,22 +8,22 @@ class GravatarIconTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       assert_output_fixture :gravatar, 
                              script.record_for_test {
-                               Google::GravatarIcon.new :email_address => 'karadanais@gmail.com'
+                               Google::GravatarIcon.new :email_address => 'yawningman@eschaton.com'
                              }
 
       assert_output_fixture :gravatar_with_size, 
                             script.record_for_test {
-                              Google::GravatarIcon.new :email_address => 'karadanais@gmail.com', :size => 50
+                              Google::GravatarIcon.new :email_address => 'yawningman@eschaton.com', :size => 50
                             }
 
       assert_output_fixture :gravatar_with_default_icon, 
                             script.record_for_test {
-                              Google::GravatarIcon.new :email_address => 'karadanais@gmail.com', :default => 'http://localhost:3000/images/blue.png'
+                              Google::GravatarIcon.new :email_address => 'yawningman@eschaton.com', :default => 'http://localhost:3000/images/blue.png'
                             }
 
       assert_output_fixture :gravatar_with_size_and_default_icon, 
                             script.record_for_test {
-                              Google::GravatarIcon.new :email_address => 'karadanais@gmail.com', :default => 'http://localhost:3000/images/blue.png',
+                              Google::GravatarIcon.new :email_address => 'yawningman@eschaton.com', :default => 'http://localhost:3000/images/blue.png',
                                                        :size => 50
                             }
     end

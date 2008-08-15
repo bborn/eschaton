@@ -140,7 +140,7 @@ class MapTest < Test::Unit::TestCase
                                 end
                               }
 
-        # Info window convention
+        # Info window convenience
         assert_output_fixture :map_click_info_window,
                               script.record_for_test {
                                 map.click :text => "This is a info window!"
@@ -247,11 +247,17 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.record_for_test do 
-                      map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
-                    end
+      assert_output_fixture :map_add_line_with_vertex, 
+                            script.record_for_test {
+                              map.add_line :vertices => {:latitude => -33.947, :longitude => 18.462}
+                            }
+                            
+      assert_output_fixture :map_add_line_with_vertices, 
+                            script.record_for_test {
+                              map.add_line :vertices => [{:latitude => -33.947, :longitude => 18.462},
+                                                         {:latitude => -34.0, :longitude => 19.0}]
+                            }
 
-      assert_output_fixture :map_add_line, test_output
     end
   end
 
@@ -259,11 +265,10 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.record_for_test do 
-                      map.clear
-                    end
-      
-      assert_equal 'map.clearOverlays();', test_output.generate
+      assert_output_fixture 'map.clearOverlays();',
+                            script.record_for_test {
+                              map.clear
+                            }
     end
   end
 

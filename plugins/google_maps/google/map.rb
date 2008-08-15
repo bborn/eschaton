@@ -354,7 +354,7 @@ module Google # :nodoc:
     end
     
     # The default center for the map which is Mzanzi.
-    def default_center
+    def default_center # :nodoc:
       {:latitude => -33.947, :longitude => 18.462}
     end
     
