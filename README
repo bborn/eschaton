@@ -33,9 +33,11 @@ Generate a map, look at the files the generator created and play a bit
 
 Visit the map at http://localhost:3000/map or wherever your server runs.
 
-== Documentation...
+== Documentation and tutorials
 
-Generate the eschaton docs
+Visit the wiki[http://github.com/yawningman/eschaton/wikis] for general info and tutorials.
+
+Then generate the eschaton docs
   $ cd vendor/plugins/eschaton
   $ rake rdoc
   $ open rdoc/index.html
