@@ -279,7 +279,7 @@ class MarkerTest < Test::Unit::TestCase
                               marker.set_tooltip :text => 'This is sparta!', :show => :always
                             }
 
-      assert_output_fixture 'marker.setTooltip("This is sparta!");', 
+      assert_output_fixture :marker_set_tooltip_show_false, 
                             script.record_for_test{
                               marker.set_tooltip :text => 'This is sparta!', :show => false
                             }
@@ -294,6 +294,30 @@ class MarkerTest < Test::Unit::TestCase
                              marker.set_tooltip :partial => 'spot_information', :show => :on_mouse_hover
                            }                 
     end
+  end
+
+  def test_show_tooltip
+    Eschaton.with_global_script do |script|            
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                  :tooltip => {:text => 'This is sparta!'}
+
+      assert_output_fixture 'tooltipmarker.show();', 
+                             script.record_for_test{
+                               marker.show_tooltip!
+                             }
+    end    
+  end
+
+  def test_hide_tooltip
+    Eschaton.with_global_script do |script|            
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                  :tooltip => {:text => 'This is sparta!'}
+
+      assert_output_fixture 'tooltipmarker.hide();', 
+                             script.record_for_test{
+                               marker.hide_tooltip!
+                             }
+    end    
   end
 
   def test_to_marker

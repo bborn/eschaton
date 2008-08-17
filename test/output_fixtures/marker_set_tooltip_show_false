@@ -1,3 +1,2 @@
 tooltipmarker = new Tooltip(marker, "This is sparta!", 4);
 map.addOverlay(tooltipmarker);
-tooltipmarker.show();

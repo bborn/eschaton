@@ -25,37 +25,64 @@ function drawCircle(center, radius, nodes, liColor, liWidth, liOpa, fillColor, f
 	return poly;
 }
 
-// Add some tooltip functionality to GMarker
-GMarker.prototype.setTooltip = function(html){
-  this.tooltip_element = document.createElement('div');
-	
-	this.hideTooltip();
-	
-	var default_style = 'border: #8B8B8B solid 1px; background: white; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 3px; opacity: 0.9; -moz-opacity: 0.9; filter:alpha(opacity=90);'
-  this.tooltip_element.innerHTML = '<div style="' + default_style + '" class="tooltip">'+ html +'</div>';
+/**
+ * Modified by yawningman to work with eschaton
+ * For original see  http://onemarco.com/2007/05/16/custom-tooltips-for-google-maps/ 
+ *
+ * @author Marco Alionso Ramirez, marco@onemarco.com
+ * @version 1.0
+ * The Tooltip class is an addon designed for the Google
+ * Maps GMarker class.
+ */
 
-	var point = map.getCurrentMapType().getProjection().fromLatLngToPixel(map.getBounds().getSouthWest(), map.getZoom());
-	var offset = map.getCurrentMapType().getProjection().fromLatLngToPixel(this.getPoint(), map.getZoom());
-	var anchor = this.getIcon().iconAnchor;
-	var width = this.getIcon().iconSize.width;
-	var pos = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(offset.x - point.x - anchor.x + width,- offset.y + point.y + anchor.y)); 
-	pos.apply(this.tooltip_element);
-
-  document.getElementById('map').appendChild(this.tooltip_element);
+/**
+ * @constructor
+ * @param {GMarker} marker
+ * @param {String} html
+ * @param {Number} padding
+ */
+function Tooltip(marker, html, padding){
+	this.marker_ = marker;
+	this.html_ = html;
+	this.padding_ = padding;
 }
 
-GMarker.prototype.showTooltip = function(){
-	this.tooltip_element.style.visibility = 'visible';
+Tooltip.prototype = new GOverlay();
+
+Tooltip.prototype.initialize = function(map){
+	var div = document.createElement("div");
+	div.innerHTML = this.html_
+	div.className = 'tooltip';
+	div.style.position = 'absolute';
+	div.style.visibility = 'hidden';
+	map.getPane(G_MAP_FLOAT_PANE).appendChild(div);
+	this.map_ = map;
+	this.div_ = div;
 }
 
-GMarker.prototype.hideTooltip = function(){
-	this.tooltip_element.style.visibility = 'hidden';
+Tooltip.prototype.remove = function(){
+	this.div_.parentNode.removeChild(this.div_);
 }
 
-GMarker.prototype.toggleTooltip = function(){
-	if (this.tooltip_element.style.visibility == 'visible'){
-	  this.hideTooltip();
-	} else {
-	  this.showTooltip();	  
-	}
+Tooltip.prototype.copy = function(){
+	return new Tooltip(this.marker_,this.html_,this.padding_);
 }
+
+Tooltip.prototype.redraw = function(force){
+	if (!force) return;
+	var markerPos = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
+	var iconAnchor = this.marker_.getIcon().iconAnchor;
+	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
+	var yPos = markerPos.y - iconAnchor.y - this.div_.clientHeight - this.padding_;
+	this.div_.style.top = yPos + 'px';
+	this.div_.style.left = xPos + 'px';
+}
+
+Tooltip.prototype.show = function(){
+	this.div_.style.visibility = 'visible';
+}
+
+Tooltip.prototype.hide = function(){
+	this.div_.style.visibility = 'hidden';
+}
+/* end tooltip */

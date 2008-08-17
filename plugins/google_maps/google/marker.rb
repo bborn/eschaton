@@ -64,7 +64,7 @@ module Google
   #  end
   class Marker < MapObject
     attr_accessor :icon
-    attr_reader :location
+    attr_reader :location, :tooltip_var
     
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
@@ -200,11 +200,11 @@ module Google
       Circle.new options
     end
     
-    # Sets the tooltip on the marker using either +text+ or +partial+ options as content. 
-    # A tooltip is a window that floats above and to the right of the marker.
+    # Sets the tooltip on the marker using either +text+ or +partial+ options as content. The tooltip window will 
+    # float just above the marker.
     #
-    # If you wish to use a different CSS style you can define a 'tooltip' style in your stylesheet.
-    # The tooltip can then be show or hidden by using Marker#show_tooltip and Marker#hide_tooltip. 
+    # To style the tooltip define a 'tooltip' style in your CSS stylesheet.
+    # The tooltip can then be shown or hidden by using show_tooltip! and hide_tooltip!. 
     #
     # ==== Options:
     # * +text+ - Optional. The text to display in the tooltip.
@@ -231,19 +231,31 @@ module Google
     #  marker.set_tooltip :partial => 'spot_information', :locals => {:information => information},
     #                     :show => :always
     def set_tooltip(options)
-      options.default! :show => :on_mouse_hover
+      options.default! :show => :on_mouse_hover, :padding => 4
 
       show = options.extract_and_remove(:show)
       content = OptionsHelper.to_content options
 
-      self << "#{self.var}.setTooltip(#{content.to_js});"
+      @tooltip_var = "tooltip#{self}"
+
+      script << "#{self.tooltip_var} = new Tooltip(#{self}, #{content.to_js}, #{options[:padding]});"                          
+      script << "map.addOverlay(#{self.tooltip_var});"
 
       if show == :on_mouse_hover
-        self.mouse_over {self.show_tooltip}
-        self.mouse_out {self.hide_tooltip}
+        self.mouse_over {self.show_tooltip!}
+        self.mouse_out {self.hide_tooltip!}
       elsif show == :always
-        self.show_tooltip
+        self.show_tooltip!
       end
+    end
+    
+    # Shows the tooltip above the marker.
+    def show_tooltip!
+      self << "#{self.tooltip_var}.show();"
+    end
+
+    def hide_tooltip!
+      self << "#{self.tooltip_var}.hide();"
     end
 
     def mouse_over(&block)

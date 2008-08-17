@@ -1,3 +1,4 @@
 marker = new GMarker(new GLatLng(-33.947, 18.462), {});
-marker.setTooltip("This is sparta!");
-marker.showTooltip();
+tooltipmarker = new Tooltip(marker, "This is sparta!", 4);
+map.addOverlay(tooltipmarker);
+tooltipmarker.show();
