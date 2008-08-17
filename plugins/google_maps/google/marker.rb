@@ -231,7 +231,7 @@ module Google
     #  marker.set_tooltip :partial => 'spot_information', :locals => {:information => information},
     #                     :show => :always
     def set_tooltip(options)
-      options.default! :show => :on_mouse_hover, :padding => 2
+      options.default! :show => :on_mouse_hover, :padding => 3
 
       show = options.extract_and_remove(:show)
       content = OptionsHelper.to_content options
