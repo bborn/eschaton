@@ -21,11 +21,7 @@ module Google
           open_info_window_on_map :location => location, :content => data
         end
       else
-        text = if options[:partial]
-                 Eschaton.current_view.render options
-               else
-                 options[:text]
-               end
+        text = OptionsHelper.to_content options
 
         open_info_window_on_map :location => location, :content => text
       end
@@ -37,11 +33,7 @@ module Google
           open_info_window_on_marker :content => data
         end
       else
-        text = if options[:partial]
-                 Eschaton.current_view.render options
-               else
-                 options[:text]
-               end
+        text = OptionsHelper.to_content options
 
         open_info_window_on_marker :content => text
       end
@@ -57,12 +49,7 @@ module Google
           yield build_window_content(data)
         end
       else
-        text = if options[:partial]
-                 Eschaton.current_view.render options
-               else
-                 options[:text]
-               end
-
+        text = OptionsHelper.to_content options
         yield build_window_content(text)
       end
     end
@@ -72,7 +59,7 @@ module Google
         {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
       else
         {:latitude => location.latitude, :longitude => location.longitude}
-      end      
+      end
     end
 
     def self.build_window_content(content)

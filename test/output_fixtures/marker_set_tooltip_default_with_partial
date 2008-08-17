@@ -1,0 +1,13 @@
+marker.setTooltip("test output for render");
+function marker_mouseover(marker){
+GEvent.addListener(marker, "mouseover", function() {
+marker.showTooltip();
+});
+}
+marker_mouseover(marker);
+function marker_mouseout(marker){
+GEvent.addListener(marker, "mouseout", function() {
+marker.hideTooltip();
+});
+}
+marker_mouseout(marker);

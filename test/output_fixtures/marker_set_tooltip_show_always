@@ -1,0 +1,2 @@
+marker.setTooltip("This is sparta!");
+marker.showTooltip();

@@ -70,6 +70,34 @@ class MarkerTest < Test::Unit::TestCase
     end 
   end
 
+  def test_initialize_with_tooltip
+    Eschaton.with_global_script do |script|
+      assert_output_fixture :marker_tooltip, 
+                             script.record_for_test {
+                               Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                  :tooltip => {:text => 'This is sparta!'}
+                             }
+                             
+      assert_output_fixture :marker_tooltip,
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :tooltip => {:text => 'This is sparta!', :show => :on_mouse_hover}
+                            }
+
+      assert_output_fixture :marker_tooltip_show_always, 
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :tooltip => {:text => 'This is sparta!', :show => :always}
+                            }
+ 
+      assert_output_fixture :marker_tooltip_with_partial,
+                            script.record_for_test {
+                              Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
+                                                 :tooltip => {:partial => 'spot_information'}
+                            }
+   end
+  end
+
   def test_marker_open_info_window
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
@@ -232,6 +260,42 @@ class MarkerTest < Test::Unit::TestCase
     end    
   end
   
+  def test_set_tooltip
+    Eschaton.with_global_script do |script|            
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+
+      assert_output_fixture :marker_set_tooltip_default, 
+                             script.record_for_test{
+                               marker.set_tooltip :text => 'This is sparta!'
+                             }
+
+      assert_output_fixture :marker_set_tooltip_default, 
+                            script.record_for_test{
+                              marker.set_tooltip :text => 'This is sparta!', :show => :on_mouse_hover
+                            }
+                            
+      assert_output_fixture :marker_set_tooltip_show_always, 
+                            script.record_for_test{
+                              marker.set_tooltip :text => 'This is sparta!', :show => :always
+                            }
+
+      assert_output_fixture 'marker.setTooltip("This is sparta!");', 
+                            script.record_for_test{
+                              marker.set_tooltip :text => 'This is sparta!', :show => false
+                            }
+      
+      assert_output_fixture :marker_set_tooltip_default_with_partial, 
+                            script.record_for_test{
+                              marker.set_tooltip :partial => 'spot_information'
+                            }
+
+     assert_output_fixture :marker_set_tooltip_default_with_partial, 
+                           script.record_for_test{
+                             marker.set_tooltip :partial => 'spot_information', :show => :on_mouse_hover
+                           }                 
+    end
+  end
+
   def test_to_marker
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}

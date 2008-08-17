@@ -1,0 +1,14 @@
+marker = new GMarker(new GLatLng(-33.947, 18.462), {});
+marker.setTooltip("test output for render");
+function marker_mouseover(marker){
+GEvent.addListener(marker, "mouseover", function() {
+marker.showTooltip();
+});
+}
+marker_mouseover(marker);
+function marker_mouseout(marker){
+GEvent.addListener(marker, "mouseout", function() {
+marker.hideTooltip();
+});
+}
+marker_mouseout(marker);
