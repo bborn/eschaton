@@ -24,3 +24,20 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
   rdoc.rdoc_files.include("plugins/*/**/*.rb")  
 end
+
+desc 'Updates any eschaton related files, used when eschaton is upgraded.'
+task :update do |t|
+  update_javascript
+end
+
+def update_javascript
+  project_dir = RAILS_ROOT + '/public/javascripts/'  
+  scripts = Dir['generators/map/templates/*.js']
+
+  FileUtils.cp scripts, project_dir
+
+  puts 'Updated javascript:'
+  scripts.each do |script|
+    puts "  #{script}"
+  end  
+end
