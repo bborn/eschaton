@@ -29,13 +29,9 @@ module Google
     # Either +vertices+, +from+ and +to+ or +between_markers+ will be used to draw the line.
     #
     # ==== Options:
-    # * +vertices+ - Required. A single location or array of locations representing the vertices of the line.
-    # 
-    # ==== or to and from:
+    # * +vertices+ - Optional. A single location or array of locations representing the vertices of the line.
     # * +from+ - Optional. The location where the line begins.
     # * +to+ - Optional. The location where the line ends.
-    #
-    # ==== or between markers:
     # * +between_markers+ - Optional. An array of markers. The line will be drawn between the markers.
     #
     # ==== Styling options
