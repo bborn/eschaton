@@ -258,6 +258,47 @@ class MapTest < Test::Unit::TestCase
                                                          {:latitude => -34.0, :longitude => 19.0}]
                             }
 
+      assert_output_fixture :map_add_line_with_from_and_to, 
+                            script.record_for_test {
+                              map.add_line :from => {:latitude => -33.947, :longitude => 18.462},
+                                           :to =>  {:latitude => -34.0, :longitude => 19.0}
+                            }
+
+      assert_output_fixture :map_add_line_with_colour,
+                            script.record_for_test {
+                              map.add_line :from => {:latitude => -33.947, :longitude => 18.462},
+                                           :to =>  {:latitude => -34.0, :longitude => 19.0},
+                                           :colour => 'red'
+                            }
+
+      assert_output_fixture :map_add_line_with_colour_and_thickness,
+                            script.record_for_test {
+                              map.add_line :from => {:latitude => -33.947, :longitude => 18.462},
+                                           :to =>  {:latitude => -34.0, :longitude => 19.0},
+                                           :colour => 'red', :thickness => 10
+                            }
+
+      assert_output_fixture :map_add_line_with_style,
+                            script.record_for_test {
+                              map.add_line :from => {:latitude => -33.947, :longitude => 18.462},
+                                           :to =>  {:latitude => -34.0, :longitude => 19.0},
+                                           :colour => 'red', :thickness => 10, :opacity => 0.7
+                            }
+
+      markers = [Google::Marker.new(:location => {:latitude => -33.947, :longitude => 18.462}),
+                 Google::Marker.new(:location => {:latitude => -34.0, :longitude => 19.0}),
+                 Google::Marker.new(:location => {:latitude => -35.0, :longitude => 19.0})]
+
+      assert_output_fixture :map_add_line_between_markers,
+                            script.record_for_test {
+                              map.add_line :between_markers => markers
+                            }
+
+      assert_output_fixture :map_add_line_between_markers_with_style,
+                            script.record_for_test {
+                              map.add_line :between_markers => markers,
+                                           :colour => 'red', :weigth => 10, :opacity => 0.7
+                            }                            
     end
   end
 

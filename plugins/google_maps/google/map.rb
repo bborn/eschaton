@@ -3,11 +3,11 @@ module Google # :nodoc:
   # Represents a map. If a method or event is not documented here please see googles online[http://code.google.com/apis/maps/documentation/reference.html#GMap2] 
   # docs for details. See MapObject#listen_to on how to use events not listed on this object.
   #
-  # You will most likely use click, open_info_window, add_marker and add_markers to get some basic functionality going.
+  # You will most likely use click, open_info_window, add_line, add_marker and add_markers to get some basic functionality going.
   #
   # === Examples:
   #
-  #  Google::Map.new # Africa, we love you!
+  #  Google::Map.new # On the mushroom dotted plains of Afffrrrricaaaaa!
   #
   #  Google::Map.new :center => :best_fit
   #
@@ -67,6 +67,26 @@ module Google # :nodoc:
   #  # Don't include the location in the params
   #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot},
   #                       :include_location => false
+  #
+  # === Using lines with add_line
+  #
+  #  map.add_line :vertices => [{:latitude => -33.958, :longitude => 18.462},
+  #                             {:latitude => -33.987, :longitude => 18.462},
+  #                             {:latitude => -33.999, :longitude => 18.472}]
+  #
+  #  map.add_line :from => {:latitude => -33.958, :longitude => 18.462},
+  #               :to => {:latitude => -33.987, :longitude => 18.462}
+  #
+  #  map.add_line :from => {:latitude => -33.958, :longitude => 18.462},
+  #               :to => {:latitude => -33.987, :longitude => 18.462},
+  #               :colour => 'red', :thickness => 20
+  #
+  #  # Adding a line betweem markers
+  #  markers = map.add_markers({:location => {:latitude => -33.958, :longitude => 18.462}},
+  #                            {:location => {:latitude => -33.987, :longitude => 18.462}},
+  #                            {:location => {:latitude => -33.999, :longitude => 18.472}})
+  #
+  #  map.add_line :between_markers => markers, :colour => 'red', :thickness => 10  
   class Map < MapObject
     attr_reader :center, :zoom, :type
     
@@ -213,8 +233,10 @@ module Google # :nodoc:
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
-
-      self << "track_bounds.extend(#{marker}.getLatLng());"
+      
+      # TODO - make track bounds a method and support markers, lines etc
+      self.extend_track_bounds marker.location
+      #self << "track_bounds.extend(#{marker}.getLatLng());"
 
       marker      
     end
@@ -239,9 +261,30 @@ module Google # :nodoc:
     end
     
     # Adds a +line+ to the map which can be a Line or whatever Line#new supports.
+    #
+    # ==== Examples:
+    #  map.add_line :vertices => [{:latitude => -33.958, :longitude => 18.462},
+    #                             {:latitude => -33.987, :longitude => 18.462},
+    #                             {:latitude => -33.999, :longitude => 18.472}]
+    #
+    #  map.add_line :from => {:latitude => -33.958, :longitude => 18.462},
+    #               :to => {:latitude => -33.987, :longitude => 18.462}
+    #
+    #  map.add_line :from => {:latitude => -33.958, :longitude => 18.462},
+    #               :to => {:latitude => -33.987, :longitude => 18.462},
+    #               :colour => 'red', :thickness => 20
+    #
+    #  # Adding a line betweem markers
+    #  markers = map.add_markers({:location => {:latitude => -33.958, :longitude => 18.462}},
+    #                            {:location => {:latitude => -33.987, :longitude => 18.462}},
+    #                            {:location => {:latitude => -33.999, :longitude => 18.472}})
+    #
+    #  map.add_line :between_markers => markers, :colour => 'red', :thickness => 10
     def add_line(line)
       line = line.to_line
       self.add_overlay line
+
+      self.extend_track_bounds line.vertices
 
       line
     end
@@ -352,7 +395,17 @@ module Google # :nodoc:
     def track_bounds! # :nodoc:
       self << "track_bounds = new GLatLngBounds();"
     end
-    
+
+    # Extends the tracking bounds of the map, locations added here will effect +center+ and +zoom+
+    # if these are in +best_fit+ mode.
+    # 
+    # Marker and Line objects are automatically tracked when using add_marker and add_line.
+    def extend_track_bounds(*locations)
+      locations.flatten.each do |location|
+        self << "track_bounds.extend(#{location});"
+      end
+    end
+
     # The default center for the map which is Mzanzi.
     def default_center # :nodoc:
       {:latitude => -33.947, :longitude => 18.462}

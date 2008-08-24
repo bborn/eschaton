@@ -1,4 +1,4 @@
-tooltipmarker = new Tooltip(marker, "test output for render", 4);
+tooltipmarker = new Tooltip(marker, "test output for render", 3);
 map.addOverlay(tooltipmarker);
 function marker_mouseover(marker){
 GEvent.addListener(marker, "mouseover", function() {

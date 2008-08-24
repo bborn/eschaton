@@ -1,6 +1,6 @@
 marker = new GMarker(new GLatLng(-33.947, 18.462), {});
 map.addOverlay(marker);
-track_bounds.extend(marker.getLatLng());
+track_bounds.extend(new GLatLng(-33.947, 18.462));
 marker = new GMarker(new GLatLng(-34.947, 19.462), {});
 map.addOverlay(marker);
-track_bounds.extend(marker.getLatLng());
+track_bounds.extend(new GLatLng(-34.947, 19.462));

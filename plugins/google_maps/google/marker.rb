@@ -1,6 +1,6 @@
 module Google
   
-  # Represents a marker that can be added to a Map, you can also use Map#add_marker. If a method or event is not documented here please 
+  # Represents a marker that can be added to a Map using Map#add_marker. If a method or event is not documented here please 
   # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GMarker] docs for details. See MapObject#listen_to on how to use
   # events not listed on this object.
   #

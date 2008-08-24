@@ -1,15 +1,49 @@
 module Google
 
-  # Represents a poly line that can be added to a Map. If a method or event is not documented here please 
+  # Represents a polyline that can be added to a Map using Map#add_line. If a method or event is not documented here please 
   # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GPolyline] docs for details.
   # See MapObject#listen_to on how to use events not listed on this object.
+  #
+  # === Examples:
+  #
+  #  Google::Line.new :vertices => [{:latitude => -33.958, :longitude => 18.462},
+  #                                 {:latitude => -33.987, :longitude => 18.462},
+  #                                 {:latitude => -33.999, :longitude => 18.472}]
+  #
+  #  Google::Line.new :from => {:latitude => -33.958, :longitude => 18.462},
+  #                   :to => {:latitude => -33.987, :longitude => 18.462}
+  #
+  #  Google::Line.new :from => {:latitude => -33.958, :longitude => 18.462},
+  #                   :to => {:latitude => -33.987, :longitude => 18.462},
+  #                   :colour => 'red', :thickness => 20
+  #
+  #  # Adding a line betweem markers
+  #  markers = map.add_markers({:location => {:latitude => -33.958, :longitude => 18.462}},
+  #                            {:location => {:latitude => -33.987, :longitude => 18.462}},
+  #                            {:location => {:latitude => -33.999, :longitude => 18.472}})
+  #
+  #  Google::Line.new :between_markers => markers, :colour => 'red', :thickness => 10
   class Line < MapObject
+    attr_reader :vertices
 
-    # :vertices, :from, :to, :editable
+    # Either +vertices+, +from+ and +to+ or +between_markers+ will be used to draw the line.
     #
+    # ==== Options:
+    # * +vertices+ - Required. A single location or array of locations representing the vertices of the line.
+    # 
+    # ==== or to and from:
+    # * +from+ - Optional. The location where the line begins.
+    # * +to+ - Optional. The location where the line ends.
     #
+    # ==== or between markers:
+    # * +between_markers+ - Optional. An array of markers. The line will be drawn between the markers.
+    #
+    # ==== Styling options
+    # * +colour+ - Optional. The colour of the line, can be a name('red', 'blue') or a hex colour.
+    # * +thickness+ - Optional. The thickness of the line in pixels.
+    # * +opacity+ - Optional. The opacity of the line between 0 and 1.
     def initialize(options = {})
-      options.default! :var => 'line', :vertices => []
+      options.default! :var => 'line', :vertices => [] 
 
       super
 
@@ -17,18 +51,26 @@ module Google
         options[:vertices] << options.extract_and_remove(:from) if options[:from]  
         options[:vertices] << options.extract_and_remove(:to) if options[:to]
 
-        vertices = options.extract_and_remove(:vertices).arify.collect(&:to_location)
+        if markers = options[:between_markers]
+          markers.each do |marker|
+            options[:vertices] << marker.location
+          end
+        end
+
+        self.vertices = options.extract_and_remove(:vertices).arify.collect(&:to_location)
         
-        self << "#{self.var} = new GPolyline(#{vertices.to_js});"
-        
-        self.style = options unless options.empty?
+        colour =  options.extract_and_remove(:colour) 
+        thickness =  options.extract_and_remove(:thickness) 
+        opacity =  options.extract_and_remove(:opacity)
+
+        self << "#{self.var} = new GPolyline(#{self.vertices.to_js}, #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
       end
     end
 
     # Adds a vertex at the given +location+ and updates the shape of the line.
     # +location+ can be a Location or whatever Location#new supports 
     def add_vertex(location)
-      self << "#{self.var}.insertVertex(#{self.var}.getVertexCount(), #{location})"
+      self << "#{self.var}.insertVertex(#{self.var}.getVertexCount(), #{location.to_location})"
     end
 
     # The length of the line along the surface of a spherical earth.
@@ -40,15 +82,32 @@ module Google
       length
     end
 
-    # Changes the style of the line. See 
-    # options[http://code.google.com/apis/maps/documentation/reference.html#GPolyStyleOptions]that are supported.
+    # Changes the style of the line.
+    #
+    # ==== Options:
+    # * +colour+ - Optional. The colour of the line, can be a name('red', 'blue') or a hex colour.
+    # * +thickness+ - Optional. The thickness of the line in pixels.
+    # * +opacity+ - Optional. The opacity of the line between 0 and 1.
+    #
+    # ==== Examples:
+    #   line.style = {:colour => 'red', :thickness => 12}    
+    #   line.style = {:colour => '#aaa', :thickness => 20, :opacity => 1}
     def style=(options)
-      self << "#{self.var}.setStrokeStyle(#{options.to_google_options});"
+      stroke_style_options = {}
+      stroke_style_options[:color] = options.extract_and_remove(:colour) if options[:colour]
+      stroke_style_options[:weight] = options.extract_and_remove(:thickness) if options[:thickness]
+
+      stroke_style_options.merge! options
+      
+      self << "#{self.var}.setStrokeStyle(#{stroke_style_options.to_google_options});"
     end
     
     def click(&block)
       self.listen_to :event => :click, :with => :location, &block
     end
+    
+    protected
+      attr_writer :vertices
 
   end
 end
