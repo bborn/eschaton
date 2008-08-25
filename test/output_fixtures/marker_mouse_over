@@ -1,0 +1,7 @@
+function marker_mouseover(marker){
+GEvent.addListener(marker, "mouseover", function() {
+/* This is some test code! */
+alert("Hello from marker drop!");
+});
+}
+marker_mouseover(marker);

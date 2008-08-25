@@ -1,2 +1,2 @@
-marker = new GMarker(new GLatLng(-33.947, 18.462), {});
+marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
 circle = drawCircle(new GLatLng(-33.947, 18.462), 1.5, 40, null, 2, null, "#0055ff", null);

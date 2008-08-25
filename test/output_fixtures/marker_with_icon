@@ -2,4 +2,4 @@ icon = new GIcon();
 icon.iconAnchor = new GPoint(9, 34);
 icon.image = "/images/blue.png";
 icon.infoWindowAnchor = new GPoint(9, 2);
-marker = new GMarker(existing_location, {icon: icon});
+marker = new GMarker(existing_location, {draggable: false, icon: icon});

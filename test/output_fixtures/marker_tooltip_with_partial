@@ -1,4 +1,4 @@
-marker = new GMarker(new GLatLng(-33.947, 18.462), {});
+marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
 tooltipmarker = new Tooltip(marker, "test output for render", 3);
 map.addOverlay(tooltipmarker);
 function marker_mouseover(marker){

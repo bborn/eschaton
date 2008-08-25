@@ -76,7 +76,7 @@ module Google
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
     def initialize(options = {})
-      options.default! :var => 'marker'
+      options.default! :var => 'marker', :draggable => false
 
       super
 
@@ -96,7 +96,8 @@ module Google
         tooltip_options = options.extract_and_remove(:tooltip)
         
         self << "#{self.var} = new GMarker(#{self.location}, #{options.to_google_options});"
-        
+
+        self.draggable = options[:draggable]
         self.set_tooltip(tooltip_options) if tooltip_options
 
         if circle_options
@@ -154,6 +155,11 @@ module Google
     # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.    
     def when_picked_up(&block)
       self.listen_to :event => :dragstart, &block
+    end
+
+    # This event is fired when the marker is being "dragged" across the map.   
+    def when_being_dragged(&block)
+      self.listen_to :event => :drag, &block
     end
     
     # This event is fired when the marker is "dropped" after being dragged.
@@ -215,7 +221,7 @@ module Google
     #   the tooltip set this to +false+, defaulted to +on_mouse_hover+.
     #
     # ==== Examples:
-    #  # By deafult will show when mouse 'hovers' over marker
+    #  # By default will show when mouse 'hovers' over marker
     #  marker.set_tooltip :text => "This is sparta!"
     #
     #  # Explicitly indicate that on_mouse_hover used
@@ -243,27 +249,62 @@ module Google
 
       if show == :on_mouse_hover
         self.mouse_over {self.show_tooltip!}
-        self.mouse_out {self.hide_tooltip!}
+        self.mouse_off {self.hide_tooltip!}
       elsif show == :always
         self.show_tooltip!
       end
+      
+      if self.draggable?
+        self.when_picked_up do |script|
+          script << "#{self.tooltip_var}.markerPickedUp();"
+        end
+
+        self.when_dropped do |script, location|
+          script << "#{self.tooltip_var}.markerDropped();"
+        end
+
+        self.when_being_dragged do |script|
+          script << "#{self.tooltip_var}.redraw(true);"
+        end
+      end
     end
     
-    # Shows the tooltip above the marker.
+    # Shows the tooltip just above the marker.
     def show_tooltip!
       self << "#{self.tooltip_var}.show();"
     end
 
+    # Hides the tooltip if it is visible.
     def hide_tooltip!
       self << "#{self.tooltip_var}.hide();"
     end
+    
+    def draggable=(value) # :nodoc:
+      @draggable = value
 
+      if self.draggable?
+        self.when_picked_up{ self.close_info_window }
+      end
+    end
+
+    def draggable? # :nodoc:
+      @draggable
+    end
+    
+    # This event is fired when the mouse "moves over" the marker.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
     def mouse_over(&block)
       self.listen_to :event => :mouseover, &block
     end
 
-    def mouse_out(&block)
-      self.listen_to :event => :mouseout, &block      
+    # This event is fired when the mouse "moves off" the marker.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    def mouse_off(&block)
+      self.listen_to :event => :mouseout, &block
     end
 
     def to_marker # :nodoc:

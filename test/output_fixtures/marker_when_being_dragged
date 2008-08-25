@@ -1,0 +1,7 @@
+function marker_drag(marker){
+GEvent.addListener(marker, "drag", function() {
+/* This is some test code! */
+alert("Hello from marker drag!");
+});
+}
+marker_drag(marker);

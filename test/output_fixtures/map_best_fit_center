@@ -4,10 +4,10 @@ if (GBrowserIsCompatible()) {
 map = new GMap2(document.getElementById('map'));
 track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));
-marker = new GMarker(new GLatLng(-33.0, 18.0), {});
+marker = new GMarker(new GLatLng(-33.0, 18.0), {draggable: false});
 map.addOverlay(marker);
 track_bounds.extend(new GLatLng(-33.0, 18.0));
-marker = new GMarker(new GLatLng(-33.5, 18.5), {});
+marker = new GMarker(new GLatLng(-33.5, 18.5), {draggable: false});
 map.addOverlay(marker);
 track_bounds.extend(new GLatLng(-33.5, 18.5));
 map.setZoom(map.getBoundsZoomLevel(track_bounds));

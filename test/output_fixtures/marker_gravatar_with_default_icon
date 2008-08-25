@@ -2,4 +2,4 @@ icon = new GIcon();
 icon.iconAnchor = new GPoint(9, 34);
 icon.image = "http://www.gravatar.com/avatar/9cbd681f28890259e8025d970bc515a3?default=http://localhost:3000/images/blue.png";
 icon.infoWindowAnchor = new GPoint(9, 2);
-marker = new GMarker(new GLatLng(-33.947, 18.462), {icon: icon});
+marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false, icon: icon});

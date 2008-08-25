@@ -6,12 +6,12 @@ class MarkerTest < Test::Unit::TestCase
 
   def test_initialize
     Eschaton.with_global_script do |script|
-      assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {});', 
+      assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});', 
                              script.record_for_test {
                                 marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
                               }
 
-      assert_output_fixture 'marker = new GMarker(existing_location, {});', 
+      assert_output_fixture 'marker = new GMarker(existing_location, {draggable: false});', 
                              script.record_for_test {
                                marker = Google::Marker.new :location => :existing_location  
                              }
@@ -21,15 +21,17 @@ class MarkerTest < Test::Unit::TestCase
                               marker = Google::Marker.new :location => :existing_location, :icon => :blue
                             }
 
-      assert_output_fixture 'marker = new GMarker(existing_location, {title: "Marker title!"});',
+      assert_output_fixture 'marker = new GMarker(existing_location, {draggable: false, title: "Marker title!"});',
                             script.record_for_test {
                               marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!'
                             }
 
-      assert_output_fixture 'marker = new GMarker(existing_location, {draggable: true, title: "Marker title!"});',
+      assert_output_fixture 'marker = new GMarker(existing_location, {bouncy: false, draggable: false, title: "Marker title!"});',
                             script.record_for_test {
-                              marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!', :draggable => true
-                            }
+                              marker = Google::Marker.new :location => :existing_location, :title => 'Marker title!',
+                                                          :bouncy => false
+                            }                            
+                            
     end
   end
 
@@ -150,16 +152,27 @@ class MarkerTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
       
-      test_output = script.record_for_test do 
-        marker.when_picked_up do |script|
-          assert script.is_a?(ActionView::Helpers::PrototypeHelper::JavaScriptGenerator)
-          
-          script.comment "This is some test code!"
-          script.alert("Hello from marker drop!")
-        end
-      end
+      assert_output_fixture :marker_when_picked_up,
+                            script.record_for_test{ 
+                              marker.when_picked_up{|script|
+                                script.comment "This is some test code!"
+                                script.alert("Hello from marker drop!")
+                              }
+                            }
+    end
+  end
 
-      assert_output_fixture :marker_when_picked_up, test_output
+  def test_when_being_dragged
+    Eschaton.with_global_script do |script|
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+      
+      assert_output_fixture :marker_when_being_dragged,
+                            script.record_for_test{
+                              marker.when_being_dragged{|script|
+                                script.comment "This is some test code!"
+                                script.alert("Hello from marker drag!")
+                              }
+                            }
     end
   end
   
@@ -169,7 +182,6 @@ class MarkerTest < Test::Unit::TestCase
       
       test_output = script.record_for_test do 
         marker.when_dropped do |script, drop_location|
-          assert script.is_a?(ActionView::Helpers::PrototypeHelper::JavaScriptGenerator)
           assert_equal :drop_location, drop_location
           
           script.comment "This is some test code!"
@@ -179,7 +191,7 @@ class MarkerTest < Test::Unit::TestCase
 
       assert_output_fixture :marker_when_dropped, test_output
     end
-  end  
+  end
   
   def test_show_map_blowup
     Eschaton.with_global_script do |script|
@@ -318,6 +330,51 @@ class MarkerTest < Test::Unit::TestCase
                                marker.hide_tooltip!
                              }
     end    
+  end
+
+  def test_draggable
+    Eschaton.with_global_script do |script|
+      assert_output_fixture 'marker = new GMarker(existing_location, {draggable: false});',
+                            script.record_for_test {
+                              marker = Google::Marker.new :location => :existing_location
+                              assert_false marker.draggable?
+                            }
+
+      assert_output_fixture :marker_draggable,
+                            script.record_for_test {
+                              marker = Google::Marker.new :location => :existing_location, :title => 'Draggable marker!', 
+                                                          :draggable => true
+                              assert marker.draggable?
+                            }
+    end    
+  end
+
+  def test_mouse_over
+    Eschaton.with_global_script do |script|
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+      
+      assert_output_fixture :marker_mouse_over,
+                            script.record_for_test{ 
+                              marker.mouse_over{|script|
+                                script.comment "This is some test code!"
+                                script.alert("Hello from marker drop!")
+                              }
+                            }
+    end
+  end
+
+  def test_mouse_off
+    Eschaton.with_global_script do |script|
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+      
+      assert_output_fixture :marker_mouse_off,
+                            script.record_for_test{ 
+                              marker.mouse_off{|script|
+                                script.comment "This is some test code!"
+                                script.alert("Hello from marker drop!")
+                              }
+                            }
+    end
   end
 
   def test_to_marker

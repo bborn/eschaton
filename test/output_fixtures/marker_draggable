@@ -1,0 +1,7 @@
+marker = new GMarker(existing_location, {draggable: true, title: "Draggable marker!"});
+function marker_dragstart(marker){
+GEvent.addListener(marker, "dragstart", function() {
+marker.closeInfoWindow();
+});
+}
+marker_dragstart(marker);
