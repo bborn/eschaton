@@ -60,6 +60,16 @@ Tooltip.prototype.initialize = function(map){
 	this.div_ = div;
 }
 
+Tooltip.prototype.markerPickedUp = function(){
+  this.previous_padding = this.padding_
+  this.padding_ = 20;
+}
+
+Tooltip.prototype.markerDropped = function(){
+  this.padding_ = this.previous_padding;
+  this.redraw(true);
+}
+
 Tooltip.prototype.remove = function(){
 	this.div_.parentNode.removeChild(this.div_);
 }
