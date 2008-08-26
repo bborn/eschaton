@@ -168,7 +168,7 @@ class MarkerTest < Test::Unit::TestCase
       
       assert_output_fixture :marker_when_being_dragged,
                             script.record_for_test{
-                              marker.when_being_dragged{|script|
+                              marker.when_being_dragged{|script, current_location|
                                 script.comment "This is some test code!"
                                 script.alert("Hello from marker drag!")
                               }

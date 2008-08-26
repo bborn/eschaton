@@ -17,7 +17,9 @@ class JavascriptObjectTest < Test::Unit::TestCase
     assert_equal "setZoom", "set_zoom".to_js_method
     assert_equal "setZoom", "zoom=".to_js_method
     assert_equal "setZoomControl", "set_zoom_control".to_js_method
-    assert_equal "openInfoWindowHtml", "open_info_window_html".to_js_method    
+    assert_equal "openInfoWindowHtml", "open_info_window_html".to_js_method
+    assert_equal "enableDragging", "enable_dragging!".to_js_method
+    assert_equal "show", "show!".to_js_method
   end
 
   def test_to_js_arguments
@@ -42,9 +44,8 @@ class JavascriptObjectTest < Test::Unit::TestCase
       obj.open_info_window(:location, "Howdy!")
       obj.update_markers [1, 2, 3]
       obj.set_options_on('map', {:zoom => 15, :controls => :small_map})
-    
-      assert obj.create_var
-      assert obj.create_var?
+      obj.enable_dragging!
+      
       assert_output_fixture :method_to_js, script
     end
   end

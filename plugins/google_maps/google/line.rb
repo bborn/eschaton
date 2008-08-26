@@ -66,7 +66,7 @@ module Google
     # Adds a vertex at the given +location+ and updates the shape of the line.
     # +location+ can be a Location or whatever Location#new supports 
     def add_vertex(location)
-      self << "#{self.var}.insertVertex(#{self.var}.getVertexCount(), #{location.to_location})"
+      self << "#{self.var}.insertVertex(#{self.last_vertex_index}, #{location.to_location})"
     end
 
     # The length of the line along the surface of a spherical earth.
@@ -101,6 +101,10 @@ module Google
     def click(&block)
       self.listen_to :event => :click, :with => :location, &block
     end
+
+    def last_vertex_index
+      "#{self.var}.getVertexCount() - 1"
+    end    
     
     protected
       attr_writer :vertices

@@ -60,6 +60,10 @@ Tooltip.prototype.initialize = function(map){
 	this.div_ = div;
 }
 
+Tooltip.prototype.updateHtml = function(html){
+  this.div_.innerHTML = html;
+}
+
 Tooltip.prototype.markerPickedUp = function(){
   this.previous_padding = this.padding_
   this.padding_ = 20;

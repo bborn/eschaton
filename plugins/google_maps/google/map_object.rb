@@ -62,6 +62,11 @@ module Google
       script << "#{wrap_method};"
     end
     
+    # Removes the map object from the map canvas
+    def remove!
+      self.script << "map.removeOverlay(#{self})"
+    end
+
     protected    
       def options_to_fields(options)
         string_hash = options.stringify_keys

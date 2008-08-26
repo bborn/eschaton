@@ -157,17 +157,25 @@ module Google
       self.listen_to :event => :dragstart, &block
     end
 
-    # This event is fired when the marker is being "dragged" across the map.   
-    def when_being_dragged(&block)
-      self.listen_to :event => :drag, &block
+    # This event is fired when the marker is being "dragged" across the map.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    # * +current_location+ - The location at which the marker is presently hovering.
+    def when_being_dragged
+      self.listen_to :event => :drag do
+        script << "current_location = #{self.var}.getLatLng();"
+
+        yield script, :current_location
+      end
     end
-    
+
     # This event is fired when the marker is "dropped" after being dragged.
     #
     # ==== Yields:
     # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
     # * +drop_location+ - The location on the map where the marker was dropped.
-    def when_dropped(&block)
+    def when_dropped
       self.listen_to :event => :dragend do |script|          
         script << "drop_location = #{self.var}.getLatLng();"
 
@@ -203,9 +211,17 @@ module Google
     def circle!(options = {})
       options[:location] = self.location
 
-      Circle.new options
+      circle = Circle.new options
+
+      if self.draggable?
+        self.when_being_dragged do |script, current_location|
+          circle.move_to current_location
+        end
+      end
+
+      circle
     end
-    
+
     # Sets the tooltip on the marker using either +text+ or +partial+ options as content. The tooltip window will 
     # float just above the marker.
     #
@@ -263,10 +279,15 @@ module Google
           script << "#{self.tooltip_var}.markerDropped();"
         end
 
-        self.when_being_dragged do |script|
+        self.when_being_dragged do |script, current_location|
           script << "#{self.tooltip_var}.redraw(true);"
         end
       end
+    end
+    
+    def update_tooltip(options)
+      content = OptionsHelper.to_content options
+      self << "#{self.tooltip_var}.updateHtml(#{content.to_js});"
     end
     
     # Shows the tooltip just above the marker.

@@ -11,10 +11,9 @@ In:
 -> script/generate map -- must write some stuff out on how to start
 
 == Intuitive Marker updates
-  -> If :draggable logic must be added to 'hide' the info window when the marker is 'picked up'
-     Perhaps even detecting if an info window was open and then 'showing' it again when the marker is 'dropped'
-  -> If :draggable and a tooltip is used, when the marker is picked up the tooltip should also rise(increase the padding), then its dragged the tooltip must
-     drag with the marker and when the marker is dropped it should return to its normal location(decrease the padding)
+  -> The :draggable logic for 'hiding' the info window when the marker is 'picked up'
+     can perhaps detect if an info window was open and then 'show' it again when the marker is 'dropped',
+     this seems intuitive
 
 == Eschaton general
 
@@ -28,14 +27,15 @@ In:
  -> Make Google::InfoWindow shareable between map and marker! update #open_info_window on both Map and Marker
  
  -> #if_google_compatible should be merged into #google_map_script and #google_map_script should *always* be used.
- 
+    There should never be a need to use it outside of this context.
+
  -> Move Pane code into eschaton.js and metafy as need be!
  
  -> See Google::Circle and refactor into various 'shape' classes.
-   Rename draw_circle in eschaton.js to 'draw_shape' and metafy as need be!
+    Rename draw_circle in eschaton.js to 'draw_shape' and metafy as need be!
    
  -> open_info_window must support string location, as update_info_window using map.getInfoWindow.getPoint()...
-   include_url must be able to interpolate this string value as it does with the symbol.
+    include_url must be able to interpolate this string value as it does with the symbol.
      
  -> Implement Line#undo_last_vertex
 
@@ -43,3 +43,6 @@ In:
 
 === Escahton Enhancments
  -> map.add_lines :from => location, :to => [other_location, another_location], :thickness => 10, :opacity => 0.7
+ -> Introdude Google::Event, a way to abstract events and to optimize how code is attached to events.
+ -> Extract Google::Tooltip from marker and allo a tooltip to be added to any overlay including lines and polygons.
+ -> Tooltips should also be allowed to be assigned a specific css class, i.e :css_class => :updating

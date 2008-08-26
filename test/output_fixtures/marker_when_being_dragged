@@ -1,5 +1,6 @@
 function marker_drag(marker){
 GEvent.addListener(marker, "drag", function() {
+current_location = marker.getLatLng();
 /* This is some test code! */
 alert("Hello from marker drag!");
 });

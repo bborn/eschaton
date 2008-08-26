@@ -27,15 +27,16 @@ module JqueryGeneratorExt
     self <<  "});"    
   end
 
-  # Posts either the +form+ or the +params+ to the given +url+.
-  # 
+  # Performs an http post using either the +form+ or the +params+ to the given +url+.
+  #
   # ==== Options:
   # * +url+ - Required. The url to post to, see Escahton.url_for_javascript for supported options.
   # * +form+ - Optional. The id of the form to post.
   # * +params+ - Optional. Parameters to post
+  # * +eval_response+ - Optional. Indicates if the response of the post should be evaled and executed client side.
   def post(options)
-    options.assert_valid_keys :url, :form, :params
-    options.default! :form => nil, :params => {}
+    options.assert_valid_keys :url, :form, :params, :eval_response
+    options.default! :form => nil, :params => {}, :eval_response => false
 
     if Eschaton.current_view.protect_against_forgery?
       options[:url][:authenticity_token] = Eschaton.current_view.form_authenticity_token
@@ -49,8 +50,20 @@ module JqueryGeneratorExt
 
     url = Eschaton.url_for_javascript(options[:url])
     self << "jQuery.post(#{url}, #{form_fields}, function(data) {"
+
     yield :data if block_given?
+
+    self.eval(:data) if options[:eval_response]
+    
     self <<  "});"    
   end
+  
+  # Performs an http post and evaluates the response as javascript. Supports the same options as post.
+  def post_and_run(options)
+    options[:eval_response] = true
+
+    self.post options
+  end
+  
 
 end

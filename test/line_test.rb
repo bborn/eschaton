@@ -90,7 +90,7 @@ class LineTest < Test::Unit::TestCase
       line = Google::Line.new :from => {:latitude => -33.947, :longitude => 18.462},
                               :to =>  {:latitude => -34.0, :longitude => 19.0}
 
-      assert_output_fixture 'line.insertVertex(line.getVertexCount(), new GLatLng(-34.5, 19.5))',
+      assert_output_fixture 'line.insertVertex(line.getVertexCount() - 1, new GLatLng(-34.5, 19.5))',
                             script.record_for_test {
                               line.add_vertex :latitude => -34.5, :longitude => 19.5
                             }

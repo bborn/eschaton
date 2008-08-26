@@ -43,7 +43,8 @@ class Object # :nodoc:
   def to_js_method
     method_name = self.to_s
     method_name = "set_#{method_name.chop}" if method_name =~ /=$/
-
+    method_name.chop! if method_name =~ /!$/
+    
     method_name.camelize.gsub(/\b\w/){$&.downcase}
   end
   

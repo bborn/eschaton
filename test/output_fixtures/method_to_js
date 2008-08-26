@@ -6,3 +6,4 @@ map.returnToSavedPosition();
 map.openInfoWindow(location, "Howdy!");
 map.updateMarkers([1, 2, 3]);
 map.setOptionsOn("map", {"controls": "small_map", "zoom": 15});
+map.enableDragging();

@@ -41,18 +41,36 @@ module Google
                        :fill_colour => '#0055ff', :fill_opacity => nil
 
       super
+      
+      @options = options
 
-      arguments = [options[:location].to_location, options[:radius], options[:quality], 
-                   options[:border_colour], options[:border_width], options[:border_opacity],
-                   options[:fill_colour], options[:fill_opacity]]
-
-      self << "#{self} = drawCircle(#{arguments.to_js_arguments});"
+      self.create!
     end
 
     # Attaches the block to the "click" event of the circle.
     def click(&block)
-      self.listen_to :event => :click, &block      
+      self.listen_to :event => :click, &block
     end
+
+    # Moves the circle to the given +location+.
+    def move_to(location)
+      @options[:location] = location
+
+      self.recreate!
+    end
+
+    protected
+      def create!
+        arguments = [@options[:location].to_location, @options[:radius], @options[:quality], 
+                     @options[:border_colour], @options[:border_width], @options[:border_opacity],
+                     @options[:fill_colour], @options[:fill_opacity]]        
+        self << "#{self} = drawCircle(#{arguments.to_js_arguments});"        
+      end
+
+      def recreate!
+        self.remove!
+        self.create!
+      end
 
   end
 end
