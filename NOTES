@@ -46,3 +46,13 @@ In:
  -> Introdude Google::Event, a way to abstract events and to optimize how code is attached to events.
  -> Extract Google::Tooltip from marker and allo a tooltip to be added to any overlay including lines and polygons.
  -> Tooltips should also be allowed to be assigned a specific css class, i.e :css_class => :updating
+ 
+=== Trippy ideas
+ -> Have a concept of 'marker' groups, in which you can add markers to these groups and perform actions on the groups.
+    Say we have two groups, 'Wikipedia' and 'Flickr' and marker in each group. We could then say stuff like
+    wikipedia_group.show && flickr_group.hide or wikipedia_group.hide && flickr_group.show.
+    
+    Basically to get a handle of groups of markers and perform actions on them.
+    Perhpas we could treat all overlays like this(markers, lines etc)
+    
+    

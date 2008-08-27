@@ -109,6 +109,7 @@ module Google # :nodoc:
       options.assert_valid_keys :center, :controls, :zoom, :type
 
       if self.create_var?
+        script << "map_lines = Array();"        
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
 
         self.track_bounds!
@@ -282,16 +283,25 @@ module Google # :nodoc:
     #  map.add_line :between_markers => markers, :colour => 'red', :thickness => 10
     def add_line(line)
       line = line.to_line
+
       self.add_overlay line
+      self << "map_lines.push(#{line});"
 
       self.extend_track_bounds line.vertices
 
       line
     end
-    
+
+    # Removes all lines from the map that where added using add_line.
+    def remove_lines!
+      self << "for(var i = 0; i < map_lines.length; i++){"
+      self.remove_overlay 'map_lines[i]'
+      self << "}"
+    end
+
     # Removes the given +overlay+ from the map.
     def remove_overlay(overlay)
-      self << "#{self}.removeOverlay(#{overlay.to_sym});"
+      self << "#{self}.removeOverlay(#{overlay});"
     end
 
     # Clears all overlays(info windows, markers, lines etc) from the map.

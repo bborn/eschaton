@@ -62,6 +62,7 @@ Tooltip.prototype.initialize = function(map){
 
 Tooltip.prototype.updateHtml = function(html){
   this.div_.innerHTML = html;
+  this.redraw(true);  
 }
 
 Tooltip.prototype.markerPickedUp = function(){
