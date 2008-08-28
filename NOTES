@@ -1,6 +1,7 @@
 N.B:
   -> In some places the 'map' variable is directly references and will cause issues if there are two maps
      or a map with a name other than map. Suggest making the Google::Map avaible globally through some interface.
+  -> Edit the wiki and put up some basic examples and tutorials   
 In:
   -> Make Google::InfoWindow shareable between map and marker! update #open_info_window on both Map and Marker
      Google::InfoWindow must also bring conveniencein the form of Google::InfoWindow#hide, Google::InfoWindow#show
