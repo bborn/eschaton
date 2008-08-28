@@ -279,8 +279,8 @@ module Google
           script << "#{self.tooltip_var}.markerDropped();"
         end
 
-        self.when_being_dragged do |script, current_location|
-          script << "#{self.tooltip_var}.redraw(true);"
+        self.when_being_dragged do
+          self.redraw_tooltip!
         end
       end
     end
@@ -328,9 +328,20 @@ module Google
       self.listen_to :event => :mouseout, &block
     end
 
+    # Moves the marker to the given +location+ on the map.
+    def move_to(location)
+      self.lat_lng = location.to_location
+      self.redraw_tooltip!
+    end
+
     def to_marker # :nodoc:
       self
     end
+    
+    protected
+      def redraw_tooltip!
+        self << "#{self.tooltip_var}.redraw(true);"        
+      end
   
   end
 end
