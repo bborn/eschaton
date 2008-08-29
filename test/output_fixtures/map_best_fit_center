@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
 window.onunload = GUnload;
 if (GBrowserIsCompatible()) {
+map_lines = Array();
 map = new GMap2(document.getElementById('map'));
 track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));

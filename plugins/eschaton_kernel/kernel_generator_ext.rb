@@ -44,11 +44,11 @@ module KernelGeneratorExt
   #
   # ==== Options:
   # * +error_wrapping+ - Optional. Indicates if the script should be wrapped in try..catch blocks, defaulted to +false+.
-  # * +compact+ - Optional. Indicates if leading and trailing whitespace should be removed from each line, defaulted to +true+.
+  # * +strip_each_line+ - Optional. Indicates if leading and trailing whitespace should be stripped from each line, defaulted to +true+.
   # * +inline+ - Optional. Indicates if new lines should be stripped from the generated script, defaulted to +false+.
   def generate(options = {})
-    options.default! :error_wrapping => false, :compact => true, :inline => false
-    options.assert_valid_keys :error_wrapping, :compact, :inline,
+    options.default! :error_wrapping => false, :strip_each_line => true, :inline => false
+    options.assert_valid_keys :error_wrapping, :strip_each_line, :inline,
     
     reset_rjs_debug = ActionView::Base.debug_rjs
     
@@ -56,7 +56,7 @@ module KernelGeneratorExt
     
     output = self.to_s
 
-    output.gsub!(/^\s+|\s+$/, '') if options[:compact]
+    output.strip_each_line! if options[:strip_each_line]
     output.gsub!("\n", ' ') if options[:inline]
 
     ActionView::Base.debug_rjs = reset_rjs_debug

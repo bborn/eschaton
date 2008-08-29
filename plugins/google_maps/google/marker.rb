@@ -285,9 +285,18 @@ module Google
       end
     end
     
+    # Updates the tooltip on the marker with the given +options+. Supports the same +options+ as set_tooltip.
     def update_tooltip(options)
-      content = OptionsHelper.to_content options
-      self << "#{self.tooltip_var}.updateHtml(#{content.to_js});"
+      if self.has_tooltip?
+        content = OptionsHelper.to_content options
+        self << "#{self.tooltip_var}.updateHtml(#{content.to_js});"
+      else
+        self.set_tooltip options
+      end
+    end
+
+    def has_tooltip? # :nodoc:
+      @tooltip_var.not_nil?
     end
     
     # Shows the tooltip just above the marker.
@@ -331,7 +340,7 @@ module Google
     # Moves the marker to the given +location+ on the map.
     def move_to(location)
       self.lat_lng = location.to_location
-      self.redraw_tooltip!
+      self.redraw_tooltip! if self.has_tooltip?
     end
 
     def to_marker # :nodoc:

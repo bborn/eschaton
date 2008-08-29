@@ -85,7 +85,7 @@ Tooltip.prototype.copy = function(){
 
 Tooltip.prototype.redraw = function(force){
 	if (!force) return;
-	var markerPos = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
+	var markerPos = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
 	var iconAnchor = this.marker_.getIcon().iconAnchor;
 	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
 	var yPos = markerPos.y - iconAnchor.y - this.div_.clientHeight - this.padding_;

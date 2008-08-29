@@ -22,9 +22,10 @@ class Test::Unit::TestCase
 
       output_to_compare = File.read fixture_file
     end
-      
+
+    output_to_compare.strip_each_line!
     output = generator.generate
-    
+
     if output_to_compare != output
       left_file = Tempfile.open "left_output"
       left_file << output_to_compare

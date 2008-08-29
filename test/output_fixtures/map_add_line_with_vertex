@@ -1,3 +1,4 @@
 line = new GPolyline([new GLatLng(-33.947, 18.462)], null, null, null);
 map.addOverlay(line);
+map_lines.push(line);
 track_bounds.extend(new GLatLng(-33.947, 18.462));
