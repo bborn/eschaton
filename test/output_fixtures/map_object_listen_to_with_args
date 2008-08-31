@@ -1,5 +1,5 @@
 function test_object_click(test_object){
-GEvent.addListener(test_object, "click", function(overlay, location) {
+return GEvent.addListener(test_object, "click", function(overlay, location) {
 });
 }
-test_object_click(test_object);
+test_object_click_event = test_object_click(test_object);

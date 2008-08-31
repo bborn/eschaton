@@ -1,7 +1,7 @@
 function marker_dragstart(marker){
-GEvent.addListener(marker, "dragstart", function() {
+return GEvent.addListener(marker, "dragstart", function() {
 /* This is some test code! */
 alert("Hello from marker drop!");
 });
 }
-marker_dragstart(marker);
+marker_dragstart_event = marker_dragstart(marker);

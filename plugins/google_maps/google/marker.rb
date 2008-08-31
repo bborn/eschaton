@@ -64,7 +64,7 @@ module Google
   #  end
   class Marker < MapObject
     attr_accessor :icon
-    attr_reader :location, :tooltip_var
+    attr_reader :location, :tooltip_var, :circle
     
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
@@ -211,15 +211,19 @@ module Google
     def circle!(options = {})
       options[:location] = self.location
 
-      circle = Circle.new options
+      @circle = Circle.new options
 
       if self.draggable?
         self.when_being_dragged do |script, current_location|
-          circle.move_to current_location
+          @circle.move_to current_location
         end
       end
 
-      circle
+      @circle
+    end
+    
+    def circled? # :nodoc:
+      @circle.not_nil?
     end
 
     # Sets the tooltip on the marker using either +text+ or +partial+ options as content. The tooltip window will 
@@ -339,8 +343,12 @@ module Google
 
     # Moves the marker to the given +location+ on the map.
     def move_to(location)
-      self.lat_lng = location.to_location
+      @location = location.to_location
+
+      self.lat_lng = @location
+
       self.redraw_tooltip! if self.has_tooltip?
+      self.circle.move_to @location if self.circled?
     end
 
     def to_marker # :nodoc:

@@ -1,5 +1,5 @@
 N.B:
-  -> In some places the 'map' variable is directly references and will cause issues if there are two maps
+  -> In some places the 'map' variable is directly referenced and will cause issues if there are two maps
      or a map with a name other than map. Suggest making the Google::Map avaible globally through some interface.
   -> Edit the wiki and put up some basic examples and tutorials   
 In:
@@ -50,7 +50,8 @@ In:
  -> Introdude Google::Event, a way to abstract events and to optimize how code is attached to events.
  -> Extract Google::Tooltip from marker and allo a tooltip to be added to any overlay including lines and polygons.
  -> Tooltips should also be allowed to be assigned a specific css class, i.e :css_class => :updating
- 
+ -> Map#add_kml(url) : Render a KML overlay on the map
+ -> Map#add_geo_rss(url) : Render a geo rss feed on the map
 === Trippy ideas
  -> Have a concept of 'marker' groups, in which you can add markers to these groups and perform actions on the groups.
     Say we have two groups, 'Wikipedia' and 'Flickr' and marker in each group. We could then say stuff like

@@ -2,14 +2,14 @@ marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
 tooltipmarker = new Tooltip(marker, "This is sparta!", 3);
 map.addOverlay(tooltipmarker);
 function marker_mouseover(marker){
-GEvent.addListener(marker, "mouseover", function() {
+return GEvent.addListener(marker, "mouseover", function() {
 tooltipmarker.show();
 });
 }
-marker_mouseover(marker);
+marker_mouseover_event = marker_mouseover(marker);
 function marker_mouseout(marker){
-GEvent.addListener(marker, "mouseout", function() {
+return GEvent.addListener(marker, "mouseout", function() {
 tooltipmarker.hide();
 });
 }
-marker_mouseout(marker);
+marker_mouseout_event = marker_mouseout(marker);

@@ -39,7 +39,12 @@ class Eschaton # :nodoc:
 
     script
   end
+
+  # TODO - Add .global_script and remove JavascriptObject.global_script  
+  def self.global_script
+    JavascriptObject.global_script
+  end
   
-  # TODO - Add .global_script and remove JavascriptObject.global_script
+
 
 end

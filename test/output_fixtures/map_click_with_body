@@ -1,5 +1,5 @@
 function map_click(map){
-GEvent.addListener(map, "click", function(overlay, location) {
+return GEvent.addListener(map, "click", function(overlay, location) {
 if(location){
 /* This is some test code! */
 /* 'location' is where the map was clicked! */
@@ -7,4 +7,4 @@ alert("Hello from map click!");
 }
 });
 }
-map_click(map);
+map_click_event = map_click(map);

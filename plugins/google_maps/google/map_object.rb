@@ -35,31 +35,11 @@ module Google
     #                 :yield_order => [:location, :overlay] do |script, location, overlay| # Note the order
     #     map.add_marker :location => location
     #   end
-    def listen_to(options = {}) # :yields: script + :with or :yield_order option
-      options.default! :on => self.var, :with => []
-      options.assert_valid_keys :event, :on, :with, :yield_order
+    def listen_to(options = {}, &block) # :yields: script + :with or :yield_order option
+      event = Event.new :on => self.var, :event => options.extract_and_remove(:event)
+      event.listen_to options, &block
       
-      with_arguments = options[:with].arify
-      js_arguments = with_arguments.join(', ')
-      
-      yield_args = if options[:yield_order]
-                     options[:yield_order]
-                   else
-                     with_arguments
-                   end
-
-      # Wrap the GEvent closure in a method to prevent the non-closure bug of javascript and google maps.
-      wrap_method = "#{self.var}_#{options[:event]}(#{self.var})"
-
-      self << "function #{wrap_method}{"
-      self << "GEvent.addListener(#{options[:on]}, \"#{options[:event]}\", function(#{js_arguments}) {"
-
-      yield *(self.script.arify + yield_args)
-
-      self <<  "});"
-      self << "}"
-
-      script << "#{wrap_method};"
+      event
     end
     
     # Removes the map object from the map canvas
