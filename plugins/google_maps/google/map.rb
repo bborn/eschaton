@@ -298,6 +298,11 @@ module Google # :nodoc:
       self.remove_overlay 'map_lines[i]'
       self << "}"
     end
+    
+    # Adds a KML[http://en.wikipedia.org/wiki/Keyhole_Markup_Language] overlay using the given +url+.
+    def add_kml(url)
+      script << "map.addOverlay(new GGeoXml(#{url.to_js}));"
+    end
 
     # Removes the given +overlay+ from the map.
     def remove_overlay(overlay)

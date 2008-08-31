@@ -11,7 +11,11 @@ class Array # :nodoc:
   def to_google_size
     "new GSize(#{self.first}, #{self.second})"
   end
-  
+
+  def to_location
+    Google::Location.new :latitude => self.first, :longitude => self.second
+  end
+
 end
 
 class String

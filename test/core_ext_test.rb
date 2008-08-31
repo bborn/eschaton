@@ -47,12 +47,19 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     assert_equal :location, :location.to_location
     assert_equal :marker_location, :marker_location.to_location
 
-    location_hash = {:latitide => 18, :longitude => 34}
+    location_hash = {:latitide => 34, :longitude => 18}
     location = location_hash.to_location
 
     assert_equal Google::Location, location.class
     assert_equal location_hash[:latitude], location.latitude
     assert_equal location_hash[:longitude], location.longitude
+
+    location_array = [18, 34]
+    location = location_array.to_location
+
+    assert_equal Google::Location, location.class
+    assert_equal location_array.first, location.latitude
+    assert_equal location_array.second, location.longitude
   end
 
   def test_to_google_control
