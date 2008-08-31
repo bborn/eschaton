@@ -26,17 +26,36 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include("plugins/*/**/*.rb")  
 end
 
-desc 'Updates any eschaton related files, used when eschaton is upgraded.'
+desc 'Updates eschaton, related plugins and files.'
 task :update do |t|
+  update_plugins
   update_javascript
 end
 
-task :update_xx do |t|
-  update_plugins
+def update_plugins
+  update_plugin :quiver_core
+  update_plugin :eschaton  
 end
 
-def update_plugins
+def update_plugin(name)
+  plugins_dir = "#{RAILS_ROOT}/vendor/plugins"
+  plugin_dir = "#{plugins_dir}/#{name}"
+  git_repo = "#{plugin_dir}/.git"
 
+  puts "updating plugin '#{name}'"  
+
+  repo_exists = File.exists?(git_repo)
+  git_results = if repo_exists 
+                  `cd #{plugin_dir} && git pull origin master`
+                else
+                  `rm -rf #{plugin_dir} && cd #{plugins_dir} && git clone git://github.com/yawningman/#{name}.git && rm -rf #{git_repo}`
+                end
+
+  puts "git says:"
+  puts "========="
+  puts git_results
+  puts "========="  
+  puts ""
 end
 
 def update_javascript
@@ -45,7 +64,7 @@ def update_javascript
 
   FileUtils.cp scripts, project_dir
 
-  puts 'Updated javascript:'
+  puts 'Updated javascripts:'
   scripts.each do |script|
     puts "  #{script}"
   end  
