@@ -2,7 +2,8 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
-require 'test/test_helper'
+# Load up the entire host rails enviroment
+require File.dirname(__FILE__) + '/../../../config/environment'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -28,6 +29,14 @@ end
 desc 'Updates any eschaton related files, used when eschaton is upgraded.'
 task :update do |t|
   update_javascript
+end
+
+task :update_xx do |t|
+  update_plugins
+end
+
+def update_plugins
+
 end
 
 def update_javascript
