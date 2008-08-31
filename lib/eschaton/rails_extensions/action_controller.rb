@@ -11,5 +11,14 @@ module ActionController # :nodoc:
     def set_current_view
       Eschaton.current_view = @template
     end
+    
+    def presentation_model(model_name)
+      render :update do |script|
+        Eschaton.with_global_script(script) do
+          yield model_name.presentation_modelify.new(script)
+        end
+      end
+    end
+
   end
 end
