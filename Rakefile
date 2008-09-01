@@ -1,6 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require 'open3'
 
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../config/environment'
@@ -27,14 +28,25 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
 end
 
 desc 'Updates eschaton, related plugins and files.'
-task :update do |t|
-  update_plugins
+task :update do
+  if update_plugins
+    update_javascript
+    puts ''
+    puts 'Plugins updated, have fun with the latest version.'
+  else
+    puts ''
+    puts "Sorry, couldn't update."
+  end
+end
+
+desc 'Updates eschaton related javascript files.'
+task :update_javascript do
   update_javascript
 end
 
+
 def update_plugins
-  update_plugin :quiver_core
-  update_plugin :eschaton  
+  update_plugin(:quiver_core) && update_plugin(:eschaton)
 end
 
 def update_plugin(name)
@@ -44,28 +56,34 @@ def update_plugin(name)
 
   puts "updating plugin '#{name}'"  
 
-  repo_exists = File.exists?(git_repo)
-  git_results = if repo_exists 
-                  `cd #{plugin_dir} && git pull origin master`
-                else
-                  `rm -rf #{plugin_dir} && cd #{plugins_dir} && git clone git://github.com/yawningman/#{name}.git && rm -rf #{git_repo}`
-                end
+  git_repo_exists = File.exists?(git_repo)
+  stdin, stdout, stderr = if git_repo_exists 
+                            Open3.popen3 "cd #{plugin_dir} && git pull origin master"
+                          else
+                            Open3.popen3 "rm -rf #{plugin_dir} && cd #{plugins_dir} && git clone git://github.com/yawningman/#{name}.git && rm -rf #{git_repo}"
+                          end
 
-  puts "git says:"
-  puts "========="
-  puts git_results
-  puts "========="  
-  puts ""
+  output, errors = stdout.read, stderr.read
+  ran_successfully = errors.blank?
+  
+  puts 'git says:'
+  puts '========='
+  puts output unless output.blank?
+  puts errors unless errors.blank?
+  puts '========='
+  puts ''
+
+  ran_successfully
 end
 
 def update_javascript
-  project_dir = RAILS_ROOT + '/public/javascripts/'  
+  project_dir = RAILS_ROOT + '/public/javascripts/'
   scripts = Dir['generators/map/templates/*.js']
 
   FileUtils.cp scripts, project_dir
 
   puts 'Updated javascripts:'
   scripts.each do |script|
-    puts "  #{script}"
+    puts "  /public/javascripts/#{File.basename(script)}"
   end  
 end
