@@ -101,12 +101,15 @@ module Google # :nodoc:
     # * +controls+ - Optional. Which controls will be added to the map, see Control_types for valid controls.
     # * +zoom+ - Optional. The zoom level of the map defaulted to <tt>:best_fit</tt>, see zoom=.
     # * +type+ - Optional. The type of map, see type=.
+    # * +keyboard_navigation+ - Optional. Indicates if 
+    #   {keyboad navigation}[http://code.google.com/apis/maps/documentation/reference.html#GKeyboardHandler] should be enabled, defaulted to +false+.
     def initialize(options = {})
-      options.default! :var => 'map', :center => :best_fit, :zoom => :best_fit
+      options.default! :var => 'map', :center => :best_fit, :zoom => :best_fit,
+                       :keyboard_navigation => false
 
       super
 
-      options.assert_valid_keys :center, :controls, :zoom, :type
+      options.assert_valid_keys :center, :controls, :zoom, :type, :keyboard_navigation
 
       if self.create_var?
         script << "map_lines = Array();"        
@@ -115,8 +118,9 @@ module Google # :nodoc:
         self.track_bounds!
 
         self.center = options.extract_and_remove(:center)
-        self.zoom = options.extract_and_remove(:zoom)
-
+        self.zoom = options.extract_and_remove(:zoom)        
+        self.enable_keyboard_navigation! if options.extract_and_remove(:keyboard_navigation)
+        
         self.options_to_fields options
       end
     end
@@ -348,7 +352,17 @@ module Google # :nodoc:
         end
       end
     end
-      
+     
+    
+    # This event is fired when the mouse "moves over" the map.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    # * +location+ - The location at which the mouse cursor is hovering.
+    def mouse_over(&block)
+      self.listen_to :event => :mousemove, :with => :location, &block
+    end
+
     # Opens an info window on the map at the given +location+ using either +url+, +partial+ or +text+ options as content.
     #
     # ==== Options:
@@ -426,5 +440,10 @@ module Google # :nodoc:
       {:latitude => -33.947, :longitude => 18.462}
     end
     
+    protected
+      def enable_keyboard_navigation! # :nodoc:
+        self << "new GKeyboardHandler(#{self})"  
+      end
+        
   end
 end
