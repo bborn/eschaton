@@ -179,9 +179,29 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
 
-      assert_output_fixture :map_replace_marker,
+      assert_output_fixture "map.closeInfoWindow();
+                            map.removeOverlay(marker);
+                            marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                            map.addOverlay(marker);
+                            track_bounds.extend(marker.getLatLng());",
                             script.record_for_test {
                               map.replace_marker :location => {:latitude => -33.947, :longitude => 18.462}
+                            }
+    end
+  end
+
+  def test_change_marker_output
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+
+      assert_output_fixture "map.closeInfoWindow();
+                            map.removeOverlay(create_spot);
+                            marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                            map.addOverlay(marker);
+                            track_bounds.extend(marker.getLatLng());",
+                            script.record_for_test {
+                              map.change_marker :create_spot,  
+                                                :location => {:latitude => -33.947, :longitude => 18.462}
                             }
     end
   end

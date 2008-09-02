@@ -1,9 +1,12 @@
 module Google
   
   class InfoWindow < MapObject
+    attr_reader :object
 
     def initialize(options = {})
       super
+      # TODO - Find a better name than "object"
+      @object = options.extract_and_remove(:object)
     end
 
     def open(options)     
@@ -13,6 +16,7 @@ module Google
       self << "center = #{self.var}.getCenter();" if location == :center      
 
       if options[:url]
+        # TODO -Share this include_location code        
         if options[:include_location] == true
           options[:url][:location] = get_location(location)
         end
@@ -28,7 +32,14 @@ module Google
     end
     
     def open_on_marker(options)
+      options.default! :include_location => true
+
       if options[:url]
+        # TODO -Share this include_location code
+        if options[:include_location] == true
+          options[:url][:location] = get_location(self.object.location)
+        end
+
         self.script.get(options[:url]) do |data|
           open_info_window_on_marker :content => data
         end

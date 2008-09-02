@@ -116,6 +116,14 @@ module GoogleViewExt
     end
   end
   
+  # A 'cancel' link that will close the currently open info window on the map.
+  # Useful when writing forms in info windows.
+  def cancel_info_window_link
+    link_to_map_script 'cancel' do |script|
+      script.map.close_info_window
+    end
+  end  
+  
   private
     def map_size(size)
       if size.is_a?(Numeric)

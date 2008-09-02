@@ -119,7 +119,8 @@ module Google
     # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be 
     #   placed inside the info window.
     # * +text+ - Optional. The html content that will be placed inside the info window.
-    #
+    # * +include_location+ - Optional. Works in conjunction with the +url+ option and indicates if latitude and longitude parameters of
+    #   +location+ should be sent through with the +url+, defaulted to +true+. Use <tt>params[:location]</tt> or <tt>params[:location][:latitude]</tt> and <tt>params[:location][:longitude]</tt> in your action.
     # ==== Examples:
     #
     #  marker.open_info_window :text => 'Hello there...'
@@ -130,7 +131,7 @@ module Google
     #
     #  map.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
     def open_info_window(options)
-      info_window = InfoWindow.new(:var => self.var)
+      info_window = InfoWindow.new(:var => self.var, :object => self)
       info_window.open_on_marker options
     end
 

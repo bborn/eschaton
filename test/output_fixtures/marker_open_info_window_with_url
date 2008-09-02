@@ -1,3 +1,3 @@
-jQuery.get('/location/show/1', function(data) {
+jQuery.get('/location/show/1?location%5Blatitude%5D=' + marker.getLatLng().lat() + '&location%5Blongitude%5D=' + marker.getLatLng().lng() + '', function(data) {
 marker.openInfoWindow("<div id='info_window_content'>" + data + "</div>");
 });

@@ -223,6 +223,12 @@ module Google # :nodoc:
       add_marker marker_or_options
     end
 
+    # Changes the +exsitng_marker+ with the given +marker_or_options+
+    def change_marker(exsitng_marker, marker_or_options)
+      remove_marker exsitng_marker
+      add_marker marker_or_options
+    end
+
     # Adds a single marker to the map which can be a Marker or whatever Marker#new supports.
     #
     # ==== Examples:
@@ -251,15 +257,18 @@ module Google # :nodoc:
       end
     end
     
-    # Removes a marker that has already been placed on the map
+    # Removes a marker that has already been placed on the map.
     def remove_marker(marker_or_options)
       # TODO - Refactor out!
       marker_id = if marker_or_options.is_a?(Hash)
                     marker_or_options[:var] || :marker
-                  else
+                  elsif marker_or_options.is_a?(Marker)
                     marker_or_options.var.to_sym
+                  else
+                    marker_or_options
                   end
 
+      self.close_info_window
       self.remove_overlay marker_id      
     end
     

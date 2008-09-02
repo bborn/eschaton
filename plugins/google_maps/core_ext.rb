@@ -18,7 +18,7 @@ class Array # :nodoc:
 
 end
 
-class String
+class String # :nodoc:
   
   def to_icon
     Google::Icon.new :image => self
@@ -38,7 +38,7 @@ class String
     
 end
 
-class Symbol
+class Symbol # :nodoc:
 
   def to_icon
     Google::Icon.new :image => self
@@ -66,7 +66,7 @@ class Symbol
     
 end
 
-class Hash
+class Hash # :nodoc:
 
   def to_google_position
     self.default! :offset => [0, 0]

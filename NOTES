@@ -8,10 +8,8 @@ N.B:
 
   -> rake update should not delete the parent plugin directory but rather its contents, then the repo should
      be cloned into that dir(is this possible with git??)
-
-  -> Marker#location should be "#{self}.getLatLng()" as opposed to returning the Google::Location, this will allow
-     for Marker#location to be used at any point an always get the correct location
-
+  
+  -> Map#center should always return "#{var}.getCenter()"
 In:
   -> Make Google::InfoWindow shareable between map and marker! update #open_info_window on both Map and Marker
      Google::InfoWindow must also bring convenience the form of Google::InfoWindow#hide, Google::InfoWindow#show
@@ -64,15 +62,16 @@ In:
  
  -> Keyboard navigation needs focus on div, sort this!!!
  
- -> Abstract the concept of a "route", have the abilty to add "Waypoints" to the route that can have a marker, tooltip and info 
-    window etc.
- 
-=== Trippy ideas
+=== Higher level ideas, trippy shit
  -> Have a concept of 'marker' groups, in which you can add markers to these groups and perform actions on the groups.
     Say we have two groups, 'Wikipedia' and 'Flickr' and marker in each group. We could then say stuff like
     wikipedia_group.show && flickr_group.hide or wikipedia_group.hide && flickr_group.show.
     
     Basically to get a handle of groups of markers and perform actions on them.
     Perhpas we could treat all overlays like this(markers, lines etc)
-    
-    
+
+ -> Abstract the concept of a "route", have the abilty to add "Waypoints" to the route that can have a marker, tooltip and info 
+    window etc.    
+ 
+ -> Integrate with google spreadsheerts so that spreadsheet data with a 'name' and 'location' column can be shown on the map,
+    that would be slick to show people!
