@@ -238,10 +238,8 @@ module Google # :nodoc:
     def add_marker(marker_or_options)
       marker = marker_or_options.to_marker
       self.add_overlay marker
-      
-      # TODO - make track bounds a method and support markers, lines etc
+
       self.extend_track_bounds marker.location
-      #self << "track_bounds.extend(#{marker}.getLatLng());"
 
       marker      
     end

@@ -100,6 +100,20 @@ class MarkerTest < Test::Unit::TestCase
    end
   end
 
+  def test_location
+    Eschaton.with_global_script do |script|
+      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
+      assert_equal "marker.getLatLng()", marker.location
+      
+      marker_one = Google::Marker.new :var => :marker_one, :location => {:latitude => -33.947, :longitude => 18.462}
+      assert_equal "marker_one.getLatLng()", marker_one.location
+      
+      marker = Google::Marker.new :location => :mouse_location
+      assert_equal "marker.getLatLng()", marker.location      
+   end    
+  end
+
+
   def test_marker_open_info_window
     Eschaton.with_global_script do |script|
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
@@ -241,13 +255,15 @@ class MarkerTest < Test::Unit::TestCase
   
   def test_circle
     Eschaton.with_global_script do |script|
-      assert_output_fixture :marker_with_default_circle, 
+      assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                             circle = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
                              script.record_for_test{
                                Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                                   :circle => true
                              }
  
-      assert_output_fixture :marker_with_custom_circle, 
+      assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                             circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
                             script.record_for_test{
                               Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                                  :circle => {:radius => 500, :border_width => 5}
@@ -255,17 +271,17 @@ class MarkerTest < Test::Unit::TestCase
 
      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
 
-     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 1.5, 40, null, 2, null, "#0055ff", null);', 
+     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
                             script.record_for_test{
                               marker.circle!  
                             }
 
-     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 500, 40, null, 5, null, "#0055ff", null);', 
+     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
                            script.record_for_test{
                              marker.circle! :radius => 500, :border_width => 5
                            }
 
-     assert_output_fixture 'circle = drawCircle(new GLatLng(-33.947, 18.462), 500, 40, null, 5, null, "black", null);', 
+     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "black", null);', 
                            script.record_for_test{
                              marker.circle! :radius => 500, :border_width => 5, :fill_colour => 'black'
                            }
@@ -421,7 +437,17 @@ class MarkerTest < Test::Unit::TestCase
                              tooltipmarker.redraw(true);', 
                             script.record_for_test{
                               marker.move_to :latitude => -33.947, :longitude => 18.562
-                            }                             
+                            }
+       
+      marker.circle! 
+                            
+      assert_output_fixture 'marker.setLatLng(new GLatLng(-33.947, 18.562));
+                             tooltipmarker.redraw(true);
+                             map.removeOverlay(circle)
+                             circle = drawCircle(new GLatLng(-33.947, 18.562), 1.5, 40, null, 2, null, "#0055ff", null);', 
+                            script.record_for_test{
+                              marker.move_to :latitude => -33.947, :longitude => 18.562
+                            }                            
     end    
   end
 

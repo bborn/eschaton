@@ -1,4 +1,4 @@
 map.removeOverlay(marker);
 marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
 map.addOverlay(marker);
-track_bounds.extend(new GLatLng(-33.947, 18.462));
+track_bounds.extend(marker.getLatLng());

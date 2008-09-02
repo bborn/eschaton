@@ -1,6 +1,6 @@
-line = new GPolyline([new GLatLng(-33.947, 18.462), new GLatLng(-34.0, 19.0), new GLatLng(-35.0, 19.0)], "red", null, 0.7);
+line = new GPolyline([marker_1.getLatLng(), marker_2.getLatLng(), marker_3.getLatLng()], "red", null, 0.7);
 map.addOverlay(line);
 map_lines.push(line);
-track_bounds.extend(new GLatLng(-33.947, 18.462));
-track_bounds.extend(new GLatLng(-34.0, 19.0));
-track_bounds.extend(new GLatLng(-35.0, 19.0));
+track_bounds.extend(marker_1.getLatLng());
+track_bounds.extend(marker_2.getLatLng());
+track_bounds.extend(marker_3.getLatLng());

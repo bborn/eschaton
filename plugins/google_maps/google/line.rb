@@ -59,7 +59,7 @@ module Google
         thickness =  options.extract_and_remove(:thickness) 
         opacity =  options.extract_and_remove(:opacity)
 
-        self << "#{self.var} = new GPolyline(#{self.vertices.to_js}, #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
+        self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
       end
     end
 

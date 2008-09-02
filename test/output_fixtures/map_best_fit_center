@@ -7,10 +7,10 @@ track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));
 marker = new GMarker(new GLatLng(-33.0, 18.0), {draggable: false});
 map.addOverlay(marker);
-track_bounds.extend(new GLatLng(-33.0, 18.0));
+track_bounds.extend(marker.getLatLng());
 marker = new GMarker(new GLatLng(-33.5, 18.5), {draggable: false});
 map.addOverlay(marker);
-track_bounds.extend(new GLatLng(-33.5, 18.5));
+track_bounds.extend(marker.getLatLng());
 map.setZoom(map.getBoundsZoomLevel(track_bounds));
 if(!track_bounds.isEmpty()){
 map.setCenter(track_bounds.getCenter());

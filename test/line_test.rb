@@ -68,16 +68,16 @@ class LineTest < Test::Unit::TestCase
 
   def test_between_markers
     Eschaton.with_global_script do |script|
-      markers = [Google::Marker.new(:location => {:latitude => -33.947, :longitude => 18.462}),
-                 Google::Marker.new(:location => {:latitude => -34.0, :longitude => 19.0}),
-                 Google::Marker.new(:location => {:latitude => -35.0, :longitude => 19.0})]
+      markers = [Google::Marker.new(:var => :marker_1, :location => {:latitude => -33.947, :longitude => 18.462}),
+                 Google::Marker.new(:var => :marker_2, :location => {:latitude => -34.0, :longitude => 19.0}),
+                 Google::Marker.new(:var => :marker_3, :location => {:latitude => -35.0, :longitude => 19.0})]
 
-      assert_output_fixture 'line = new GPolyline([new GLatLng(-33.947, 18.462), new GLatLng(-34.0, 19.0), new GLatLng(-35.0, 19.0)], null, null, null);',
+      assert_output_fixture 'line = new GPolyline([marker_1.getLatLng(), marker_2.getLatLng(), marker_3.getLatLng()], null, null, null);',
                             script.record_for_test {
                                Google::Line.new :between_markers => markers
                             }
 
-      assert_output_fixture 'line = new GPolyline([new GLatLng(-33.947, 18.462), new GLatLng(-34.0, 19.0), new GLatLng(-35.0, 19.0)], "red", 10, null);',
+      assert_output_fixture 'line = new GPolyline([marker_1.getLatLng(), marker_2.getLatLng(), marker_3.getLatLng()], "red", 10, null);',
                             script.record_for_test {
                                Google::Line.new :between_markers => markers,
                                                 :colour => 'red', :thickness => 10

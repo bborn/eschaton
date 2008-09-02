@@ -148,79 +148,31 @@ class MapTest < Test::Unit::TestCase
       end
     end    
   end
-  
-  def test_add_marker
-    Eschaton.with_global_script do
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
-      
-      first_marker_location = {:latitude => -33.947, :longitude => 18.462}
-      marker = map.add_marker :location => first_marker_location
-    
-      assert marker.is_a?(Google::Marker)
-      assert marker.location.is_a?(Google::Location)
-      assert_equal first_marker_location[:latitude], marker.location.latitude
-      assert_equal first_marker_location[:longitude], marker.location.longitude      
-    end
-    
-    # Now add multiple markers
-    Eschaton.with_global_script do
-      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
-      
-      first_marker_location = {:latitude => -33.947, :longitude => 18.462}
-      second_marker_location = {:latitude => -34.947, :longitude => 18.462}
-      
-      markers = map.add_markers({:location => first_marker_location}, {:location => second_marker_location})
-      
-      assert markers.is_a?(Array)
-      assert_equal 2, markers.size
-      
-      first_marker = markers[0]
-      
-      assert first_marker.is_a?(Google::Marker)
-      assert first_marker.location.is_a?(Google::Location)
-      assert_equal first_marker_location[:latitude], first_marker.location.latitude
-      assert_equal first_marker_location[:longitude], first_marker.location.longitude
-      
-      second_marker = markers[1]
-      
-      assert second_marker.is_a?(Google::Marker)
-      assert second_marker.location.is_a?(Google::Location)
-      assert_equal second_marker_location[:latitude], second_marker.location.latitude
-      assert_equal second_marker_location[:longitude], second_marker.location.longitude
-    end
-  end  
 
   def test_add_marker_output
     Eschaton.with_global_script do |script|
       script.google_map_script do
         map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
       
-        assert_output_fixture :map_add_marker,
+        assert_output_fixture "marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                               map.addOverlay(marker);
+                               track_bounds.extend(marker.getLatLng());",
                               script.record_for_test {
                                 map.add_marker :location => {:latitude => -33.947, :longitude => 18.462}
                               }
 
-        assert_output_fixture :map_add_markers,
+        assert_output_fixture "marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                              map.addOverlay(marker);
+                              track_bounds.extend(marker.getLatLng());
+                              marker = new GMarker(new GLatLng(-34.947, 19.462), {draggable: false});
+                              map.addOverlay(marker);
+                              track_bounds.extend(marker.getLatLng());",
                               script.record_for_test {
                                 map.add_markers({:location => {:latitude => -33.947, :longitude => 18.462}},
                                                 {:location => {:latitude => -34.947, :longitude => 19.462}})
                               }
       end
     end
-  end
-
-  def test_replace_marker
-     Eschaton.with_global_script do
-       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
-
-       first_marker_location = {:latitude => -33.947, :longitude => 18.462}
-       marker = map.replace_marker :location => first_marker_location
-
-       assert marker.is_a?(Google::Marker)
-       assert marker.location.is_a?(Google::Location)
-       assert_equal first_marker_location[:latitude], marker.location.latitude
-       assert_equal first_marker_location[:longitude], marker.location.longitude      
-     end
   end
 
   def test_replace_marker_output
@@ -285,9 +237,9 @@ class MapTest < Test::Unit::TestCase
                                            :colour => 'red', :thickness => 10, :opacity => 0.7
                             }
 
-      markers = [Google::Marker.new(:location => {:latitude => -33.947, :longitude => 18.462}),
-                 Google::Marker.new(:location => {:latitude => -34.0, :longitude => 19.0}),
-                 Google::Marker.new(:location => {:latitude => -35.0, :longitude => 19.0})]
+      markers = [Google::Marker.new(:var => :marker_1, :location => {:latitude => -33.947, :longitude => 18.462}),
+                 Google::Marker.new(:var => :marker_2, :location => {:latitude => -34.0, :longitude => 19.0}),
+                 Google::Marker.new(:var => :marker_3, :location => {:latitude => -35.0, :longitude => 19.0})]
 
       assert_output_fixture :map_add_line_between_markers,
                             script.record_for_test {

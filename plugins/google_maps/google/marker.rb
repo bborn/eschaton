@@ -81,7 +81,7 @@ module Google
       super
 
       if create_var?
-        @location = options.extract_and_remove(:location).to_location
+        location = options.extract_and_remove(:location).to_location
         #@location = OptionsHandler.to_location!(options) #:extract => true
 
         self.icon = if icon = options.extract_and_remove(:icon)
@@ -95,7 +95,7 @@ module Google
         circle_options = options.extract_and_remove(:circle)
         tooltip_options = options.extract_and_remove(:tooltip)
         
-        self << "#{self.var} = new GMarker(#{self.location}, #{options.to_google_options});"
+        self << "#{self.var} = new GMarker(#{location}, #{options.to_google_options});"
 
         self.draggable = options[:draggable]
         self.set_tooltip(tooltip_options) if tooltip_options
@@ -105,6 +105,11 @@ module Google
           self.circle! circle_options
         end
       end
+    end
+    
+    # The location at which the marker is currently placed on the map.
+    def location
+      "#{self}.getLatLng()"
     end
 
     # Opens a information window on the marker using either +url+, +partial+ or +text+ options as content.
@@ -343,12 +348,12 @@ module Google
 
     # Moves the marker to the given +location+ on the map.
     def move_to(location)
-      @location = location.to_location
+      location = location.to_location
 
-      self.lat_lng = @location
+      self.lat_lng = location
 
       self.redraw_tooltip! if self.has_tooltip?
-      self.circle.move_to @location if self.circled?
+      self.circle.move_to(location) if self.circled?
     end
 
     def to_marker # :nodoc:

@@ -61,10 +61,10 @@ module Google
 
     protected
       def create!
-        arguments = [@options[:location].to_location, @options[:radius], @options[:quality], 
+        arguments = [@options[:radius], @options[:quality], 
                      @options[:border_colour], @options[:border_width], @options[:border_opacity],
                      @options[:fill_colour], @options[:fill_opacity]]        
-        self << "#{self} = drawCircle(#{arguments.to_js_arguments});"        
+        self << "#{self} = drawCircle(#{@options[:location].to_location}, #{arguments.to_js_arguments});"        
       end
 
       def recreate!
