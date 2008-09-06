@@ -64,7 +64,7 @@ module Google
   #  end
   class Marker < MapObject
     attr_accessor :icon
-    attr_reader :location, :tooltip_var, :circle
+    attr_reader :tooltip_var, :circle
     
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.

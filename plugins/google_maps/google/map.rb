@@ -88,7 +88,7 @@ module Google # :nodoc:
   #
   #  map.add_line :between_markers => markers, :colour => 'red', :thickness => 10  
   class Map < MapObject
-    attr_reader :center, :zoom, :type
+    attr_reader :zoom, :type
     
     Control_types = [:small_map, :large_map, :small_zoom, 
                      :scale, 
@@ -156,7 +156,7 @@ module Google # :nodoc:
     #
     #  map.center = Google::Location.new(:latitude => -34, :longitude => 18.5)
     def center=(location)
-      @center = location.to_location
+      location = location.to_location
 
       if location == :best_fit
         self.center = self.default_center
@@ -164,10 +164,14 @@ module Google # :nodoc:
                                              #{self}.setCenter(track_bounds.getCenter()); 
                                             }"
       else
-        self.set_center(self.center)
+        self.set_center location
       end
     end
-    
+
+    def center
+      "#{self}.getCenter()"
+    end
+
     # Sets the zoom level of the map, +zoom+ can be a number(1 - 22) or <tt>:best_fit</tt>. If set to <tt>:best_fit</tt> 
     # google maps will determine an appropriate zoom level.
     #
@@ -359,8 +363,7 @@ module Google # :nodoc:
         end
       end
     end
-     
-    
+
     # This event is fired when the mouse "moves over" the map.
     #
     # ==== Yields:
@@ -404,7 +407,7 @@ module Google # :nodoc:
     #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot},
     #                       :include_location => false
     def open_info_window(options)
-      info_window = InfoWindow.new(:var => self.var)
+      info_window = InfoWindow.new(:var => self.var, :object => self)
       info_window.open options
     end
 

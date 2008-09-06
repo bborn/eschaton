@@ -6,9 +6,7 @@ N.B:
   
   -> rake update should not delete the parent plugin directory but rather its contents, then the repo should
      be cloned into that dir(is this possible with git??)
-  
-  -> Map#center should always return "#{var}.getCenter()"
-  
+    
   -> Track the "maps" that the user has created by keeping a hash by name, the main map being called "main".
      Other objects can then refer to these maps using the abstraction
 In:

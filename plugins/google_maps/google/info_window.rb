@@ -5,6 +5,7 @@ module Google
 
     def initialize(options = {})
       super
+
       # TODO - Find a better name than "object"
       @object = options.extract(:object)
     end
@@ -13,7 +14,7 @@ module Google
       options.default! :location => :center, :include_location => true
       location = options[:location].to_location
 
-      self << "center = #{self.var}.getCenter();" if location == :center      
+      location = object.center if location == :center      
 
       if options[:url]
         # TODO -Share this include_location code        
