@@ -12,9 +12,9 @@ class JavascriptObject
   def initialize(options = {})
     options.default! :var => :random, :create_var => true
     
-    self.var = options.extract_and_remove(:var)
-    @create_var = options.extract_and_remove(:create_var)
-    @script = options.extract_and_remove(:script)
+    self.var = options.extract(:var)
+    @create_var = options.extract(:create_var)
+    @script = options.extract(:script)
   end
 
   # Used to work on an existing javascript variable by setting the +create_var+ option to +false+.

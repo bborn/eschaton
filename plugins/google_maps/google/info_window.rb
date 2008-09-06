@@ -6,7 +6,7 @@ module Google
     def initialize(options = {})
       super
       # TODO - Find a better name than "object"
-      @object = options.extract_and_remove(:object)
+      @object = options.extract(:object)
     end
 
     def open(options)     

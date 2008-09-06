@@ -12,9 +12,9 @@ module Google
 
       # TODO - uses hashish goodness here!
       gravatar_options = {}
-      gravatar_options[:email_address] = options.extract_and_remove(:email_address) if options[:email_address]      
-      gravatar_options[:size] = options.extract_and_remove(:size) if options[:size]
-      gravatar_options[:default] = options.extract_and_remove(:default) if options[:default]
+      gravatar_options[:email_address] = options.extract(:email_address) if options[:email_address]      
+      gravatar_options[:size] = options.extract(:size) if options[:size]
+      gravatar_options[:default] = options.extract(:default) if options[:default]
 
       options[:image] = Gravatar.image_url gravatar_options
 

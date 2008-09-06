@@ -81,19 +81,19 @@ module Google
       super
 
       if create_var?
-        location = options.extract_and_remove(:location).to_location
+        location = options.extract(:location).to_location
         #@location = OptionsHandler.to_location!(options) #:extract => true
 
-        self.icon = if icon = options.extract_and_remove(:icon)
+        self.icon = if icon = options.extract(:icon)
                       icon.to_icon
-                    elsif gravatar = options.extract_and_remove(:gravatar)
+                    elsif gravatar = options.extract(:gravatar)
                       gravatar.to_gravatar_icon  
                     end
 
         options[:icon] = self.icon if self.icon
         
-        circle_options = options.extract_and_remove(:circle)
-        tooltip_options = options.extract_and_remove(:tooltip)
+        circle_options = options.extract(:circle)
+        tooltip_options = options.extract(:tooltip)
         
         self << "#{self.var} = new GMarker(#{location}, #{options.to_google_options});"
 
@@ -265,7 +265,7 @@ module Google
     def set_tooltip(options)
       options.default! :show => :on_mouse_hover, :padding => 3
 
-      show = options.extract_and_remove(:show)
+      show = options.extract(:show)
       content = OptionsHelper.to_content options
 
       @tooltip_var = "tooltip#{self}"

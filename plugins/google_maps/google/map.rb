@@ -117,9 +117,9 @@ module Google # :nodoc:
 
         self.track_bounds!
 
-        self.center = options.extract_and_remove(:center)
-        self.zoom = options.extract_and_remove(:zoom)        
-        self.enable_keyboard_navigation! if options.extract_and_remove(:keyboard_navigation)
+        self.center = options.extract(:center)
+        self.zoom = options.extract(:zoom)        
+        self.enable_keyboard_navigation! if options.extract(:keyboard_navigation)
         
         self.options_to_fields options
       end
@@ -423,7 +423,7 @@ module Google # :nodoc:
     # * +map_type+ - Optional. Set the type of map shown in the blowup.
     def show_blowup(options = {})
       options[:map_type] = options[:map_type].to_map_type if options[:map_type]
-      location = options.extract_and_remove(:location).to_location
+      location = options.extract(:location).to_location
       
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end

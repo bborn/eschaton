@@ -44,8 +44,8 @@ module Google
       super
 
       if create_var?
-        options[:vertices] << options.extract_and_remove(:from) if options[:from]  
-        options[:vertices] << options.extract_and_remove(:to) if options[:to]
+        options[:vertices] << options.extract(:from) if options[:from]  
+        options[:vertices] << options.extract(:to) if options[:to]
 
         if markers = options[:between_markers]
           markers.each do |marker|
@@ -53,11 +53,11 @@ module Google
           end
         end
 
-        self.vertices = options.extract_and_remove(:vertices).arify.collect(&:to_location)
+        self.vertices = options.extract(:vertices).arify.collect(&:to_location)
         
-        colour =  options.extract_and_remove(:colour) 
-        thickness =  options.extract_and_remove(:thickness) 
-        opacity =  options.extract_and_remove(:opacity)
+        colour =  options.extract(:colour) 
+        thickness =  options.extract(:thickness) 
+        opacity =  options.extract(:opacity)
 
         self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
       end
@@ -90,8 +90,8 @@ module Google
     #   line.style = {:colour => '#aaa', :thickness => 20, :opacity => 1}
     def style=(options)
       stroke_style_options = {}
-      stroke_style_options[:color] = options.extract_and_remove(:colour) if options[:colour]
-      stroke_style_options[:weight] = options.extract_and_remove(:thickness) if options[:thickness]
+      stroke_style_options[:color] = options.extract(:colour) if options[:colour]
+      stroke_style_options[:weight] = options.extract(:thickness) if options[:thickness]
 
       stroke_style_options.merge! options
       

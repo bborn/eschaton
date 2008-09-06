@@ -2,10 +2,8 @@ N.B:
   -> In some places the 'map' variable is directly referenced and will cause issues if there are two maps
      or a map with a name other than map. Suggest making the Google::Map avaible globally through some interface.
      
-  -> Edit the wiki and put up some basic code examples and tutorials   
+  -> Write "Eschaton showcase" to show all samples code and allow for some form of user contribution.  
   
-  -> Marker#set_tooltip and Marker#update_tooltip to support a string and use it as the :text option
-
   -> rake update should not delete the parent plugin directory but rather its contents, then the repo should
      be cloned into that dir(is this possible with git??)
   
@@ -18,8 +16,8 @@ In:
      Google::InfoWindow must also bring convenience the form of Google::InfoWindow#hide, Google::InfoWindow#show
      Google::InfoWindow#toggle
 
-  -> API key? Default to localhost
-     Support yaml files for map keys, so in one place and no need to edit dev.rb or prod.rb
+  -> * API key? Default to localhost
+     * Support yaml files for map keys, so in one place and no need to edit dev.rb or prod.rb
 
 == Intuitive Marker updates
   -> The :draggable logic for 'hiding' the info window when the marker is 'picked up'
@@ -50,20 +48,19 @@ In:
 
  -> Eschaton generator to generate eschaton plugins in the 'lib' folder.
 
-=== Escahton Enhancments
+=== Eschaton Enhancments
  -> map.add_lines :from => location, :to => [other_location, another_location], :thickness => 10, :opacity => 0.7
  
  -> Introdude Google::Event, a way to abstract events and to optimize how code is attached to events.
  
- -> Extract Google::Tooltip from marker and allo a tooltip to be added to any overlay including lines and polygons.
- 
- -> Tooltips should also be allowed to be assigned a specific css class, i.e :css_class => :updating
+ -> * Extract Google::Tooltip from marker and allo a tooltip to be added to any overlay including lines and polygons.
+    * Tooltips should also be allowed to be assigned a specific css class, i.e :css_class => :updating
  
  -> Map#add_geo_rss(url) : Render a geo rss feed on the map
  
- -> Implement Line#undo_last_vertex 
+ -> Implement Line#undo_last_vertex
  
- -> Keyboard navigation needs focus on div, sort this!!!
+ -> Keyboard navigation needs focus on div, sort this, how ???
  
 === Higher level ideas, trippy shit
  -> Have a concept of 'marker' groups, in which you can add markers to these groups and perform actions on the groups.
@@ -74,7 +71,7 @@ In:
     Perhpas we could treat all overlays like this(markers, lines etc)
 
  -> Abstract the concept of a "route", have the abilty to add "Waypoints" to the route that can have a marker, tooltip and info 
-    window etc.    
+    window etc. This should be an eschaton plugin
  
- -> Integrate with google spreadsheerts so that spreadsheet data with a 'name' and 'location' column can be shown on the map,
+ -> Integrate with google spreadsheets so that spreadsheet data with a 'name' and 'location' column can be shown on the map,
     that would be slick to show people!

@@ -25,7 +25,7 @@ module GoogleViewExt
   def prepare_info_window_options(options)
     options.default! :include_location => true, :html => {}
 
-    include_location = options.extract_and_remove(:include_location)
+    include_location = options.extract(:include_location)
     if include_location && params[:location].not_blank?
       options[:url][:location] = params[:location]
     end
@@ -90,13 +90,13 @@ module GoogleViewExt
     
     map_style = options[:style] || ""
     
-    if options.extract_and_remove(:fullscreen)
+    if options.extract(:fullscreen)
       map_style << "position: absolute; top: 0; left: 0;
                     height: 100%; width: 100%;
                     overflow: hidden;"
     else
-      map_style << "width: #{map_size(options.extract_and_remove(:width))};" if options[:width]
-      map_style << "height: #{map_size(options.extract_and_remove(:height))};" if options[:height]
+      map_style << "width: #{map_size(options.extract(:width))};" if options[:width]
+      map_style << "height: #{map_size(options.extract(:height))};" if options[:height]
     end
     
     options[:style] = map_style
