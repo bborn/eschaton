@@ -3,6 +3,13 @@ map = new GMap2(document.getElementById('map'));
 track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-35.0, 19.0));
 map.setZoom(12);
+last_mouse_location = map.getCenter();
+function map_mousemove(map){
+return GEvent.addListener(map, "mousemove", function(location) {
+last_mouse_location = location;
+});
+}
+map_mousemove_event = map_mousemove(map);
 map.addControl(new GSmallMapControl());
 map.addControl(new GMapTypeControl());
 map.setMapType(G_SATELLITE_MAP);

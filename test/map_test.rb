@@ -5,22 +5,23 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 class MapTest < Test::Unit::TestCase
   
   def test_map_initialize
-    map = Google::Map.new :script => Eschaton.javascript_generator        
-      
-    assert_output_fixture :map_default, map.send(:script)
+    assert_output_fixture :map_default,
+                          Eschaton.with_global_script{ 
+                            map = Google::Map.new
+                          }
 
-    map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0}, 
-                          :script => Eschaton.javascript_generator        
-      
-    assert_output_fixture :map_with_center, map.send(:script)
+    assert_output_fixture :map_with_center, 
+                          Eschaton.with_global_script{
+                            map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0}                            
+                          }
     
-    map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0},
-                          :controls => [:small_map, :map_type],
-                          :zoom => 12,
-                          :type => :satellite,
-                          :script => Eschaton.javascript_generator
-
-    assert_output_fixture :map_with_args, map.send(:script)
+    assert_output_fixture :map_with_args,
+                          Eschaton.with_global_script{
+                            map = Google::Map.new :center => {:latitude => -35.0, :longitude => 19.0},
+                                                  :controls => [:small_map, :map_type],
+                                                  :zoom => 12,
+                                                  :type => :satellite
+                          }
   end
 
   def test_add_control

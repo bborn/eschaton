@@ -5,6 +5,13 @@ map_lines = Array();
 map = new GMap2(document.getElementById('map'));
 track_bounds = new GLatLngBounds();
 map.setCenter(new GLatLng(-33.947, 18.462));
+last_mouse_location = map.getCenter();
+function map_mousemove(map){
+return GEvent.addListener(map, "mousemove", function(location) {
+last_mouse_location = location;
+});
+}
+map_mousemove_event = map_mousemove(map);
 marker = new GMarker(new GLatLng(-33.0, 18.0), {draggable: false});
 map.addOverlay(marker);
 track_bounds.extend(marker.getLatLng());
