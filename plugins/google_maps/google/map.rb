@@ -121,6 +121,8 @@ module Google # :nodoc:
         self.zoom = options.extract(:zoom)        
         self.enable_keyboard_navigation! if options.extract(:keyboard_navigation)
         
+        self.track_last_mouse_location!
+        
         self.options_to_fields options
       end
     end
@@ -170,6 +172,11 @@ module Google # :nodoc:
 
     def center
       "#{self}.getCenter()"
+    end
+    
+    # The last location of the mouse. If the mouse has not moved the map center will be used.
+    def last_mouse_location
+      :last_mouse_location
     end
 
     # Sets the zoom level of the map, +zoom+ can be a number(1 - 22) or <tt>:best_fit</tt>. If set to <tt>:best_fit</tt> 
@@ -431,10 +438,6 @@ module Google # :nodoc:
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end
 
-    def track_bounds! # :nodoc:
-      self << "track_bounds = new GLatLngBounds();"
-    end
-
     # Extends the tracking bounds of the map, locations added here will effect +center+ and +zoom+
     # if these are in +best_fit+ mode.
     # 
@@ -454,6 +457,17 @@ module Google # :nodoc:
       def enable_keyboard_navigation! # :nodoc:
         self << "new GKeyboardHandler(#{self})"  
       end
-        
+
+      def track_bounds! # :nodoc:
+        self << "track_bounds = new GLatLngBounds();"
+      end        
+
+      def track_last_mouse_location! # :nodoc:
+        self << "last_mouse_location = #{self.center};"
+
+        self.mouse_over do |script, location|
+          script << "last_mouse_location = #{location};"
+        end
+      end
   end
 end
