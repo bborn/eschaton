@@ -1,5 +1,5 @@
 class MapGenerator < Rails::Generator::Base
-  attr_reader :plugin_class
+  attr_reader :slice_class
   
   def manifest
     record do |m|
@@ -21,15 +21,15 @@ class MapGenerator < Rails::Generator::Base
       m.file "green.png", "public/images/green.png"      
       m.file "shadow.png", "public/images/shadow.png"
 
-      # Eschaton plugin
-      plugin_name = File.basename(RAILS_ROOT).singularize.downcase
-      @plugin_class = plugin_name.classify
-      plugin_dir = "lib/eschaton_plugins/#{plugin_name}"
+      # Eschaton slice
+      slice_name = File.basename(RAILS_ROOT).singularize.downcase
+      @slice_class = slice_name.classify
+      slice_dir = "lib/eschaton_slices/#{slice_name}"
 
-      m.directory plugin_dir
+      m.directory slice_dir
 
-      m.template "generator_ext.rb", "#{plugin_dir}/#{plugin_name}_generator_ext.rb" 
-      m.template "view_ext.rb", "#{plugin_dir}/#{plugin_name}_view_ext.rb"
+      m.template "generator_ext.rb", "#{slice_dir}/#{slice_name}_generator_ext.rb" 
+      m.template "view_ext.rb", "#{slice_dir}/#{slice_name}_view_ext.rb"
     end
   end
 

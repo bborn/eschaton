@@ -1,4 +1,4 @@
-module <%= plugin_class %>GeneratorExt
+module <%= slice_class %>GeneratorExt
 
   def map
     @map ||= Google::Map.existing(:var => 'map')

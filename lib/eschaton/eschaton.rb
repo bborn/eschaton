@@ -19,7 +19,7 @@ class Eschaton # :nodoc:
     "'#{url}'"
   end
 
-  # Returns a JavascriptGenerator which is extended by all eschaton plugins.
+  # Returns a JavascriptGenerator which is extended by all eschaton slices.
   def self.javascript_generator
     ActionView::Helpers::PrototypeHelper::JavaScriptGenerator.new(self.current_view){}
   end

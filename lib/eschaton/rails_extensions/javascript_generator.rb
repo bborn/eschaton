@@ -39,7 +39,7 @@ module ActionView # :nodoc:
         end
 
         # Extends the JavaScriptGenerator by including the +extention_module+.
-        def self.extend_with_plugin(extention_module)
+        def self.extend_with_slice(extention_module)
           include extention_module
         end
       end

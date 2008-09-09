@@ -44,7 +44,7 @@ In:
  -> open_info_window must support string location, as update_info_window using map.getInfoWindow.getPoint()...
     include_url must be able to interpolate this string value as it does with the symbol.
 
- -> Eschaton generator to generate eschaton plugins in the 'lib' folder.
+ -> Eschaton generator to generate eschaton slices in the 'lib' folder.
 
 === Eschaton Enhancments
  -> map.add_lines :from => location, :to => [other_location, another_location], :thickness => 10, :opacity => 0.7

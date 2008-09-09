@@ -1,3 +1,3 @@
-module <%= plugin_class %>ViewExt
+module <%= slice_class %>ViewExt
     
 end

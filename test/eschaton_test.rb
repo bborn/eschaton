@@ -22,7 +22,7 @@ class EschatonTest < Test::Unit::TestCase
 
     assert_equal ActionView::Helpers::PrototypeHelper::JavaScriptGenerator, generator.class
     assert generator.repond_to?(:generate)
-    assert generator.class.respond_to?(:extend_with_plugin)
+    assert generator.class.respond_to?(:extend_with_slice)
     assert generator.repond_to?(:comment)
   end
   
