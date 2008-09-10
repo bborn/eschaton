@@ -1,7 +1,6 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
-require 'open3'
 
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../config/environment'
@@ -44,6 +43,11 @@ task :update_javascript do
   update_javascript
 end
 
+
+desc 'Installs a slice from a git repo'
+task :clone_slice do
+  SliceCloner.clone :repo => ENV['slice']
+end
 
 def update_plugins
   update_plugin(:quiver_core) && update_plugin(:eschaton)
