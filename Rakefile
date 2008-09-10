@@ -43,8 +43,7 @@ task :update_javascript do
   update_javascript
 end
 
-
-desc 'Installs a slice from a git repo'
+desc 'Clones an eschaton slice from a git repo'
 task :clone_slice do
   SliceCloner.clone :repo => ENV['slice']
 end
