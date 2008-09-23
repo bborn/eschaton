@@ -217,7 +217,7 @@ module Google
     def circle!(options = {})
       options[:location] = self.location
 
-      @circle = Circle.new options
+      @circle = Google::Circle.new options
 
       if self.draggable?
         self.when_being_dragged do |script, current_location|
