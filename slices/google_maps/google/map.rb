@@ -321,6 +321,13 @@ module Google # :nodoc:
       self << "}"
     end
     
+    def add_polygon(options)
+      polygon = options.to_polygon
+      self.add_overlay polygon
+      
+      polygon
+    end
+    
     # Adds a KML[http://en.wikipedia.org/wiki/Keyhole_Markup_Language] overlay using the given +url+.
     def add_kml(url)
       script << "map.addOverlay(new GGeoXml(#{url.to_js}));"

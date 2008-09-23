@@ -82,6 +82,10 @@ class Hash # :nodoc:
 
     "{#{args.join(', ')}}"
   end
+
+  def to_polygon
+    Google::Polygon.new self
+  end
   
   def to_location
     Google::Location.new self
