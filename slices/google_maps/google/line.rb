@@ -57,7 +57,7 @@ module Google
         
         colour =  options.extract(:colour) 
         thickness =  options.extract(:thickness) 
-        opacity =  options.extract(:opacity)
+        opacity =  self.get_opacity(options.extract(:opacity))
 
         self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
       end
@@ -108,6 +108,14 @@ module Google
     
     protected
       attr_writer :vertices
+      
+      def get_opacity(opacity)
+        if opacity == :solid
+          1
+        else
+          opacity
+        end
+      end
 
   end
 end

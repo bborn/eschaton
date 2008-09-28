@@ -3,6 +3,7 @@ class Eschaton # :nodoc:
   cattr_accessor :current_view
   
   # works like rails url for only with more options!!!!
+  # TODO - Doc
   def self.url_for_javascript(options)
     url = self.current_view.url_for(options)
 
@@ -44,7 +45,5 @@ class Eschaton # :nodoc:
   def self.global_script
     JavascriptObject.global_script
   end
-  
-
 
 end

@@ -14,8 +14,7 @@ In:
      Google::InfoWindow must also bring convenience the form of Google::InfoWindow#hide, Google::InfoWindow#show
      Google::InfoWindow#toggle
 
-  -> * API key? Default to localhost
-     * Support yaml files for map keys, so in one place and no need to edit dev.rb or prod.rb
+  -> Support yaml files for map keys, so in one place and no need to edit dev.rb or prod.rb
 
 == Intuitive Marker updates
   -> The :draggable logic for 'hiding' the info window when the marker is 'picked up'

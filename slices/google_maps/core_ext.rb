@@ -83,6 +83,10 @@ class Hash # :nodoc:
     "{#{args.join(', ')}}"
   end
 
+  def to_circle
+    Google::Circle.new self
+  end
+
   def to_polygon
     Google::Polygon.new self
   end

@@ -321,11 +321,19 @@ module Google # :nodoc:
       self << "}"
     end
     
+    # Adds a +line+ to the map which can be a Line or whatever Line#new supports.    
     def add_polygon(options)
       polygon = options.to_polygon
       self.add_overlay polygon
       
       polygon
+    end
+    
+    def add_circle(options)
+      circle = options.to_circle
+      self.add_overlay circle
+      
+      circle
     end
     
     # Adds a KML[http://en.wikipedia.org/wiki/Keyhole_Markup_Language] overlay using the given +url+.
