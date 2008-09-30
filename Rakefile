@@ -26,6 +26,11 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include("slices/*/**/*.rb")
 end
 
+desc 'Opens documentation for the eschaton plugin.'
+task :open_doc do |rdoc|
+  `open rdoc/index.html`
+end
+
 desc 'Updates eschaton related javascript files.'
 task :update_javascript do
   update_javascript
