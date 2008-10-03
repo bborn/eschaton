@@ -11,6 +11,19 @@ module ActionView # :nodoc:
       
             javascript
           end
+          
+          # TODO - Move this out once extending Generator methods is supported
+          def replace_html(id, *options_for_render)
+            options = *options_for_render
+            if url = options.extract(:url)
+              self.get(url) do |data|
+                self << "$('#{id}').update(#{data});"
+              end
+            else
+              call 'Element.update', id, render(options)
+            end
+          end          
+          
         end
 
         # Allows for recording any script contained within the block passed to this method. This will return what was 
