@@ -64,7 +64,7 @@ module Google
   #  end
   class Marker < MapObject
     attr_accessor :icon
-    attr_reader :tooltip_var, :circle
+    attr_reader :tooltip_var, :circle, :circle_var
     
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
@@ -79,6 +79,9 @@ module Google
       options.default! :var => 'marker', :draggable => false
 
       super
+
+      @tooltip_var = "tooltip_#{self}"
+      @circle_var = "circle_#{self}"      
 
       if create_var?
         location = options.extract(:location).to_location
@@ -215,10 +218,10 @@ module Google
     #
     #  marker.circle! :radius => 500, :border_width => 5
     def circle!(options = {})
+      options[:var] = self.circle_var
       options[:location] = self.location
 
       @circle = Google::Circle.new options
-
       if self.draggable?
         self.when_being_dragged do |script, current_location|
           @circle.move_to current_location
@@ -267,8 +270,6 @@ module Google
 
       show = options.extract(:show)
       content = OptionsHelper.to_content options
-
-      @tooltip_var = "tooltip#{self}"
 
       script << "#{self.tooltip_var} = new Tooltip(#{self}, #{content.to_js}, #{options[:padding]});"                          
       script << "map.addOverlay(#{self.tooltip_var});"
@@ -360,6 +361,18 @@ module Google
     def to_marker # :nodoc:
       self
     end
+
+    def removed_from_map(map) # :nodoc:
+      self.close_info_window
+      
+      self.script.if "typeof(#{self.tooltip_var}) != 'undefined'" do
+        map.remove_overlay self.tooltip_var
+      end
+
+      self.script.if "typeof(#{self.circle_var}) != 'undefined'" do               
+        map.remove_overlay self.circle_var
+      end
+    end   
     
     protected
       def redraw_tooltip!

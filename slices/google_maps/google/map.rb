@@ -279,8 +279,10 @@ module Google # :nodoc:
                     marker_or_options
                   end
 
-      self.close_info_window
-      self.remove_overlay marker_id      
+      marker = Marker.existing(:var => marker_id)
+
+      self.remove_overlay marker
+      marker.removed_from_map(self)
     end
     
     # Adds a +line+ to the map which can be a Line or whatever Line#new supports.
