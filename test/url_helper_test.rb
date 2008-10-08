@@ -22,5 +22,18 @@ class UrlHelperTest < Test::Unit::TestCase
     assert_equal @decoded_polygon_vertices,
                  Google::UrlHelper.decode_vertices(@encoded_polygon_vertices)
   end
+  
+  def test_encode_location
+    google_location = Google::Location.new(:latitude=>"-33.91", :longitude=>"18.48")
+
+    assert_equal ({:latitude => "-33.91", :longitude=> "18.48"}),
+                 Google::UrlHelper.encode_location(google_location)
+
+    assert_equal ({:latitude => "#drop_location.lat()", :longitude => "#drop_location.lng()"}),
+                 Google::UrlHelper.encode_location(:drop_location)
+
+    assert_equal ({:latitude => "#map.getCenter().lat()", :longitude => "#map.getCenter().lng()"}),
+                 Google::UrlHelper.encode_location('map.getCenter()')
+  end
     
 end

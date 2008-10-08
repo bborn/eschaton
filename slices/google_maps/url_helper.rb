@@ -16,7 +16,7 @@ module Google
       end
     end
     
-    # Returns a url interpolation that represents the +polygons+ vertices. This can then be used in conjunction
+    # Returns a encoded string that represents the +polygons+ vertices. This can then be used in conjunction
     # with eschaton url related methods such as Eschaton#url_for_javascript.
     #
     #  polygon = Google::Polygon.new :vertices =>[{:latitude=>"-33.91", :longitude=>"18.48"}, 
@@ -35,7 +35,16 @@ module Google
 
       '#url_vertices'
     end
-    
+
+    # Encodes the given +location+
+    def self.encode_location(location)      
+      if location.is_a?(Symbol) || location.is_a?(String)
+        {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
+      else
+        {:latitude => location.latitude, :longitude => location.longitude}
+      end
+    end
+
   end
   
 end
