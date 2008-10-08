@@ -12,18 +12,10 @@ class Array # :nodoc:
     "new GSize(#{self.first}, #{self.second})"
   end
 
-  def to_location
-    Google::Location.new :latitude => self.first, :longitude => self.second
-  end
-
 end
 
 class String # :nodoc:
-  
-  def to_icon
-    Google::Icon.new :image => self
-  end
-  
+    
   def to_image
     self
   end
@@ -31,23 +23,11 @@ class String # :nodoc:
   def to_gravatar_icon
     Google::GravatarIcon.new :email_address => self
   end
-  
-  def to_location
-    self
-  end
     
 end
 
 class Symbol # :nodoc:
-
-  def to_icon
-    Google::Icon.new :image => self
-  end
   
-  def to_location
-    self
-  end
-
   def to_google_control
     "G#{self.to_s.classify}Control".to_sym
   end
@@ -82,19 +62,7 @@ class Hash # :nodoc:
 
     "{#{args.join(', ')}}"
   end
-
-  def to_circle
-    Google::Circle.new self
-  end
   
-  def to_location
-    Google::Location.new self
-  end
-
-  def to_icon
-    Google::Icon.new self
-  end
-
   def to_gravatar_icon
     Google::GravatarIcon.new self
   end

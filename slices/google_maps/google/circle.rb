@@ -67,8 +67,11 @@ module Google
       def create!
         arguments = [@options[:radius], @options[:quality], 
                      @options[:border_colour], @options[:border_width], @options[:border_opacity],
-                     @options[:fill_colour], @options[:fill_opacity]]        
-        self << "#{self} = drawCircle(#{@options[:location].to_location}, #{arguments.to_js_arguments});"        
+                     @options[:fill_colour], @options[:fill_opacity]]
+    
+        location = Google::OptionsHelper.to_location(@options[:location])
+
+        self << "#{self} = drawCircle(#{location}, #{arguments.to_js_arguments});"        
       end
 
       def recreate!

@@ -53,7 +53,9 @@ module Google
           end
         end
 
-        self.vertices = options.extract(:vertices).arify.collect(&:to_location)
+        self.vertices = options.extract(:vertices).arify.collect do |vertex| 
+                                                                   Google::OptionsHelper.to_location(vertex)
+                                                                 end
         
         colour =  options.extract(:colour) 
         thickness =  options.extract(:thickness) 
@@ -66,7 +68,8 @@ module Google
     # Adds a vertex at the given +location+ and updates the shape of the line.
     # +location+ can be a Location or whatever Location#new supports 
     def add_vertex(location)
-      self << "#{self.var}.insertVertex(#{self.last_vertex_index}, #{location.to_location})"
+      location = Google::OptionsHelper.to_location(location)
+      self << "#{self.var}.insertVertex(#{self.last_vertex_index}, #{location})"
     end
 
     # The length of the line along the surface of a spherical earth.

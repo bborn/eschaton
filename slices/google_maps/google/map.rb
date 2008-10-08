@@ -158,7 +158,7 @@ module Google # :nodoc:
     #
     #  map.center = Google::Location.new(:latitude => -34, :longitude => 18.5)
     def center=(location)
-      location = location.to_location
+      location = Google::OptionsHelper.to_location(location)
 
       if location == :best_fit
         self.center = self.default_center
@@ -333,7 +333,7 @@ module Google # :nodoc:
 
     # Adds a +circle+ to the map which can be a Circle or whatever Circle#new supports.    
     def add_circle(options)
-      circle = options.to_circle
+      circle = OptionsHelper.to_circle(options)
       self.add_overlay circle
 
       circle
@@ -451,7 +451,7 @@ module Google # :nodoc:
     # * +map_type+ - Optional. Set the type of map shown in the blowup.
     def show_blowup(options = {})
       options[:map_type] = options[:map_type].to_map_type if options[:map_type]
-      location = options.extract(:location).to_location
+      location = Google::OptionsHelper.to_location(options.extract(:location))
       
       self << "#{self.var}.showMapBlowup(#{location}, #{options.to_google_options});" 
     end

@@ -30,10 +30,10 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     assert_equal "/images/green.png", "/images/green.png".to_image
   end
   
-  def test_to_icon
-    assert_equal Google::Icon, "green".to_icon.class
-    assert_equal Google::Icon, :green.to_icon.class
-    assert_equal Google::Icon, ({:image => :green}).to_icon.class
+  def test_options_helper_to_icon
+    assert_equal Google::Icon, Google::OptionsHelper.to_icon("green").class
+    assert_equal Google::Icon, Google::OptionsHelper.to_icon(:green).class
+    assert_equal Google::Icon, Google::OptionsHelper.to_icon({:image => :green}).class
   end
 
   def test_to_gravatar_icon
@@ -41,21 +41,21 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     assert_equal Google::GravatarIcon, 'joesoap@email.com'.to_gravatar_icon.class    
   end
 
-  def test_to_location
-    assert_equal "location", "location".to_location
-    assert_equal "map.getCenter()", "map.getCenter()".to_location
-    assert_equal :location, :location.to_location
-    assert_equal :marker_location, :marker_location.to_location
+  def test_options_helper_to_location
+    assert_equal "location", Google::OptionsHelper.to_location("location")
+    assert_equal "map.getCenter()", Google::OptionsHelper.to_location("map.getCenter()")
+    assert_equal :location, Google::OptionsHelper.to_location(:location)
+    assert_equal :marker_location, Google::OptionsHelper.to_location(:marker_location)
 
     location_hash = {:latitide => 34, :longitude => 18}
-    location = location_hash.to_location
+    location = Google::OptionsHelper.to_location(location_hash)
 
     assert_equal Google::Location, location.class
     assert_equal location_hash[:latitude], location.latitude
     assert_equal location_hash[:longitude], location.longitude
 
     location_array = [18, 34]
-    location = location_array.to_location
+    location = Google::OptionsHelper.to_location(location_array)
 
     assert_equal Google::Location, location.class
     assert_equal location_array.first, location.latitude

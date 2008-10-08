@@ -10,11 +10,6 @@ module Google
       @longitude, @latitude = options[:longitude], options[:latitude]
     end
     
-    # This method provides compatibility with Hash#to_location and in this case returns self.
-    def to_location
-      self
-    end
-    
     def to_s
       "new GLatLng(#{self.latitude}, #{self.longitude})"
     end

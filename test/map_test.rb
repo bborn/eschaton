@@ -228,6 +228,37 @@ class MapTest < Test::Unit::TestCase
     end
   end
 
+
+  def test_add_circle
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+      circle = map.add_circle :location => {:latitude => -33.947, :longitude => 18.462}
+
+      assert circle.is_a?(Google::Circle)
+    end
+  end
+
+
+  def test_add_circle_output
+    Eschaton.with_global_script do |script|
+      map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
+
+      add_circle_output = 'circle = drawCircle(new GLatLng(-33.947, 18.462), 1.5, 40, null, 2, null, "#0055ff", null);
+                           map.addOverlay(circle);'
+                           
+      assert_output_fixture add_circle_output, 
+                            script.record_for_test {
+                              map.add_circle Google::Circle.new(:location => {:latitude => -33.947, :longitude => 18.462})
+                            }
+      
+      assert_output_fixture add_circle_output, 
+                            script.record_for_test {
+                              map.add_circle :location => {:latitude => -33.947, :longitude => 18.462}
+                            } 
+    end
+  end
+
+
   def test_add_line_output
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}

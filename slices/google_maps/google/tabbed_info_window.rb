@@ -17,7 +17,7 @@ module Google
 
     def open(options = {})
       options.default! :location => :center
-      location = options[:location].to_location
+      location = Google::OptionsHelper.to_location(options[:location])
       
       self << "center = #{self.var}.getCenter();" if location == :center
       

@@ -84,11 +84,11 @@ module Google
       @circle_var = "circle_#{self}"      
 
       if create_var?
-        location = options.extract(:location).to_location
+        location = Google::OptionsHelper.to_location(options.extract(:location))
         #@location = OptionsHandler.to_location!(options) #:extract => true
 
         self.icon = if icon = options.extract(:icon)
-                      icon.to_icon
+                      Google::OptionsHelper.to_icon(icon)
                     elsif gravatar = options.extract(:gravatar)
                       gravatar.to_gravatar_icon  
                     end
@@ -353,7 +353,7 @@ module Google
 
     # Moves the marker to the given +location+ on the map.
     def move_to(location)
-      location = location.to_location
+      location = Google::OptionsHelper.to_location(location)
 
       self.lat_lng = location
 

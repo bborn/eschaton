@@ -28,7 +28,9 @@ module Google
       super
 
       if create_var?
-        self.vertices = options.extract(:vertices).arify.collect(&:to_location)
+        self.vertices = options.extract(:vertices).arify.collect do |vertex|
+                                                                   Google::OptionsHelper.to_location(vertex)
+                                                                 end
         editable = options.extract(:editable)
         
         border_colour =  options.extract(:border_colour) 
@@ -48,7 +50,8 @@ module Google
 
     # Adds a vertex at the given +location+ and updates the shape of the polygon.
     def add_vertex(location)
-      self << "#{self.var}.insertVertex(#{self.last_vertex_index}, #{location.to_location})"
+      location = Google::OptionsHelper.to_location(location)
+      self << "#{self.var}.insertVertex(#{self.last_vertex_index}, #{location})"
     end
     
     def click(&block)
