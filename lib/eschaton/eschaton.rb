@@ -43,7 +43,13 @@ class Eschaton # :nodoc:
 
   # TODO - Add .global_script and remove JavascriptObject.global_script  
   def self.global_script
-    JavascriptObject.global_script
+    global_script = JavascriptObject.global_script
+
+    if block_given?
+      yield global_script
+    end
+
+    global_script
   end
 
 end

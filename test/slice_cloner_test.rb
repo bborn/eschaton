@@ -6,7 +6,7 @@ class SliceClonerTest < Test::Unit::TestCase
 
   def test_clone
     # TODO - test somehow??
-    SliceCloner.clone :repo => "/Users/guilio/Desktop/common_slices"
+    #SliceCloner.clone :repo => "/Users/guilio/Desktop/common_slices"
   end
   
 end

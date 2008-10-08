@@ -1,0 +1,26 @@
+require File.dirname(__FILE__) + '/test_helper'
+
+Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
+
+class UrlHelperTest < Test::Unit::TestCase
+  
+  def setup
+    @encoded_polygon_vertices = "[-33.91,18.48],[-33.93,18.44]"
+    @decoded_polygon_vertices = [{:latitude=>"-33.91", :longitude=>"18.48"}, 
+                        {:latitude=>"-33.93", :longitude=>"18.44"}]
+  end
+
+  def test_encode_polygon
+    Eschaton.with_global_script do |script|
+      polygon = Google::Polygon.new :vertices => @decoded_polygon_vertices
+
+      assert_equal '#url_vertices', Google::UrlHelper.encode_vertices(polygon)
+    end
+  end
+  
+  def test_decode_polygon
+    assert_equal @decoded_polygon_vertices,
+                 Google::UrlHelper.decode_vertices(@encoded_polygon_vertices)
+  end
+    
+end
