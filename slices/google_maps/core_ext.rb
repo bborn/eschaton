@@ -14,18 +14,6 @@ class Array # :nodoc:
 
 end
 
-class String # :nodoc:
-    
-  def to_image
-    self
-  end
-  
-  def to_gravatar_icon
-    Google::GravatarIcon.new :email_address => self
-  end
-    
-end
-
 class Symbol # :nodoc:
   
   def to_google_control
@@ -38,10 +26,6 @@ class Symbol # :nodoc:
   
   def to_google_anchor
     "G_ANCHOR_#{self.to_s.upcase}".to_sym
-  end
-  
-  def to_image
-    "/images/#{self}.png"
   end
     
 end
@@ -63,16 +47,4 @@ class Hash # :nodoc:
     "{#{args.join(', ')}}"
   end
   
-  def to_gravatar_icon
-    Google::GravatarIcon.new self
-  end
-  
-  def to_marker
-    Google::Marker.new self
-  end
-  
-  def to_line
-    Google::Line.new self
-  end
-
 end

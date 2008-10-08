@@ -26,8 +26,8 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
   
   def test_to_image
-    assert_equal "/images/green.png", :green.to_image
-    assert_equal "/images/green.png", "/images/green.png".to_image
+    assert_equal "/images/green.png",  Google::OptionsHelper.to_image(:green)
+    assert_equal "/images/green.png", Google::OptionsHelper.to_image("/images/green.png")
   end
   
   def test_options_helper_to_icon
@@ -37,8 +37,8 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
 
   def test_to_gravatar_icon
-    assert_equal Google::GravatarIcon, ({:email_address => 'joesoap@email.com'}).to_gravatar_icon.class
-    assert_equal Google::GravatarIcon, 'joesoap@email.com'.to_gravatar_icon.class    
+    assert_equal Google::GravatarIcon, Google::OptionsHelper.to_gravatar_icon(:email_address => 'joesoap@email.com').class    
+    assert_equal Google::GravatarIcon, Google::OptionsHelper.to_gravatar_icon('joesoap@email.com').class    
   end
 
   def test_options_helper_to_location
@@ -46,6 +46,9 @@ class GoogleCoreExtTest < Test::Unit::TestCase
     assert_equal "map.getCenter()", Google::OptionsHelper.to_location("map.getCenter()")
     assert_equal :location, Google::OptionsHelper.to_location(:location)
     assert_equal :marker_location, Google::OptionsHelper.to_location(:marker_location)
+
+    location = Google::Location.new(:latitide => 34, :longitude => 18)
+    assert_equal location, Google::OptionsHelper.to_location(location)
 
     location_hash = {:latitide => 34, :longitude => 18}
     location = Google::OptionsHelper.to_location(location_hash)
@@ -94,11 +97,17 @@ class GoogleCoreExtTest < Test::Unit::TestCase
   end
   
   def test_to_marker
-    assert_equal Google::Marker, {:location => :existing}.to_marker.class
+    marker = Google::Marker.new(:location => {:latitude => -33.947, :longitude => 18.462})
+
+    assert_equal marker, Google::OptionsHelper.to_marker(marker)
+    assert_equal Google::Marker, Google::OptionsHelper.to_marker(:location => :existing).class    
   end
 
   def test_to_line
-    assert_equal Google::Line, {:vertices => :first_location}.to_line.class
+    line = Google::Line.new(:vertices => :first_location)
+
+    assert_equal line, Google::OptionsHelper.to_line(line)
+    assert_equal Google::Line, Google::OptionsHelper.to_line(:vertices => :first_location).class
   end
 
 end

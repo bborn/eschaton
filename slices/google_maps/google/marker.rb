@@ -90,7 +90,7 @@ module Google
         self.icon = if icon = options.extract(:icon)
                       Google::OptionsHelper.to_icon(icon)
                     elsif gravatar = options.extract(:gravatar)
-                      gravatar.to_gravatar_icon  
+                      Google::OptionsHelper.to_gravatar_icon(gravatar)
                     end
 
         options[:icon] = self.icon if self.icon
@@ -208,7 +208,9 @@ module Google
     #  marker.change_icon :green_cicle #=> "/images/green_circle.png"
     #  marker.change_icon "/images/red_dot.gif"
     def change_icon(image)
-      self << "#{self.var}.setImage(#{image.to_image.to_js});"
+      image = Google::OptionsHelper.to_image(image)
+
+      self << "#{self.var}.setImage(#{image.to_js});"
     end
 
     # Draws a circle around the marker, see Circle#new for valid styling options.
@@ -359,10 +361,6 @@ module Google
 
       self.redraw_tooltip! if self.has_tooltip?
       self.circle.move_to(location) if self.circled?
-    end
-
-    def to_marker # :nodoc:
-      self
     end
 
     def removed_from_map(map) # :nodoc:

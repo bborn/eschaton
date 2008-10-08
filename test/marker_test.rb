@@ -450,13 +450,5 @@ class MarkerTest < Test::Unit::TestCase
                             }                            
     end    
   end
-
-  def test_to_marker
-    Eschaton.with_global_script do |script|
-      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
-      
-      assert_equal marker, marker.to_marker
-    end
-  end  
   
 end

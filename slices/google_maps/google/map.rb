@@ -253,7 +253,7 @@ module Google # :nodoc:
     #  map.add_marker :location => {:latitude => -34, :longitude => 18.5},
     #                 :icon => :green_circle
     def add_marker(marker_or_options)
-      marker = marker_or_options.to_marker
+      marker = Google::OptionsHelper.to_marker(marker_or_options)
       self.add_overlay marker
 
       self.extend_track_bounds marker.location
@@ -306,7 +306,7 @@ module Google # :nodoc:
     #
     #  map.add_line :between_markers => markers, :colour => 'red', :thickness => 10
     def add_line(line)
-      line = line.to_line
+      line = Google::OptionsHelper.to_line(line)
 
       self.add_overlay line
       self << "map_lines.push(#{line});"
@@ -325,7 +325,7 @@ module Google # :nodoc:
     
     # Adds a +polygon+ to the map which can be a Polygon or whatever Polygon#new supports.
     def add_polygon(options)
-      polygon = OptionsHelper.to_polygon(options)
+      polygon = Google::OptionsHelper.to_polygon(options)
       self.add_overlay polygon
 
       polygon

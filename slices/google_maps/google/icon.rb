@@ -14,12 +14,16 @@ module Google
       options_to_fields options
     end
   
-    def image=(image)      
-      self << "#{self.var}.image = #{image.to_image.to_js};"
+    def image=(image)
+      image = Google::OptionsHelper.to_image(image)
+
+      self << "#{self.var}.image = #{image.to_js};"
     end
   
-    def shadow=(image)      
-      self << "#{self.var}.shadow = #{image.to_image.to_js};"
+    def shadow=(image)
+      image = Google::OptionsHelper.to_image(image)
+            
+      self << "#{self.var}.shadow = #{image.to_js};"
     end
   
     def size=(size)
