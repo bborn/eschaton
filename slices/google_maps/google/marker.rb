@@ -267,7 +267,9 @@ module Google
     #                     :show => :always
     def set_tooltip(options)
       options.default! :show => :on_mouse_hover, :padding => 3
-
+      
+      @has_tooltip = true # TODO - replace with Tooltip
+      
       show = options.extract(:show)
       content = OptionsHelper.to_content options
 
@@ -306,8 +308,9 @@ module Google
       end
     end
 
+    # TODO - this will need to change when ToolTip comes into play
     def has_tooltip? # :nodoc:
-      @tooltip_var.not_nil?
+      @has_tooltip == true
     end
     
     # Shows the tooltip just above the marker.

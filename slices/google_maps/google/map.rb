@@ -325,9 +325,9 @@ module Google # :nodoc:
     
     # Adds a +polygon+ to the map which can be a Polygon or whatever Polygon#new supports.
     def add_polygon(options)
-      polygon = options.to_polygon
+      polygon = OptionsHelper.to_polygon(options)
       self.add_overlay polygon
-      
+
       polygon
     end
 

@@ -86,10 +86,6 @@ class Hash # :nodoc:
   def to_circle
     Google::Circle.new self
   end
-
-  def to_polygon
-    Google::Polygon.new self
-  end
   
   def to_location
     Google::Location.new self

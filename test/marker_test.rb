@@ -256,14 +256,14 @@ class MarkerTest < Test::Unit::TestCase
   def test_circle
     Eschaton.with_global_script do |script|
       assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-                             circle = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
+                             circle_marker = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
                              script.record_for_test{
                                Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                                   :circle => true
                              }
  
       assert_output_fixture 'marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-                             circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
+                             circle_marker = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
                             script.record_for_test{
                               Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                                  :circle => {:radius => 500, :border_width => 5}
@@ -271,17 +271,17 @@ class MarkerTest < Test::Unit::TestCase
 
      marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462}
 
-     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
+     assert_output_fixture 'circle_marker = drawCircle(marker.getLatLng(), 1.5, 40, null, 2, null, "#0055ff", null);', 
                             script.record_for_test{
                               marker.circle!  
                             }
 
-     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
+     assert_output_fixture 'circle_marker = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "#0055ff", null);', 
                            script.record_for_test{
                              marker.circle! :radius => 500, :border_width => 5
                            }
 
-     assert_output_fixture 'circle = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "black", null);', 
+     assert_output_fixture 'circle_marker = drawCircle(marker.getLatLng(), 500, 40, null, 5, null, "black", null);', 
                            script.record_for_test{
                              marker.circle! :radius => 500, :border_width => 5, :fill_colour => 'black'
                            }
@@ -340,12 +340,12 @@ class MarkerTest < Test::Unit::TestCase
                               marker.update_tooltip :text => 'This is sparta!'
                             }
 
-      assert_output_fixture 'tooltipmarker.updateHtml("This is sparta!");',
+      assert_output_fixture 'tooltip_marker.updateHtml("This is sparta!");',
                             script.record_for_test{
                               marker.update_tooltip :text => 'This is sparta!'
                             }
 
-      assert_output_fixture 'tooltipmarker.updateHtml("test output for render");',
+      assert_output_fixture 'tooltip_marker.updateHtml("test output for render");',
                              script.record_for_test{
                                marker.update_tooltip :partial => 'This is sparta!'
                              }
@@ -359,7 +359,7 @@ class MarkerTest < Test::Unit::TestCase
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                   :tooltip => {:text => 'This is sparta!'}
 
-      assert_output_fixture 'tooltipmarker.show();', 
+      assert_output_fixture 'tooltip_marker.show();', 
                              script.record_for_test{
                                marker.show_tooltip!
                              }
@@ -371,7 +371,7 @@ class MarkerTest < Test::Unit::TestCase
       marker = Google::Marker.new :location => {:latitude => -33.947, :longitude => 18.462},
                                   :tooltip => {:text => 'This is sparta!'}
 
-      assert_output_fixture 'tooltipmarker.hide();', 
+      assert_output_fixture 'tooltip_marker.hide();', 
                              script.record_for_test{
                                marker.hide_tooltip!
                              }
@@ -434,7 +434,7 @@ class MarkerTest < Test::Unit::TestCase
       marker.set_tooltip :text => "This is sparta!"
 
       assert_output_fixture 'marker.setLatLng(new GLatLng(-33.947, 18.562));
-                             tooltipmarker.redraw(true);', 
+                             tooltip_marker.redraw(true);', 
                             script.record_for_test{
                               marker.move_to :latitude => -33.947, :longitude => 18.562
                             }
@@ -442,9 +442,9 @@ class MarkerTest < Test::Unit::TestCase
       marker.circle! 
                             
       assert_output_fixture 'marker.setLatLng(new GLatLng(-33.947, 18.562));
-                             tooltipmarker.redraw(true);
-                             map.removeOverlay(circle)
-                             circle = drawCircle(new GLatLng(-33.947, 18.562), 1.5, 40, null, 2, null, "#0055ff", null);', 
+                             tooltip_marker.redraw(true);
+                             map.removeOverlay(circle_marker)
+                             circle_marker = drawCircle(new GLatLng(-33.947, 18.562), 1.5, 40, null, 2, null, "#0055ff", null);', 
                             script.record_for_test{
                               marker.move_to :latitude => -33.947, :longitude => 18.562
                             }                            

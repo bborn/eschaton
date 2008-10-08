@@ -180,11 +180,17 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
 
-      assert_output_fixture "map.closeInfoWindow();
-                            map.removeOverlay(marker);
-                            marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-                            map.addOverlay(marker);
-                            track_bounds.extend(marker.getLatLng());",
+      assert_output_fixture "map.removeOverlay(marker);
+                             marker.closeInfoWindow();
+                             if(typeof(tooltip_marker) != 'undefined'){
+                             map.removeOverlay(tooltip_marker);
+                             }
+                             if(typeof(circle_marker) != 'undefined'){
+                             map.removeOverlay(circle_marker);
+                             }                            
+                             marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                             map.addOverlay(marker);
+                             track_bounds.extend(marker.getLatLng());",
                             script.record_for_test {
                               map.replace_marker :location => {:latitude => -33.947, :longitude => 18.462}
                             }
@@ -195,11 +201,17 @@ class MapTest < Test::Unit::TestCase
     Eschaton.with_global_script do |script|
       map = Google::Map.new :center => {:latitude => -33.947, :longitude => 18.462}
 
-      assert_output_fixture "map.closeInfoWindow();
-                            map.removeOverlay(create_spot);
-                            marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-                            map.addOverlay(marker);
-                            track_bounds.extend(marker.getLatLng());",
+      assert_output_fixture "map.removeOverlay(create_spot);
+                             create_spot.closeInfoWindow();
+                             if(typeof(tooltip_create_spot) != 'undefined'){
+                             map.removeOverlay(tooltip_create_spot);
+                             }
+                             if(typeof(circle_create_spot) != 'undefined'){
+                             map.removeOverlay(circle_create_spot);
+                             }
+                             marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
+                             map.addOverlay(marker);
+                             track_bounds.extend(marker.getLatLng());",
                             script.record_for_test {
                               map.change_marker :create_spot,  
                                                 :location => {:latitude => -33.947, :longitude => 18.462}

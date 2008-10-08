@@ -13,6 +13,14 @@ module Google
         options[:text]
       end
     end
+    
+    def self.to_polygon(options)
+      if options.is_a?(Google::Polygon)
+        options
+      else
+        Google::Polygon.new options
+      end
+    end
 
   end
 
