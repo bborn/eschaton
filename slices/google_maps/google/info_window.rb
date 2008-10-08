@@ -50,14 +50,6 @@ module Google
         "\"<div id='info_window_content'>\" + #{content.to_js} + \"</div>\""
       end
 
-      def get_location(location) #TODO ? move to Map::Location ?
-        if location.is_a?(Symbol) || location.is_a?(String)
-          {:latitude => "##{location}.lat()", :longitude => "##{location}.lng()"}
-        else
-          {:latitude => location.latitude, :longitude => location.longitude}
-        end      
-      end
-
       def open_info_window_on_map(options)
         content = window_content options[:content]
         self << "#{self.var}.openInfoWindow(#{options[:location]}, #{content});"        
@@ -70,7 +62,7 @@ module Google
 
       def get(options)
         if options[:include_location] == true
-          options[:url][:location] = get_location(options[:location])
+          options[:url][:location] = Google::UrlHelper.encode_location(options[:location])
         end
 
         self.script.get(options[:url]) do |data|
