@@ -23,7 +23,7 @@ module Google
           open_info_window_on_map :location => location, :content => data
         end        
       else
-        text = OptionsHelper.to_content options
+        text = Google::OptionsHelper.to_content options
 
         open_info_window_on_map :location => location, :content => text
       end
