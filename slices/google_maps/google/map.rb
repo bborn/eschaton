@@ -254,7 +254,9 @@ module Google # :nodoc:
     #                 :icon => :green_circle
     def add_marker(marker_or_options)
       marker = Google::OptionsHelper.to_marker(marker_or_options)
+
       self.add_overlay marker
+      marker.added_to_map self
 
       self.extend_track_bounds marker.location
 

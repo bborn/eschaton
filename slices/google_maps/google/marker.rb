@@ -268,36 +268,33 @@ module Google
     #  marker.set_tooltip :partial => 'spot_information', :locals => {:information => information},
     #                     :show => :always
     def set_tooltip(options)
-      options.default! :show => :on_mouse_hover, :padding => 3
+      options.default! :show => :on_mouse_hover
       
       @has_tooltip = true # TODO - replace with Tooltip
+
+      options[:on] = self
+      @tooltip = Google::Tooltip.new(options)
+
+      #if show == :on_mouse_hover
+      #  self.mouse_over {@tooltip.show!}
+      #  self.mouse_off {@tooltip.hide!}
+      #elsif show == :always
+      #  @tooltip.show!
+      #end
       
-      show = options.extract(:show)
-      content = OptionsHelper.to_content options
+      #if self.draggable?
+      #  self.when_picked_up do |script|
+      #    script << "#{self.tooltip_var}.markerPickedUp();"
+      #  end
 
-      script << "#{self.tooltip_var} = new Tooltip(#{self}, #{content.to_js}, #{options[:padding]});"                          
-      script << "map.addOverlay(#{self.tooltip_var});"
+      #  self.when_dropped do |script, location|
+      #    script << "#{self.tooltip_var}.markerDropped();"
+      #  end
 
-      if show == :on_mouse_hover
-        self.mouse_over {self.show_tooltip!}
-        self.mouse_off {self.hide_tooltip!}
-      elsif show == :always
-        self.show_tooltip!
-      end
-      
-      if self.draggable?
-        self.when_picked_up do |script|
-          script << "#{self.tooltip_var}.markerPickedUp();"
-        end
-
-        self.when_dropped do |script, location|
-          script << "#{self.tooltip_var}.markerDropped();"
-        end
-
-        self.when_being_dragged do
-          self.redraw_tooltip!
-        end
-      end
+      #  self.when_being_dragged do
+      #    self.redraw_tooltip!
+      #  end
+      #end
     end
     
     # Updates the tooltip on the marker with the given +options+. Supports the same +options+ as set_tooltip.
@@ -362,7 +359,14 @@ module Google
       self.redraw_tooltip! if self.has_tooltip?
       self.circle.move_to(location) if self.circled?
     end
-
+    
+    def added_to_map(map)
+      if @tooltip
+        map.add_overlay @tooltip
+        @tooltip.show
+      end
+    end
+    
     def removed_from_map(map) # :nodoc:
       self.close_info_window
       
