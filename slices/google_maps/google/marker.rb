@@ -274,13 +274,15 @@ module Google
 
       options[:on] = self
       @tooltip = Google::Tooltip.new(options)
-
-      #if show == :on_mouse_hover
-      #  self.mouse_over {@tooltip.show!}
-      #  self.mouse_off {@tooltip.hide!}
+      
+      @show_tooltip = options[:show] == :always
+      
+      if options[:show] == :on_mouse_hover
+        self.mouse_over {@tooltip.show!}
+        self.mouse_off {@tooltip.hide!}
       #elsif show == :always
       #  @tooltip.show!
-      #end
+      end
       
       #if self.draggable?
       #  self.when_picked_up do |script|
@@ -363,7 +365,9 @@ module Google
     def added_to_map(map)
       if @tooltip
         map.add_overlay @tooltip
-        @tooltip.show
+        if @show_tooltip == true
+          @tooltip.show!
+        end
       end
     end
     
