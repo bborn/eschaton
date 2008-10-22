@@ -276,27 +276,25 @@ module Google
       @tooltip = Google::Tooltip.new(options)
       
       @show_tooltip = options[:show] == :always
-      
+
       if options[:show] == :on_mouse_hover
         self.mouse_over {@tooltip.show!}
         self.mouse_off {@tooltip.hide!}
-      #elsif show == :always
-      #  @tooltip.show!
       end
       
-      #if self.draggable?
-      #  self.when_picked_up do |script|
-      #    script << "#{self.tooltip_var}.markerPickedUp();"
-      #  end
+      if self.draggable?
+        self.when_picked_up do |script|
+          @tooltip.marker_picked_up
+        end
 
-      #  self.when_dropped do |script, location|
-      #    script << "#{self.tooltip_var}.markerDropped();"
-      #  end
+        self.when_dropped do |script, location|
+          @tooltip.marker_dropped
+        end
 
-      #  self.when_being_dragged do
-      #    self.redraw_tooltip!
-      #  end
-      #end
+        self.when_being_dragged do
+          @tooltip.force_redraw
+        end
+      end
     end
     
     # Updates the tooltip on the marker with the given +options+. Supports the same +options+ as set_tooltip.
@@ -385,7 +383,7 @@ module Google
     
     protected
       def redraw_tooltip!
-        self << "#{self.tooltip_var}.redraw(true);"        
+        @tooltip.force_redraw
       end
   
   end

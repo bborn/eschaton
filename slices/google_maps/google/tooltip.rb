@@ -14,5 +14,9 @@ module Google
       script << "#{self} = new Tooltip(#{on}, #{content.to_js}, #{options[:padding]});"
     end
 
+    def force_redraw
+      self.redraw true
+    end
+
   end
 end
