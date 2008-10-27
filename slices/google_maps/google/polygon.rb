@@ -4,7 +4,7 @@ module Google
   # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GPolygon] docs for details.
   # See MapObject#listen_to on how to use events not listed on this object.
   class Polygon < MapObject
-    attr_reader :vertices
+    attr_reader :vertices, :tooltip
 
     # ==== Options:
     # * +vertices+ - Required. A single location or array of locations representing the vertices of the polygon.
@@ -14,7 +14,7 @@ module Google
     # * +border_colour+ - Optional. The colour of the border, can be a name('red', 'blue') or a hex colour, defaulted to '#00F'
     # * +border_thickness+ - Optional. The thickness of the border in pixels, defaulted to 2.
     # * +border_opacity+ - Optional. The opacity of the border between 0 and 1, defaulted to 0.5.
-    # * +fill_colour+ - Optional. The colour that the circle is filled with, defaulted to '##66F'.
+    # * +fill_colour+ - Optional. The colour that the circle is filled with, defaulted to '#66F'.
     # * +fill_opacity+ - Optional. The opacity of the filled area of the circle, defaulted to 0.5.
     def initialize(options = {})
       options.default! :var => 'polygon', :vertices => [],
@@ -40,12 +40,22 @@ module Google
         fill_colour = options.extract(:fill_colour)
         fill_opacity = options.extract(:fill_opacity)
         
+        
+        tooltip_options = options.extract(:tooltip)
+        
         remaining_options = options
         self << "#{self.var} = new GPolygon([#{self.vertices.join(', ')}], #{border_colour.to_js}, #{border_thickness.to_js}, #{border_opacity.to_js}, #{fill_colour.to_js}, #{fill_opacity.to_js}, #{remaining_options.to_google_options});"
 
         self.enable_editing! if editable
+        self.set_tooltip(tooltip_options) if tooltip_options
       end
-      
+
+    end
+
+    def set_tooltip(options)
+      options.default! :on => self
+
+      @tooltip = Google::Tooltip.new(options)
     end
 
     # Adds a vertex at the given +location+ and updates the shape of the polygon.
@@ -58,6 +68,27 @@ module Google
       self.listen_to :event => :click, :with => :location, &block
     end
 
+    # This event is fired when the mouse "moves over" the polygon.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    # * +mouse_location+ - The location at which the mouse cursor is hovering within the polygon.
+    def mouse_over(&block)
+      self.listen_to :event => :mouseover do |script|
+        script << "mouse_location = last_mouse_location;"
+
+        yield script, :mouse_location
+      end
+    end
+
+    # This event is fired when the mouse "moves off" the polygon.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    def mouse_off(&block)
+      self.listen_to :event => :mouseout, &block
+    end
+
     def last_vertex_index
       "#{self.vertext_count} - 1"
     end
@@ -65,6 +96,14 @@ module Google
     def vertex_count
       "#{self.var}.getVertexCount()"
     end
+
+    def added_to_map(map) # :nodoc:
+      self.tooltip.added_to_map(map) if self.tooltip
+    end 
+    
+    def removed_from_map(map) # :nodoc:
+      self.tooltip.removed_from_map(map) if self.tooltip
+    end   
     
     protected
       attr_writer :vertices

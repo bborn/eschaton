@@ -268,20 +268,14 @@ module Google
     #  marker.set_tooltip :partial => 'spot_information', :locals => {:information => information},
     #                     :show => :always
     def set_tooltip(options)
-      options.default! :show => :on_mouse_hover
+      options.default! :on => self, :type => 'marker', :show => :on_mouse_hover
       
       @has_tooltip = true # TODO - replace with Tooltip
 
-      options[:on] = self
       @tooltip = Google::Tooltip.new(options)
       
       @show_tooltip = options[:show] == :always
 
-      if options[:show] == :on_mouse_hover
-        self.mouse_over {@tooltip.show!}
-        self.mouse_off {@tooltip.hide!}
-      end
-      
       if self.draggable?
         self.when_picked_up do |script|
           @tooltip.marker_picked_up
@@ -361,12 +355,7 @@ module Google
     end
     
     def added_to_map(map)
-      if @tooltip
-        map.add_overlay @tooltip
-        if @show_tooltip == true
-          @tooltip.show!
-        end
-      end
+      @tooltip.add_to_map(map) if @tooltip
     end
     
     def removed_from_map(map) # :nodoc:

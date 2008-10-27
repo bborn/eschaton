@@ -328,9 +328,19 @@ module Google # :nodoc:
     # Adds a +polygon+ to the map which can be a Polygon or whatever Polygon#new supports.
     def add_polygon(options)
       polygon = Google::OptionsHelper.to_polygon(options)
+      
       self.add_overlay polygon
-
+      polygon.added_to_map self
+      
       polygon
+    end
+    
+    # Removes a +polygon+ to the map
+    def remove_polygon(options)
+      polygon = Google::OptionsHelper.to_polygon(options)
+      
+      self.remove_overlay polygon
+      polygon.removed_from_map self      
     end
 
     # Adds a +circle+ to the map which can be a Circle or whatever Circle#new supports.    
