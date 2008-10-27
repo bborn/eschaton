@@ -272,21 +272,12 @@ module Google # :nodoc:
     
     # Removes a marker that has already been placed on the map.
     def remove_marker(marker_or_options)
-      # TODO - Refactor out!
-      marker_id = if marker_or_options.is_a?(Hash)
-                    marker_or_options[:var] || :marker
-                  elsif marker_or_options.is_a?(Marker)
-                    marker_or_options.var.to_sym
-                  else
-                    marker_or_options
-                  end
-
-      marker = Marker.existing(:var => marker_id)
+      marker =  OptionsHelper.to_marker(marker_or_options)
 
       self.remove_overlay marker
       marker.removed_from_map(self)
     end
-    
+
     # Adds a +line+ to the map which can be a Line or whatever Line#new supports.
     #
     # ==== Examples:

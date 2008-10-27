@@ -4,8 +4,10 @@ module Google
   # see googles online[http://code.google.com/apis/maps/documentation/reference.html#GPolygon] docs for details.
   # See MapObject#listen_to on how to use events not listed on this object.
   class Polygon < MapObject
-    attr_reader :vertices, :tooltip
-
+    attr_reader :vertices
+    
+    include Tooltipable
+    
     # ==== Options:
     # * +vertices+ - Required. A single location or array of locations representing the vertices of the polygon.
     # * +editable+ - Optional. Indicates if the polygon is editable, defaulted to +false+.
@@ -52,12 +54,6 @@ module Google
 
     end
 
-    def set_tooltip(options)
-      options.default! :on => self
-
-      @tooltip = Google::Tooltip.new(options)
-    end
-
     # Adds a vertex at the given +location+ and updates the shape of the polygon.
     def add_vertex(location)
       location = Google::OptionsHelper.to_location(location)
@@ -98,11 +94,11 @@ module Google
     end
 
     def added_to_map(map) # :nodoc:
-      self.tooltip.added_to_map(map) if self.tooltip
+      self.add_tooltip_to_map(map)
     end 
-    
+
     def removed_from_map(map) # :nodoc:
-      self.tooltip.removed_from_map(map) if self.tooltip
+      self.remove_tooltip_from_map(map)
     end   
     
     protected

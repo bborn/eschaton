@@ -64,7 +64,9 @@ module Google
   #  end
   class Marker < MapObject
     attr_accessor :icon
-    attr_reader :tooltip_var, :circle, :circle_var
+    attr_reader :circle, :circle_var
+    
+    include Tooltipable
     
     # ==== Options:
     # * +location+ - Required. A Location or whatever Location#new supports which indicates where the marker must be placed on the map.
@@ -80,7 +82,6 @@ module Google
 
       super
 
-      @tooltip_var = "tooltip_#{self}"
       @circle_var = "circle_#{self}"      
 
       if create_var?
@@ -237,85 +238,25 @@ module Google
       @circle.not_nil?
     end
 
-    # Sets the tooltip on the marker using either +text+ or +partial+ options as content. The tooltip window will 
-    # float just above the marker.
-    #
-    # To style the tooltip define a 'tooltip' style in your CSS stylesheet.
-    # The tooltip can then be shown or hidden by using show_tooltip! and hide_tooltip!. 
-    #
-    # ==== Options:
-    # * +text+ - Optional. The text to display in the tooltip.
-    # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be
-    #   displayed in the tooltip.
-    # * +show+ - Optional. If set to +always+ the tooltip will always be visible. If set to +on_mouse_hover+ the 
-    #   tooltip will only be shown when the cursor 'hovers' over the maker. If you wish to use your own way of showing
-    #   the tooltip set this to +false+, defaulted to +on_mouse_hover+.
-    #
-    # ==== Examples:
-    #  # By default will show when mouse 'hovers' over marker
-    #  marker.set_tooltip :text => "This is sparta!"
-    #
-    #  # Explicitly indicate that on_mouse_hover used
-    #  marker.set_tooltip :text => "This is sparta!", :show => :on_mouse_hover
-    #
-    #  marker.set_tooltip :text => "This is sparta!", :show => :always
-    #
-    #  # Open the tool tip yourself at a later stage
-    #  marker.set_tooltip :text => "This is sparta!", :show => false
-    #
-    #  marker.set_tooltip :partial => 'spot_information'
-    #
-    #  marker.set_tooltip :partial => 'spot_information', :locals => {:information => information},
-    #                     :show => :always
+    # See Tooltipable#set_tooltip about valid +options+
     def set_tooltip(options)
-      options.default! :on => self, :type => 'marker', :show => :on_mouse_hover
+      super
       
-      @has_tooltip = true # TODO - replace with Tooltip
-
-      @tooltip = Google::Tooltip.new(options)
-      
-      @show_tooltip = options[:show] == :always
-
       if self.draggable?
         self.when_picked_up do |script|
-          @tooltip.marker_picked_up
+          self.tooltip.marker_picked_up
         end
 
         self.when_dropped do |script, location|
-          @tooltip.marker_dropped
+          self.tooltip.marker_dropped
         end
 
         self.when_being_dragged do
-          @tooltip.force_redraw
+          self.tooltip.force_redraw
         end
       end
     end
-    
-    # Updates the tooltip on the marker with the given +options+. Supports the same +options+ as set_tooltip.
-    def update_tooltip(options)
-      if self.has_tooltip?
-        content = OptionsHelper.to_content options
-        self << "#{self.tooltip_var}.updateHtml(#{content.to_js});"
-      else
-        self.set_tooltip options
-      end
-    end
-
-    # TODO - this will need to change when ToolTip comes into play
-    def has_tooltip? # :nodoc:
-      @has_tooltip == true
-    end
-    
-    # Shows the tooltip just above the marker.
-    def show_tooltip!
-      self << "#{self.tooltip_var}.show();"
-    end
-
-    # Hides the tooltip if it is visible.
-    def hide_tooltip!
-      self << "#{self.tooltip_var}.hide();"
-    end
-    
+            
     def draggable=(value) # :nodoc:
       @draggable = value
 
@@ -350,30 +291,22 @@ module Google
 
       self.lat_lng = location
 
-      self.redraw_tooltip! if self.has_tooltip?
+      self.tooltip.force_redraw if self.tooltip
       self.circle.move_to(location) if self.circled?
     end
     
-    def added_to_map(map)
-      @tooltip.add_to_map(map) if @tooltip
+    def added_to_map(map) # :nodoc:
+      self.add_tooltip_to_map(map)
     end
     
     def removed_from_map(map) # :nodoc:
       self.close_info_window
-      
-      self.script.if "typeof(#{self.tooltip_var}) != 'undefined'" do
-        map.remove_overlay self.tooltip_var
-      end
+      self.remove_tooltip_from_map(map)
 
       self.script.if "typeof(#{self.circle_var}) != 'undefined'" do               
         map.remove_overlay self.circle_var
       end
     end   
-    
-    protected
-      def redraw_tooltip!
-        @tooltip.force_redraw
-      end
   
   end
 end

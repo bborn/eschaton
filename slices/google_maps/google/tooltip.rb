@@ -19,6 +19,11 @@ module Google
       script << "#{self} = new Tooltip(#{options[:base_type].to_js}, #{on}, #{content.to_js}, #{options[:padding]});"
     end
 
+    def update_html(options)
+      content = OptionsHelper.to_content(options)
+      self << "#{self}.updateHtml(#{content.to_js});"
+    end
+    
     def force_redraw
       self.redraw true
     end
