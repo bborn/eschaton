@@ -10,20 +10,7 @@ module Google::Tooltipable
       self.set_tooltip options
     end
   end  
-  
-  # Sets the tooltip using either +text+ or +partial+ options as content.
-  #
-  # To style the tooltip define a 'tooltip' style in your CSS stylesheet.
-  # The tooltip can then be shown or hidden by using show!+ and hide!
-  #
-  # ==== Options:
-  # * +text+ - Optional. The text to display in the tooltip.
-  # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be
-  #   displayed in the tooltip.
-  # * +show+ - Optional. If set to +always+ the tooltip will always be visible. If set to +on_mouse_hover+ the 
-  #   tooltip will only be shown when the cursor 'hovers' over the maker. If you wish to use your own way of showing
-  #   the tooltip set this to +false+, defaulted to +on_mouse_hover+.
-  #
+
   # ==== Examples:
   #  # By default will show when mouse 'hovers' over the marker
   #  marker.set_tooltip :text => "This is sparta!"

@@ -25,7 +25,9 @@ module Google
   #  Google::Line.new :between_markers => markers, :colour => 'red', :thickness => 10
   class Line < MapObject
     attr_reader :vertices
-
+    
+    include Tooltipable
+    
     # Either +vertices+, +from+ and +to+ or +between_markers+ will be used to draw the line.
     #
     # ==== Options:
@@ -62,6 +64,9 @@ module Google
         opacity =  self.get_opacity(options.extract(:opacity))
 
         self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
+
+        tooltip_options = options.extract(:tooltip)
+        self.set_tooltip(tooltip_options) if tooltip_options
       end
     end
 
@@ -107,7 +112,36 @@ module Google
 
     def last_vertex_index
       "#{self.var}.getVertexCount() - 1"
+    end   
+    
+    # This event is fired when the mouse "moves over" the line.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    # * +mouse_location+ - The location at which the mouse cursor is hovering within the polygon.
+    def mouse_over(&block)
+      self.listen_to :event => :mouseover do |script|
+        script << "mouse_location = last_mouse_location;"
+
+        yield script, :mouse_location
+      end
+    end
+
+    # This event is fired when the mouse "moves off" the line.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    def mouse_off(&block)
+      self.listen_to :event => :mouseout, &block
     end    
+    
+    def added_to_map(map) # :nodoc:
+       self.add_tooltip_to_map(map)
+     end 
+
+     def removed_from_map(map) # :nodoc:
+       self.remove_tooltip_from_map(map)
+     end    
     
     protected
       attr_writer :vertices

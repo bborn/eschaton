@@ -302,6 +302,7 @@ module Google # :nodoc:
       line = Google::OptionsHelper.to_line(line)
 
       self.add_overlay line
+      line.added_to_map self
       self << "map_lines.push(#{line});"
 
       self.extend_track_bounds line.vertices
