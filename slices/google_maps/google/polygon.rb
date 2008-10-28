@@ -43,7 +43,6 @@ module Google
         fill_colour = options.extract(:fill_colour)
         fill_opacity = options.extract(:fill_opacity)
         
-        
         tooltip_options = options.extract(:tooltip)
         
         remaining_options = options

@@ -16,19 +16,28 @@ module Google
       end
     end
     
-    # Returns a encoded string that represents the +polygons+ vertices. This can then be used in conjunction
-    # with eschaton url related methods such as Eschaton#url_for_javascript.
+    # Returns a encoded string that represents the polygon or line's vertices. These values can then be
+    # decoded in a rails action using decode_vertices.
     #
+    # ==== Examples:
+    #    
     #  polygon = Google::Polygon.new :vertices =>[{:latitude=>"-33.91", :longitude=>"18.48"}, 
     #                                             {:latitude=>"-33.93", :longitude=>"18.44"}]
     #
-    #  Eschaton.url_for_javascript :action => :update_polygon, :vertices => UrlHelper.encode_polygon_vertices(polygon) 
+    #  script.post :url => {:action => :update_polygon, :vertices => UrlHelper.encode_polygon_vertices(polygon)}
     #  #=> "/update_polygon?vertices=[-33.91,18.48],[-33.93,18.44]"
-    def self.encode_vertices(polygon)
+    #
+    #
+    #  line = Google::Line.new :vertices =>[{:latitude=>"-33.91", :longitude=>"18.48"}, 
+    #                                       {:latitude=>"-33.93", :longitude=>"18.44"}]
+    #
+    #  script.post :url => {:action => :update_line, :vertices => UrlHelper.encode_polygon_vertices(polygon)}
+    #  #=> "/update_line?vertices=[-33.91,18.48],[-33.93,18.44]"
+    def self.encode_vertices(polygon_or_line)
       Eschaton.global_script do |script|
         script << "var url_vertices = '';"        
-        script << "for(var i = 0; i < #{polygon.vertex_count}; i++){"
-        script << "url_vertices += '[' + #{polygon}.getVertex(i).toUrlValue() + '],';"
+        script << "for(var i = 0; i < #{polygon_or_line.vertex_count}; i++){"
+        script << "url_vertices += '[' + #{polygon_or_line}.getVertex(i).toUrlValue() + '],';"
         script << "}"
         script << "url_vertices = url_vertices.substring(0, url_vertices.length - 1);"        
       end

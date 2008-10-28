@@ -13,6 +13,8 @@ module Google::Tooltipable
   #
   #  marker.set_tooltip :text => "This is sparta!", :show => :always
   #
+  #  marker.set_tooltip :text => "This is sparta!", :show => :always, :css_class => :green
+  #
   #  # Open the tool tip yourself at a later stage
   #  marker.set_tooltip :text => "This is sparta!", :show => false
   #
@@ -27,6 +29,11 @@ module Google::Tooltipable
   end
 
   # Updates the tooltip with the given +options+. See Google::Tooltip#update_html for valid options.
+  #
+  # ==== Examples:
+  #  marker.update_tooltip :text => "Updated tooltip!"
+  #
+  #  marker.update_tooltip :partial => 'spot_information'
   def update_tooltip(options)
     if self.tooltip
       self.tooltip.update_html options

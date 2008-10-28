@@ -35,6 +35,7 @@ module Google
     # * +from+ - Optional. The location where the line begins.
     # * +to+ - Optional. The location where the line ends.
     # * +between_markers+ - Optional. An array of markers. The line will be drawn between the markers.
+    # * +editable+ - Optional. Indicates if the line is editable, defaulted to +false+.    
     # * +tooltip+ - Optional. See Google::Tooltip#new for valid options.
     #
     # ==== Styling options
@@ -42,7 +43,7 @@ module Google
     # * +thickness+ - Optional. The thickness of the line in pixels.
     # * +opacity+ - Optional. The opacity of the line between 0 and 1.
     def initialize(options = {})
-      options.default! :var => 'line', :vertices => [] 
+      options.default! :var => 'line', :vertices => [], :editable => false
 
       super
 
@@ -65,6 +66,8 @@ module Google
         opacity =  self.get_opacity(options.extract(:opacity))
 
         self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
+
+        self.enable_editing! if options[:editable] == true
 
         tooltip_options = options.extract(:tooltip)
         self.set_tooltip(tooltip_options) if tooltip_options
@@ -114,6 +117,10 @@ module Google
     def last_vertex_index
       "#{self.var}.getVertexCount() - 1"
     end   
+    
+    def vertex_count
+      "#{self.var}.getVertexCount()"
+    end    
     
     # This event is fired when the mouse "moves over" the line.
     #
