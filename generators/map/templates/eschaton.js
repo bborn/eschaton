@@ -29,35 +29,28 @@ function drawCircle(center, radius, nodes, liColor, liWidth, liOpa, fillColor, f
  * Modified by yawningman to work with eschaton
  * For original see  http://onemarco.com/2007/05/16/custom-tooltips-for-google-maps/ 
  *
- * @author Marco Alionso Ramirez, marco@onemarco.com
- * @version 1.0
- * The Tooltip class is an addon designed for the Google
- * Maps GMarker class.
+ * Original Author =  Marco Alionso Ramirez, marco@onemarco.com
  */
-
-/**
- * @constructor
- * @param {GMarker} marker
- * @param {String} html
- * @param {Number} padding
- */
-function Tooltip(marker, html, padding){
-	this.marker_ = marker;
+function Tooltip(base_type, base, html, css_class, padding){
+  this.base_type_ = base_type;
+	this.base_ = base;
 	this.html_ = html;
 	this.padding_ = padding;
+
+	var div = document.createElement("div");
+	div.innerHTML = this.html_;
+	div.className = css_class;
+	div.style.position = 'absolute';
+	div.style.visibility = 'hidden';
+	
+	this.div_ = div;	
 }
 
 Tooltip.prototype = new GOverlay();
 
 Tooltip.prototype.initialize = function(map){
-	var div = document.createElement("div");
-	div.innerHTML = this.html_
-	div.className = 'tooltip';
-	div.style.position = 'absolute';
-	div.style.visibility = 'hidden';
-	map.getPane(G_MAP_FLOAT_PANE).appendChild(div);
+	map.getPane(G_MAP_FLOAT_PANE).appendChild(this.div_);
 	this.map_ = map;
-	this.div_ = div;
 }
 
 Tooltip.prototype.updateHtml = function(html){
@@ -80,17 +73,52 @@ Tooltip.prototype.remove = function(){
 }
 
 Tooltip.prototype.copy = function(){
-	return new Tooltip(this.marker_,this.html_,this.padding_);
+	return new Tooltip(this.base_,this.html_,this.padding_);
 }
 
 Tooltip.prototype.redraw = function(force){
 	if (!force) return;
-	var markerPos = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
-	var iconAnchor = this.marker_.getIcon().iconAnchor;
+  if(this.base_type_ == 'google::marker'){
+    this.redraw_for_marker();
+  } else if(this.base_type_ == 'google::polygon'){
+    this.redraw_for_polygon();
+  } else if(this.base_type_ == 'google::line'){
+    this.redraw_for_line();    
+  }
+}
+
+Tooltip.prototype.redraw_for_marker = function(){
+	var markerPos = this.map_.fromLatLngToDivPixel(this.base_.getLatLng());
+	var iconAnchor = this.base_.getIcon().iconAnchor;
+
 	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
 	var yPos = markerPos.y - iconAnchor.y - this.div_.clientHeight - this.padding_;
-	this.div_.style.top = yPos + 'px';
-	this.div_.style.left = xPos + 'px';
+
+	this.position_div(xPos, yPos)
+}
+
+Tooltip.prototype.redraw_for_polygon = function(){
+	var markerPos = this.map_.fromLatLngToDivPixel(this.base_.getBounds().getCenter());
+	
+	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
+	var yPos = markerPos.y - this.div_.clientHeight - this.padding_;
+
+	this.position_div(xPos, yPos)
+}
+
+Tooltip.prototype.redraw_for_line = function(){
+  mid_vertex_index = Math.round(this.base_.getVertexCount() / 2);
+	var markerPos = this.map_.fromLatLngToDivPixel(this.base_.getVertex(mid_vertex_index));
+	
+	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
+	var yPos = markerPos.y - this.div_.clientHeight - this.padding_;
+
+	this.position_div(xPos, yPos)
+}
+
+Tooltip.prototype.position_div = function(x, y){
+	this.div_.style.left = x + 'px';  
+	this.div_.style.top = y + 'px';
 }
 
 Tooltip.prototype.show = function(){
