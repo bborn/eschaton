@@ -74,7 +74,7 @@ module Google
     # * +gravatar+ - Optional. Uses a gravatar as the icon. If a string is supplied it will be used for the +email_address+ 
     #   option, see Gravatar#new for other valid options.
     # * +circle+ - Optional. Indicates if a circle should be drawn around the marker, also supports styling options(see Circle#new)
-    # * +tooltip+ - Optional. Provides the abilty to add a tooltip to the marker, supports the same options as set_tooltip
+    # * +tooltip+ - Optional. See Google::Tooltip#new for valid options.
     #
     # See addtional options[http://code.google.com/apis/maps/documentation/reference.html#GMarkerOptions] that are supported.
     def initialize(options = {})

@@ -11,6 +11,7 @@ module Google
     # ==== Options:
     # * +vertices+ - Required. A single location or array of locations representing the vertices of the polygon.
     # * +editable+ - Optional. Indicates if the polygon is editable, defaulted to +false+.
+    # * +tooltip+ - Optional. See Google::Tooltip#new for valid options.    
     #
     # ==== Styling options
     # * +border_colour+ - Optional. The colour of the border, can be a name('red', 'blue') or a hex colour, defaulted to '#00F'

@@ -1,8 +1,11 @@
 module Google
   
+  # Provides a tooltip that can be applied to any object that includes Google::Tooltipable.
   class Tooltip < MapObject
     attr_reader :show, :on
 
+    # Either +text+ or +partial+ is used as the html for the tooltip.
+    #
     # ==== Options:
     # * +text+ - Optional. The text to display in the tooltip.
     # * +partial+ - Optional. Supports the same form as rails +render+ for partials, content of the rendered partial will be
@@ -27,7 +30,7 @@ module Google
       script << "#{self} = new Tooltip(#{options[:base_type].to_js}, #{on}, #{content.to_js}, #{options[:css_class].to_s.to_js}, #{options[:padding]});"
     end
 
-    # Updates the tooltip with the given +options+.
+    # Updates the tooltip with the given +options+. Either +text+ or +partial+ is used as the html for the tooltip.
     #
     # ==== Options:
     # * +text+ - Optional. The text to display in the tooltip.

@@ -35,6 +35,7 @@ module Google
     # * +from+ - Optional. The location where the line begins.
     # * +to+ - Optional. The location where the line ends.
     # * +between_markers+ - Optional. An array of markers. The line will be drawn between the markers.
+    # * +tooltip+ - Optional. See Google::Tooltip#new for valid options.
     #
     # ==== Styling options
     # * +colour+ - Optional. The colour of the line, can be a name('red', 'blue') or a hex colour.

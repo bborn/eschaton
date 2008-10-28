@@ -1,16 +1,9 @@
-# Allows a map object to have tooltips, currently Google::Marker and Google::Polygon are supported.
+# Allows a map object to have tooltips. Currently Google::Marker, Google::Polygon and Google::Line are supported.
 module Google::Tooltipable
   attr_reader :tooltip
       
-  # Updates the tooltip with the given +options+. Supports the same +options+ as set_tooltip.
-  def update_tooltip(options)
-    if self.tooltip
-      self.tooltip.update_html options
-    else
-      self.set_tooltip options
-    end
-  end  
-
+  # Sets the tooltip on the map object with the given +options+. See Google::Tooltip#new for valid options.
+  #
   # ==== Examples:
   #  # By default will show when mouse 'hovers' over the marker
   #  marker.set_tooltip :text => "This is sparta!"
@@ -31,6 +24,15 @@ module Google::Tooltipable
     options.default! :on => self
 
     @tooltip = Google::Tooltip.new(options)
+  end
+
+  # Updates the tooltip with the given +options+. See Google::Tooltip#update_html for valid options.
+  def update_tooltip(options)
+    if self.tooltip
+      self.tooltip.update_html options
+    else
+      self.set_tooltip options
+    end
   end
 
   def add_tooltip_to_map(map) # :nodoc:
