@@ -112,7 +112,7 @@ module Google # :nodoc:
       options.assert_valid_keys :center, :controls, :zoom, :type, :keyboard_navigation
 
       if self.create_var?
-        script << "map_lines = Array();"        
+        script << "map_lines = new Array();"        
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
 
         self.track_bounds!
@@ -303,11 +303,20 @@ module Google # :nodoc:
 
       self.add_overlay line
       line.added_to_map self
-      self << "map_lines.push(#{line});"
+
+      self << "map_lines.push(#{line});"      
 
       self.extend_track_bounds line.vertices
 
       line
+    end
+
+    # Removes a +line+ from the map.
+    def remove_line(options)
+      line = Google::OptionsHelper.to_line(options)
+
+      self.remove_overlay line
+      line.removed_from_map self      
     end
 
     # Removes all lines from the map that where added using add_line.
@@ -316,7 +325,7 @@ module Google # :nodoc:
       self.remove_overlay 'map_lines[i]'
       self << "}"
     end
-    
+
     # Adds a +polygon+ to the map which can be a Polygon or whatever Polygon#new supports.
     def add_polygon(options)
       polygon = Google::OptionsHelper.to_polygon(options)
@@ -327,7 +336,7 @@ module Google # :nodoc:
       polygon
     end
     
-    # Removes a +polygon+ to the map
+    # Removes a +polygon+ from the map.
     def remove_polygon(options)
       polygon = Google::OptionsHelper.to_polygon(options)
       

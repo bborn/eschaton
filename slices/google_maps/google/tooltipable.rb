@@ -33,13 +33,15 @@ module Google::Tooltipable
     @tooltip = Google::Tooltip.new(options)
   end
 
-  def add_tooltip_to_map(map)
+  def add_tooltip_to_map(map) # :nodoc:
     self.tooltip.added_to_map(map) if self.tooltip  
   end
 
-  # Removes the tooltip from the +map+
-  def remove_tooltip_from_map(map)
-    self.tooltip.removed_from_map(map) if self.tooltip  
+  def remove_tooltip_from_map(map) # :nodoc:
+    tooltip_var = "tooltip_#{self}"
+    self.script.if "typeof(#{tooltip_var}) != 'undefined'" do
+      map.remove_overlay tooltip_var
+    end
   end
 
 end

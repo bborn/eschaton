@@ -54,6 +54,8 @@ module Google
     def self.to_marker(options)
       if options.is_a?(Hash)
         Google::Marker.new options
+      elsif options.is_a?(Symbol)
+        Google::Marker.existing :var => options
       else
         options
       end

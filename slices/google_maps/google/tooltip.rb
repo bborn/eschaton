@@ -26,7 +26,7 @@ module Google
 
       script << "#{self} = new Tooltip(#{options[:base_type].to_js}, #{on}, #{content.to_js}, #{options[:css_class].to_s.to_js}, #{options[:padding]});"
     end
-    
+
     # Updates the tooltip with the given +options+.
     #
     # ==== Options:
@@ -50,12 +50,6 @@ module Google
       elsif self.show == :on_mouse_hover
         on.mouse_over {self.show!}
         on.mouse_off {self.hide!}
-      end
-    end
-
-    def removed_from_map(map) # :nodoc:
-      self.script.if "typeof(#{self}) != 'undefined'" do
-        map.remove_overlay self
       end
     end
 
