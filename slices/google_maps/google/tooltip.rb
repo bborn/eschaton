@@ -28,6 +28,11 @@ module Google
       content = OptionsHelper.to_content(options)
 
       script << "#{self} = new Tooltip(#{options[:base_type].to_js}, #{on}, #{content.to_js}, #{options[:css_class].to_s.to_js}, #{options[:padding]});"
+      
+      if self.show == :on_mouse_hover
+        on.mouse_over {self.show!}
+        on.mouse_off {self.hide!}
+      end
     end
 
     # Updates the tooltip with the given +options+. Either +text+ or +partial+ is used as the html for the tooltip.
@@ -50,9 +55,6 @@ module Google
       
       if self.show == :always
         self.show!
-      elsif self.show == :on_mouse_hover
-        on.mouse_over {self.show!}
-        on.mouse_off {self.hide!}
       end
     end
 

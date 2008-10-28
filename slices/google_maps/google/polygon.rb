@@ -85,6 +85,14 @@ module Google
       self.listen_to :event => :mouseout, &block
     end
 
+    # This event is fired when the polygon has been edited.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    def edited(&block)
+      self.listen_to :event => :lineupdated, &block
+    end
+
     def last_vertex_index
       "#{self.vertext_count} - 1"
     end

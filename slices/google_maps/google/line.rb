@@ -113,14 +113,6 @@ module Google
     def click(&block)
       self.listen_to :event => :click, :with => :location, &block
     end
-
-    def last_vertex_index
-      "#{self.var}.getVertexCount() - 1"
-    end   
-    
-    def vertex_count
-      "#{self.var}.getVertexCount()"
-    end    
     
     # This event is fired when the mouse "moves over" the line.
     #
@@ -141,6 +133,22 @@ module Google
     # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
     def mouse_off(&block)
       self.listen_to :event => :mouseout, &block
+    end    
+    
+    # This event is fired when the line has been edited.
+    #
+    # ==== Yields:
+    # * +script+ - A JavaScriptGenerator to assist in generating javascript or interacting with the DOM.
+    def edited(&block)
+      self.listen_to :event => :lineupdated, &block
+    end    
+
+    def last_vertex_index
+      "#{self.var}.getVertexCount() - 1"
+    end   
+    
+    def vertex_count
+      "#{self.var}.getVertexCount()"
     end    
     
     def added_to_map(map) # :nodoc:

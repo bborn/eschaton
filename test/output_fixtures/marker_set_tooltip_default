@@ -1,14 +1,1 @@
-tooltip_marker = new Tooltip(marker, "This is sparta!", 3);
-map.addOverlay(tooltip_marker);
-function marker_mouseover(marker){
-return GEvent.addListener(marker, "mouseover", function() {
-tooltip_marker.show();
-});
-}
-marker_mouseover_event = marker_mouseover(marker);
-function marker_mouseout(marker){
-return GEvent.addListener(marker, "mouseout", function() {
-tooltip_marker.hide();
-});
-}
-marker_mouseout_event = marker_mouseout(marker);
+tooltip_marker.updateHtml("This is sparta!");

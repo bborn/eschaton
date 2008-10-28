@@ -1,6 +1,5 @@
 marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-tooltip_marker = new Tooltip(marker, "This is sparta!", 3);
-map.addOverlay(tooltip_marker);
+tooltip_marker = new Tooltip("google::marker", marker, "This is sparta!", "tooltip", 3);
 function marker_mouseover(marker){
 return GEvent.addListener(marker, "mouseover", function() {
 tooltip_marker.show();
@@ -13,3 +12,6 @@ tooltip_marker.hide();
 });
 }
 marker_mouseout_event = marker_mouseout(marker);
+map.addOverlay(marker);
+map.addOverlay(tooltip_marker);
+track_bounds.extend(marker.getLatLng());

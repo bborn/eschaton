@@ -272,7 +272,7 @@ module Google # :nodoc:
     
     # Removes a marker that has already been placed on the map.
     def remove_marker(marker_or_options)
-      marker =  OptionsHelper.to_marker(marker_or_options)
+      marker = OptionsHelper.to_marker(marker_or_options)
 
       self.remove_overlay marker
       marker.removed_from_map(self)

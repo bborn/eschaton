@@ -1,4 +1,6 @@
 marker = new GMarker(new GLatLng(-33.947, 18.462), {draggable: false});
-tooltip_marker = new Tooltip(marker, "This is sparta!", 3);
+tooltip_marker = new Tooltip("google::marker", marker, "This is sparta!", "tooltip", 3);
+map.addOverlay(marker);
 map.addOverlay(tooltip_marker);
 tooltip_marker.show();
+track_bounds.extend(marker.getLatLng());

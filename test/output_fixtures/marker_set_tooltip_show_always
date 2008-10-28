@@ -1,3 +1,4 @@
-tooltip_marker = new Tooltip(marker, "This is sparta!", 3);
+tooltip_marker = new Tooltip("google::marker", marker, "This is sparta!", "tooltip", 3);
+map.addOverlay(marker);
 map.addOverlay(tooltip_marker);
 tooltip_marker.show();

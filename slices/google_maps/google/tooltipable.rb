@@ -35,11 +35,7 @@ module Google::Tooltipable
   #
   #  marker.update_tooltip :partial => 'spot_information'
   def update_tooltip(options)
-    if self.tooltip
-      self.tooltip.update_html options
-    else
-      self.set_tooltip options
-    end
+    self.tooltip.update_html options
   end
 
   def add_tooltip_to_map(map) # :nodoc:
