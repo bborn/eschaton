@@ -1,14 +1,14 @@
 class SliceLoader # :nodoc:
   
   # Loads all slices found using slice_locations and extends relevant objects.
-  def self.load(ordered = [])
-    self.slice_locations(order).each do |slice_location|
+  def self.load
+    self.slice_locations.each do |slice_location|
       mixin_slice_extentions slice_location
     end
   end
 
   # Returns all the locations in which eschaton slices are located.
-  def self.slice_locations(ordered = [])
+  def self.slice_locations
     locations = []
     locations << "#{File.dirname(__FILE__)}/../../slices"
     locations << "#{RAILS_ROOT}/lib/eschaton_slices"
