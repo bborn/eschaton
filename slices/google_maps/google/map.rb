@@ -230,7 +230,13 @@ module Google # :nodoc:
     
     # Replaces an existing marker on the map.
     def replace_marker(marker_or_options)
-      remove_marker marker_or_options
+      remove_options = if marker_or_options.is_a?(Hash)
+                         marker_or_options.merge :existing => true
+                       else
+                         marker_or_options
+                       end
+
+      remove_marker remove_options
       add_marker marker_or_options
     end
 

@@ -51,8 +51,12 @@ module Google
       end
     end
     
+    # ==== Options:
+    # * +existing+ - Optional. Indicates if the marker is an existing marker.
     def self.to_marker(options)
-      if options.is_a?(Hash)
+      if options.is_a?(Hash) && options[:existing] == true
+        Google::Marker.existing options
+      elsif options.is_a?(Hash)
         Google::Marker.new options
       elsif options.is_a?(Symbol)
         Google::Marker.existing :var => options
