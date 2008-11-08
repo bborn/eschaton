@@ -209,7 +209,7 @@ module Google # :nodoc:
     #  map.add_control :map_type, :position => {:anchor => :top_left, :offset => [10, 10]}
     def add_control(control, options = {})
       control = "new #{control.to_google_control}()" if control.is_a?(Symbol)
-      position = options[:position].to_google_position if options[:position]
+      position = Google::OptionsHelper.to_google_position options[:position]
       arguments = [control, position].compact
 
       script << "#{self.var}.addControl(#{arguments.join(', ')});"

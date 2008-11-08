@@ -6,7 +6,6 @@ function drawCircle(center, radius, nodes, liColor, liWidth, liOpa, fillColor, f
 	var latConv = center.distanceFrom(new GLatLng(center.lat() +0.1, center.lng()))/100;
 	var lngConv = center.distanceFrom(new GLatLng(center.lat(), center.lng()+0.1))/100;
 
-	//Loop 
 	var points = [];
 	var step = parseInt(360/nodes);
 	for(var i=0; i<=360; i+=step){
@@ -25,8 +24,7 @@ function drawCircle(center, radius, nodes, liColor, liWidth, liOpa, fillColor, f
 	return poly;
 }
 
-/**
- * Modified by yawningman to work with eschaton
+/* Modified by yawningman to work with eschaton
  * For original see  http://onemarco.com/2007/05/16/custom-tooltips-for-google-maps/ 
  *
  * Original Author =  Marco Alionso Ramirez, marco@onemarco.com
@@ -129,3 +127,27 @@ Tooltip.prototype.hide = function(){
 	this.div_.style.visibility = 'hidden';
 }
 /* end tooltip */
+
+/* GooglePane - A simple pane for google maps
+   by yawningman */
+function GooglePane(options){
+  this.default_position = options['position']
+
+  this.panel = document.createElement('div');
+  this.panel.id = options['id'];
+  this.panel.className = options['cssClass']
+  this.panel.innerHTML = options['text']
+}
+
+GooglePane.prototype = new GControl;
+GooglePane.prototype.initialize = function(map) {
+  map.getContainer().appendChild(this.panel);
+
+  return this.panel;
+};
+
+GooglePane.prototype.getDefaultPosition = function() {
+  return this.default_position;
+};
+
+/* end pane */

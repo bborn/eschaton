@@ -88,6 +88,14 @@ module Google
         Google::GravatarIcon.new options
       end
     end
+    
+    def self.to_google_position(options)
+      if options.not_blank?
+        options.default! :anchor => :top_right, :offset => [0, 0]
+
+        "new GControlPosition(#{options[:anchor].to_google_anchor}, #{options[:offset].to_google_size})"        
+      end
+    end
 
   end
 

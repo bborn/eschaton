@@ -32,16 +32,20 @@ end
 
 class Hash # :nodoc:
 
-  def to_google_position
-    self.default! :offset => [0, 0]
-
-    "new GControlPosition(#{self[:anchor].to_google_anchor}, #{self[:offset].to_google_size})"
-  end
-
-  def to_google_options
+  # ==== Options
+  # * +dont_convert+ - An array of keys that should *_not_* be converted to javascript.
+  def to_google_options(options = {})
+    dont_convert = (options[:dont_convert] || []).collect(&:to_s)
     string_keys = self.stringify_keys
+
     args = string_keys.keys.sort.collect do |key|
-             "#{key.to_js_method}: #{string_keys[key].to_js}"
+             value = if key.in?(dont_convert)
+                       string_keys[key]
+                     else
+                       string_keys[key].to_js
+                     end
+
+             "#{key.to_js_method}: #{value}"
            end
 
     "{#{args.join(', ')}}"
