@@ -152,12 +152,12 @@ module Google
     end    
     
     def added_to_map(map) # :nodoc:
-       self.add_tooltip_to_map(map)
-     end 
+      self.add_tooltip_to_map(map)
+    end 
 
-     def removed_from_map(map) # :nodoc:
-       self.remove_tooltip_from_map(map)
-     end    
+    def removed_from_map(map) # :nodoc:
+      self.remove_tooltip_from_map(map)
+    end    
     
     protected
       attr_writer :vertices

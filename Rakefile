@@ -22,8 +22,7 @@ task :stats do
     %w(eschaton           lib/eschaton),
     %w(kernel_slice       slices/eschaton_kernel),
     %w(google_maps_slice  slices/google_maps),
-    %w(jquery_slice       slices/jquery), 
-    %w(tests              test)    
+    %w(jquery_slice       slices/jquery)
   ].collect { |name, dir| [ name, "#{File.dirname(__FILE__)}/#{dir}" ] }.select { |name, dir| File.directory?(dir) }  
   
   CodeStatistics.new(*STATS_DIRECTORIES).to_s

@@ -1,24 +1,19 @@
 module GoogleGeneratorExt
   
-  # Any script that is added within the block will execute if the browser is compatible with google maps.
-  def if_google_compatible(&block)
-    self << "if (GBrowserIsCompatible()) {"
-    yield
-    self << "} else { alert('Your browser be old, it cannot run google maps!');}"
-  end
-  
   # Any script that is added within the block will execute if the browser is compatible with google maps 
   # and when the document is ready.
   def google_map_script
     self.when_document_ready do      
       self << "window.onunload = GUnload;"
-      self.if_google_compatible do
-        yield
+      self << "if (GBrowserIsCompatible()) {"
 
-        if Google::Scripts.has_end_of_map_script?
-          self << Google::Scripts.clear_end_of_map_script
-        end
-      end      
+      yield
+
+      if Google::Scripts.has_end_of_map_script?
+        self << Google::Scripts.clear_end_of_map_script
+      end
+
+      self << "} else { alert('Your browser be old, it cannot run google maps!');}"
     end
   end
 

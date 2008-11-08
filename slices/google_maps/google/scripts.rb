@@ -5,4 +5,5 @@ module Google
 
     define :end_of_map_script  
   end
+
 end

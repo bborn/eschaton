@@ -59,10 +59,6 @@ module Google
       self.recreate!
     end
 
-    def to_circle
-      self
-    end
-
     protected
       def create!
         arguments = [@options[:radius], @options[:quality], 
