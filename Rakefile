@@ -19,17 +19,12 @@ end
 desc "Report code statistics (KLOCs, etc) from the application"
 task :stats do
   STATS_DIRECTORIES = [
-    %w(Controllers        app/controllers),
-    %w(Helpers            app/helpers), 
-    %w(Models             app/models),
-    %w(Libraries          lib/),
-    %w(APIs               app/apis),
-    %w(Components         components),
-    %w(Integration\ tests test/integration),
-    %w(Functional\ tests  test/functional),
-    %w(Unit\ tests        test/unit)
-
-  ].collect { |name, dir| [ name, "#{RAILS_ROOT}/#{dir}" ] }.select { |name, dir| File.directory?(dir) }  
+    %w(eschaton           lib/eschaton),
+    %w(kernel_slice       slices/eschaton_kernel),
+    %w(google_maps_slice  slices/google_maps),
+    %w(jquery_slice       slices/jquery), 
+    %w(tests              test)    
+  ].collect { |name, dir| [ name, "#{File.dirname(__FILE__)}/#{dir}" ] }.select { |name, dir| File.directory?(dir) }  
   
   CodeStatistics.new(*STATS_DIRECTORIES).to_s
 end
