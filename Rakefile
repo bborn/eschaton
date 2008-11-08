@@ -1,7 +1,8 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
-
+require 'code_statistics'
+  
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../config/environment'
 
@@ -14,6 +15,25 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
+
+desc "Report code statistics (KLOCs, etc) from the application"
+task :stats do
+  STATS_DIRECTORIES = [
+    %w(Controllers        app/controllers),
+    %w(Helpers            app/helpers), 
+    %w(Models             app/models),
+    %w(Libraries          lib/),
+    %w(APIs               app/apis),
+    %w(Components         components),
+    %w(Integration\ tests test/integration),
+    %w(Functional\ tests  test/functional),
+    %w(Unit\ tests        test/unit)
+
+  ].collect { |name, dir| [ name, "#{RAILS_ROOT}/#{dir}" ] }.select { |name, dir| File.directory?(dir) }  
+  
+  CodeStatistics.new(*STATS_DIRECTORIES).to_s
+end
+
 
 desc 'Generate documentation for the eschaton plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|

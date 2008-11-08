@@ -1,9 +1,8 @@
 # Provides access to global objects of interest.
 class Eschaton # :nodoc:
   cattr_accessor :current_view
-  
+
   # works like rails url for only with more options!!!!
-  # TODO - Doc
   def self.url_for_javascript(options)
     url = self.current_view.url_for(options)
 

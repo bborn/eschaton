@@ -1,66 +1,29 @@
 # All methods noted here become available on all rails views and provide helpers relating to google maps.
 module GoogleViewExt
-  
-  # Works in much the same as link_to_function but allows for mapping script to be written within the script block
+
+  # Works in the same way as run_javascript but code is treated as google map script.
   #
-  #  link_to_map_script("Show info") do |script|
-  #    script.map.open_info_window :text => 'I am showing some info'
+  #  run_map_script do |script|
+  #    map = Google::Map.new(:controls => [:small_map, :map_type],
+  #                          :center => {:latitude => -33.947, :longitude => 18.462})
   #  end
-  def link_to_map_script(name, *args, &block)
-    link_to_function name, *args do |script|
-      Eschaton.with_global_script(script, &block)
+  def run_map_script(&block)
+    run_javascript do |script|
+      script.google_map_script {yield script}
     end
   end
 
-  # Unless the +condition+ is +true+ this will have the same effect as link_to_map_script otherwise
-  # +name+ will be returned.
-  def link_to_map_script_unless(condition, name, *args, &block)
-    unless condition
-      link_to_map_script name, *args, &block
-    else
-      name
-    end
-  end
-
-  def prepare_info_window_options(options)
-    options.default! :include_location => true, :html => {}
-
-    include_location = options.extract(:include_location)
-    if include_location && params[:location].not_blank?
-      options[:url][:location] = params[:location]
-    end
-
-    options[:html][:class] = :info_window_form
-  end
-  
-  # Works in exactly the same way as rails +form_remote_tag+ but provides some extra options. This would be used 
-  # to create a remote form tag within an info window.
-  #
-  # ==== Options:
-  # * +include_location+ - Optional. Indicates if latitude and longitude +params+(if present) should be include in the +url+, defaulted to +true+.
-  def info_window_form(options, &block) #TODO rename => info_window_form_tag
-    prepare_info_window_options(options)
-    
-    form_remote_tag options, &block
-  end
-
-  def info_window_form_for(model, model_instance, options, &block)
-    prepare_info_window_options(options)
-    
-    remote_form_for model, model_instance, options, &block
-  end
-  
   # Includes the required google maps and eschaton javascript files. This must be called in the view or layout 
   # to enable google maps functionality.
   #
   # ==== Options:
   # * +key+ - Optional. The key[http://code.google.com/apis/maps/signup.html] that google maps supplied you with, defaulted to GOOGLE_MAPS_API_KEY if present or a key for +localhost+.
-  # * +include_jquery+ - Optional. Indicates if the jquery file should be included, defaulted to +true+, set this to +false+ if you have already include jQuery.
+  # * +include_jquery+ - Optional. Indicates if the jquery file should be included, defaulted to +true+, set this to +false+ if you have already included jQuery.
   def include_google_javascript(options = {})
     key = if defined?(GOOGLE_MAPS_API_KEY)
             GOOGLE_MAPS_API_KEY
-           else
-           "ABQIAAAActtI8WkgLZcM_n8uvnIYsBTJQa0g3IQ9GZqIMmInSLzwtGDKaBT9A95dZjICm7SeC_GoxpzGlyCdQA"
+          else
+            'ABQIAAAActtI8WkgLZcM_n8uvnIYsBTJQa0g3IQ9GZqIMmInSLzwtGDKaBT9A95dZjICm7SeC_GoxpzGlyCdQA'
           end
     
     options.default! :key => key, :include_jquery => true
@@ -108,17 +71,60 @@ module GoogleViewExt
     
     content_tag :div, 'loading map...', options
   end
-
-  # Works in the same way as run_javascript but code is treated as google map script.
+  
+  # Works in much the same as link_to_function but allows for mapping script to be written within the script block
   #
-  #  run_map_script do |script|
-  #    map = Google::Map.new(:controls => [:small_map, :map_type],
-  #                          :center => {:latitude => -33.947, :longitude => 18.462})
+  #  link_to_map_script("Show info") do |script|
+  #    script.map.open_info_window :text => 'I am showing some info'
   #  end
-  def run_map_script(&block)
-    run_javascript do |script|
-      script.google_map_script {yield script}
+  def link_to_map_script(name, *args, &block)
+    link_to_function name, *args do |script|
+      Eschaton.with_global_script(script) do 
+        yield script
+
+        if Google::Scripts.has_end_of_map_script?
+          script << Google::Scripts.clear_end_of_map_script
+        end
+      end
     end
+  end
+
+  # Unless the +condition+ is +true+ this will have the same effect as link_to_map_script otherwise
+  # +name+ will be returned.
+  def link_to_map_script_unless(condition, name, *args, &block)
+    unless condition
+      link_to_map_script name, *args, &block
+    else
+      name
+    end
+  end
+  
+  # Works in exactly the same way as rails +form_remote_tag+ but provides some extra options. This would be used 
+  # to create a remote form tag within an info window.
+  #
+  # ==== Options:
+  # * +include_location+ - Optional. Indicates if latitude and longitude +params+(if present) should be include in the +url+, defaulted to +true+.
+  def info_window_form(options, &block) #TODO rename => info_window_form_tag
+    prepare_info_window_options(options)
+    
+    form_remote_tag options, &block
+  end
+
+  def info_window_form_for(model, model_instance, options, &block)
+    prepare_info_window_options(options)
+    
+    remote_form_for model, model_instance, options, &block
+  end
+
+  def prepare_info_window_options(options)
+    options.default! :include_location => true, :html => {}
+
+    include_location = options.extract(:include_location)
+    if include_location && params[:location].not_blank?
+      options[:url][:location] = params[:location]
+    end
+
+    options[:html][:class] = :info_window_form
   end
   
   # A 'cancel' link that will close the currently open info window on the map.

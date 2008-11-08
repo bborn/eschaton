@@ -162,9 +162,9 @@ module Google # :nodoc:
 
       if location == :best_fit
         self.center = self.default_center
-        MappingEvents.end_of_map_script << "if(!track_bounds.isEmpty()){
-                                             #{self}.setCenter(track_bounds.getCenter()); 
-                                            }"
+        Google::Scripts.end_of_map_script << "if(!track_bounds.isEmpty()){
+                                                #{self}.setCenter(track_bounds.getCenter()); 
+                                              }".strip_each_line!
       else
         self.set_center location
       end
@@ -190,7 +190,7 @@ module Google # :nodoc:
       @zoom = zoom
 
       if zoom == :best_fit
-        MappingEvents.end_of_map_script << "#{self}.setZoom(#{self}.getBoundsZoomLevel(track_bounds));"
+        Google::Scripts.end_of_map_script << "#{self}.setZoom(#{self}.getBoundsZoomLevel(track_bounds));"
       else
         self.set_zoom(self.zoom)        
       end

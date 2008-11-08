@@ -9,14 +9,14 @@ module KernelViewExt
   end
   
   def javascript(&block)
-    update_page do |page|
-      Eschaton.with_global_script page, &block
+    update_page do |script|
+      Eschaton.with_global_script script, &block
     end
   end
 
   def run_javascript(&block)
-    update_page_tag do |page|
-      Eschaton.with_global_script page, &block
+    update_page_tag do |script|
+      Eschaton.with_global_script script, &block
     end
   end
   

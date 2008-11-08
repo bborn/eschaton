@@ -1,6 +1,6 @@
 module Google
   
-  # Provides translation to the relevant Google mapping object when working with method options.
+  # Provides translation to the relevant Google mapping objects when working with method options.
   class OptionsHelper # :nodoc:
 
     def self.to_content(options)
