@@ -8,7 +8,7 @@ module Google
     # * +text+ - Optional
     # * +partial+ - Optional
     #
-    # * +css_class+, Optional, defaulted to 'pane'
+    # * +css_class+, Optional, defaulted to 'pane'.
     # * +anchor+ - Optional, defaulted to +top_left+
     # * +offset+ - Optional, defaulted to [10, 10]
     def initialize(options = {})
