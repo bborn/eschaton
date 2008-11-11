@@ -4,10 +4,8 @@ class Eschaton # :nodoc:
 
   def self.dependencies
     if defined?(ActiveSupport::Dependencies)
-      puts 'new dep'      
       ActiveSupport::Dependencies
     else
-      puts 'old dep'
       Dependencies
     end
   end
