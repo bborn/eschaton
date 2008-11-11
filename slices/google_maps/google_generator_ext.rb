@@ -29,7 +29,9 @@ module GoogleGeneratorExt
   #
   #   page.alert("after mapping")
   def mapping_script(&block)
-    Eschaton.with_global_script self, &block
+    Eschaton.with_global_script(self) do
+      self.google_map_script &block
+    end
   end
    
 end
