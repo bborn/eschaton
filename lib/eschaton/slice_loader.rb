@@ -22,9 +22,9 @@ class SliceLoader # :nodoc:
     def self.mixin_slice_extentions(location)
       _logger_info "loading slice '#{File.basename(location)}'"
        
-      ActiveSupport::Dependencies.load_paths << location
+      Eschaton.dependencies.load_paths << location
       Dir["#{location}/*.rb"].each do |file|
-        ActiveSupport::Dependencies.require_or_load file
+        Eschaton.dependencies.require_or_load file
       end
 
       # Generator extentions

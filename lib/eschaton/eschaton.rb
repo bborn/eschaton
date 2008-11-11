@@ -2,6 +2,16 @@
 class Eschaton # :nodoc:
   cattr_accessor :current_view
 
+  def self.dependencies
+    if defined?(ActiveSupport::Dependencies)
+      puts 'new dep'      
+      ActiveSupport::Dependencies
+    else
+      puts 'old dep'
+      Dependencies
+    end
+  end
+
   # works like rails url for only with more options!!!!
   def self.url_for_javascript(options)
     url = self.current_view.url_for(options)
