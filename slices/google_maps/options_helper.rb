@@ -11,7 +11,7 @@ module Google
 
         :javascript
       else
-        (options[:text] || '').interpolate_javascript_vars
+        options[:text]
       end
     end
     

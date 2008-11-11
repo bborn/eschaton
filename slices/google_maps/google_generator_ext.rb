@@ -28,9 +28,19 @@ module GoogleGeneratorExt
   #   end
   #
   #   page.alert("after mapping")
-  def mapping_script(&block)
+  def mapping_script(options = {}, &block)
+    options.default! :run_when_doc_ready => true
+    
     Eschaton.with_global_script(self) do
-      self.google_map_script &block
+      if options[:run_when_doc_ready]
+        self.google_map_script &block
+      else
+        yield
+
+        if Google::Scripts.has_end_of_map_script?
+          self << Google::Scripts.clear_end_of_map_script
+        end
+      end
     end
   end
    
