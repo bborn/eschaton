@@ -36,7 +36,7 @@ module Google
     #     map.add_marker :location => location
     #   end
     def listen_to(options = {}, &block) # :yields: script + :with or :yield_order option
-      event = Event.new :on => self.var, :event => options.extract(:event)
+      event = Google::Event.new :on => self.var, :event => options.extract(:event)
       event.listen_to options, &block
       
       event
