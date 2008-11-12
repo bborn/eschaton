@@ -7,7 +7,7 @@ module GoogleGeneratorExt
       self << "window.onunload = GUnload;"
       self << "if (GBrowserIsCompatible()) {"
 
-      yield
+      yield self
 
       if Google::Scripts.has_end_of_map_script?
         self << Google::Scripts.clear_end_of_map_script
@@ -28,14 +28,17 @@ module GoogleGeneratorExt
   #   end
   #
   #   page.alert("after mapping")
+  #
+  # ==== Options:
+  # * +run_when_doc_ready+ - Optional, indicated is code should be wrapped in google_map_script.
   def mapping_script(options = {}, &block)
     options.default! :run_when_doc_ready => true
-    
+
     Eschaton.with_global_script(self) do
       if options[:run_when_doc_ready]
         self.google_map_script &block
       else
-        yield
+        yield self
 
         if Google::Scripts.has_end_of_map_script?
           self << Google::Scripts.clear_end_of_map_script
