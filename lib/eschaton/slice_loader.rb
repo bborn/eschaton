@@ -28,15 +28,15 @@ class SliceLoader # :nodoc:
       end
 
       # Generator extentions
-      mixin_extentions :path => location, :pattern => /([a-z_]*_generator_ext).rb/,
+      mixin_extentions :path => location, :pattern => /([a-z_\d]*_generator_ext).rb/,
                        :extend => ActionView::Helpers::PrototypeHelper::JavaScriptGenerator
 
       # View extentions
-      mixin_extentions :path => location, :pattern => /([a-z_]*_view_ext).rb/,
+      mixin_extentions :path => location, :pattern => /([a-z_\d]*_view_ext).rb/,
                        :extend => ActionView::Base
 
       # Controller extentions
-      mixin_extentions :path => location, :pattern => /([a-z_]*_controller_ext).rb/,
+      mixin_extentions :path => location, :pattern => /([a-z_\d]*_controller_ext).rb/,
                        :extend => ActionController::Base                       
     end
 
