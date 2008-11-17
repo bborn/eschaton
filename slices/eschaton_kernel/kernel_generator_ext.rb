@@ -40,6 +40,11 @@ module KernelGeneratorExt
     self << "}"
   end
 
+  # Merges the content of +other_generator+ with this generator. The given +options+ are the same as supported by generate.
+  def merge(other_generator, options = {})
+    self << other_generator.generate(options)
+  end
+
   # Returns script that has been generated and allows for addtional +options+ regarding generation than the default +to_s+ method.
   #
   # ==== Options:
