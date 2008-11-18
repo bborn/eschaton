@@ -9,14 +9,6 @@
 
 Helps with writing google map mashups in Rails bringing together the power of Google Maps and Rails.
 
-=== What people are saying?
-
-==== "A shocking spectacle of decadence" - <tt>Joe Marker</tt>
-==== "very, very fast and very, very loud" - <tt>Penny Polygon</tt>
-==== "a bombardment of the most unsubtle, one-dimensional noise" - <tt>Alan Artifact</tt>
-==== "like listening to Al Green on Lp" - <tt>Paul Polyline</tt>
-
-
 Visit the wiki[http://github.com/yawningman/eschaton/wikis] for more info.
 
   map = Google::Map.new(:center => {:latitude => -33.947, :longitude => 18.462},
