@@ -1,4 +1,4 @@
-class Hash
+class Hash # :nodoc:
   alias extract delete  
     
   # Defaults key values in a hash that are not present. Works like #merge but does not overwrite

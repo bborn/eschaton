@@ -1,4 +1,4 @@
-class MatchData
+class MatchData # :nodoc:
   
   # Returns the group at the given +position+, which is zero based.
   #   match = "Group1 Group2 Group3".match(/(\w+) (\w+) (\w+)/)  

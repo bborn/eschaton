@@ -1,4 +1,4 @@
-class Array
+class Array # :nodoc:
   
   # Aliases array indexes with english terms. Add terms as needed to the hash
   {1 => :second, 2 => :third, 3 => :forth, 4 => :fifth}.each do |index, method_alias|

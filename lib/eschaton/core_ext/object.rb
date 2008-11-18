@@ -1,4 +1,4 @@
-class Object
+class Object # :nodoc:
     
   def arify
     if self.is_a?(Array)

@@ -1,4 +1,4 @@
-class String
+class String # :nodoc:
 
   def quote
     "\"#{self}\""

@@ -1,4 +1,4 @@
-module ScriptStore
+module ScriptStore # :nodoc:
 
   def define(*names)
     names.each do |name|
