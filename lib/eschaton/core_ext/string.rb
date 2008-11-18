@@ -16,4 +16,9 @@ class String
     self.gsub!(/^\s+|\s+$/, '')
   end
 
+  # Escapes +self+ and returns the escaped string.
+  def escape
+    CGI.escape self
+  end
+
 end
