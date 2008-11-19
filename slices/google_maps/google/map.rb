@@ -112,7 +112,9 @@ module Google # :nodoc:
       options.assert_valid_keys :center, :controls, :zoom, :type, :keyboard_navigation
 
       if self.create_var?
-        script << "map_lines = new Array();"        
+        Google::Scripts.before_map_script << "var map;" # For IE Fix
+
+        script << "map_lines = new Array();"
         script << "#{self.var} = new GMap2(document.getElementById('#{self.var}'));" 
 
         self.track_bounds!
