@@ -45,13 +45,13 @@ module GoogleGeneratorExt
     options.default! :run_when_doc_ready => true
 
     Eschaton.with_global_script(self) do
-      if options[:run_when_doc_ready]
-        self.google_map_script &block
-      else
-        yield self
+      self.with_mapping_scripts do
+        if options[:run_when_doc_ready]
+          self.google_map_script &block
+        else
+          yield self
 
-        if Google::Scripts.has_end_of_map_script?
-          self << Google::Scripts.clear_end_of_map_script
+          self << Google::Scripts.extract(:end_of_map_script)
         end
       end
     end

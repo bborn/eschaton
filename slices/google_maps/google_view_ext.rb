@@ -79,11 +79,11 @@ module GoogleViewExt
   #  end
   def link_to_map_script(name, *args, &block)
     link_to_function name, *args do |script|
-      Eschaton.with_global_script(script) do 
-        yield script
+      Eschaton.with_global_script(script) do
+        script.with_mapping_scripts do
+          yield script
 
-        if Google::Scripts.has_end_of_map_script?
-          script << Google::Scripts.clear_end_of_map_script
+          script << Google::Scripts.extract(:end_of_map_script)
         end
       end
     end

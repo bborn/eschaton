@@ -8,10 +8,10 @@ module GoogleControllerExt
   #  end
   def run_map_script(&block)
     run_javascript do |script|
-      yield script
-
-      if Google::Scripts.has_end_of_map_script?
-        script << Google::Scripts.clear_end_of_map_script
+      script.with_mapping_scripts do
+        yield script
+       
+        script << Google::Scripts.extract(:end_of_map_script)
       end
     end
   end
