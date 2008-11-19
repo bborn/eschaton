@@ -26,7 +26,8 @@ class GoogleGeneratorExtTest < Test::Unit::TestCase
                              last_mouse_location = location;
                              });
                              }
-                             map_mousemove_event = map_mousemove(map);} else { alert('Your browser be old, it cannot run google maps!');}
+                             map_mousemove_event = map_mousemove(map);
+                             } else { alert('Your browser be old, it cannot run google maps!');}
                              })", script
     end
   end
@@ -54,7 +55,8 @@ class GoogleGeneratorExtTest < Test::Unit::TestCase
                            jQuery(document).ready(function() {
                            window.onunload = GUnload;
                            if (GBrowserIsCompatible()) {
-                           /* Map script */} else { alert('Your browser be old, it cannot run google maps!');}
+                           /* Map script */
+                           } else { alert('Your browser be old, it cannot run google maps!');}
                            })
                            /* After 1 */
                            /* After 2 */",

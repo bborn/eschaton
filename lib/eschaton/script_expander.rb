@@ -5,7 +5,11 @@ class ScriptExpander
   end
 
   def to_s
-    @generator.generate
+    output = @generator.generate
+    # TODO - This causes a blank output in the generator, investigate this
+    output = ' ' if output.blank?
+
+    output
   end
 
   def method_missing(method, *args, &block)
