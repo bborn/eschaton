@@ -92,7 +92,11 @@ module Google
     def edited(&block)
       self.listen_to :event => :lineupdated, &block
     end
-
+    
+    def center
+      "#{self}.getBounds().getCenter()"
+    end
+    
     def last_vertex_index
       "#{self.vertext_count} - 1"
     end

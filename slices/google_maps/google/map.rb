@@ -341,6 +341,8 @@ module Google # :nodoc:
       self.add_overlay polygon
       polygon.added_to_map self
       
+      self.extend_track_bounds polygon.vertices
+      
       polygon
     end
     
