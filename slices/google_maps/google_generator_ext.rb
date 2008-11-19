@@ -27,7 +27,7 @@ module GoogleGeneratorExt
     end
   end
 
-  # Used when working on google map objects in RJS templates, makes this generator global to all mapping objects.
+  # Used when working on google map objects in RJS templates.
   #
   # RJS template:
   #   page.alert("before mapping")
@@ -40,17 +40,16 @@ module GoogleGeneratorExt
   #   page.alert("after mapping")
   #
   # ==== Options:
-  # * +run_when_doc_ready+ - Optional, indicated is code should be wrapped in google_map_script.
+  # * +run_when_doc_ready+ - Optional, indicates is code should be wrapped in google_map_script.
   def mapping_script(options = {}, &block)
     options.default! :run_when_doc_ready => true
 
     Eschaton.with_global_script(self) do
-      self.with_mapping_scripts do
-        if options[:run_when_doc_ready]
-          self.google_map_script &block
-        else
+      if options[:run_when_doc_ready]
+        self.google_map_script &block
+      else
+        self.with_mapping_scripts do
           yield self
-
           self << Google::Scripts.extract(:end_of_map_script)
         end
       end
