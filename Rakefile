@@ -6,7 +6,7 @@ require 'code_statistics'
 # Load up the entire host rails enviroment
 require File.dirname(__FILE__) + '/../../../config/environment'
 
-desc 'Default: run unit tests.'
+desc 'Default: run eschaton tests.'
 task :default => :test
 
 desc 'Test the eschaton plugin.'
@@ -16,7 +16,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-desc "Report code statistics (KLOCs, etc) from the application"
+desc "Report code statistics (KLOCs, etc) from the eschaton and slices"
 task :stats do
   STATS_DIRECTORIES = [
     %w(eschaton           lib/eschaton),
@@ -27,7 +27,6 @@ task :stats do
   
   CodeStatistics.new(*STATS_DIRECTORIES).to_s
 end
-
 
 desc 'Generate documentation for the eschaton plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
@@ -44,6 +43,9 @@ desc 'Opens documentation for the eschaton plugin.'
 task :open_doc do |rdoc|
   `open rdoc/index.html`
 end
+
+desc 'Default: run eschaton tests.'
+task :rdoc_and_open => [:rdoc, :open_doc]
 
 desc 'Updates eschaton related javascript files.'
 task :update_javascript do
