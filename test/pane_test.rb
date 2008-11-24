@@ -4,7 +4,7 @@ Test::Unit::TestCase.output_fixture_base = File.dirname(__FILE__)
 
 class PaneTest < Test::Unit::TestCase
 
-  def test_clone
+  def test_initialize
     Eschaton.with_global_script do |script|
       map = Google::Map.new
       
@@ -39,7 +39,22 @@ class PaneTest < Test::Unit::TestCase
                               map.add_control Google::Pane.new(:partial => 'jump_to', :css_class => :green)
                             }
     end
+  end
+  
+  def test_pane_id
+    Eschaton.with_global_script do |script|
+      output = 'my_pane = new GooglePane({cssClass: "pane", id: "my_pane", position: new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10, 10)), text: "Poly Jean Harvey"});'
+     
+      assert_output_fixture output,
+                            script.record_for_test {
+                              Google::Pane.new(:var => :my_pane, :text => 'Poly Jean Harvey')
+                            }
 
+      assert_output_fixture output, 
+                            script.record_for_test {
+                              Google::Pane.new(:var => 'my_pane', :text => 'Poly Jean Harvey')
+                            }
+    end
   end
   
 end
