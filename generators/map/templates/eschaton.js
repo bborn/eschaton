@@ -81,7 +81,9 @@ Tooltip.prototype.redraw = function(force){
   } else if(this.base_type_ == 'google::polygon'){
     this.redraw_for_polygon();
   } else if(this.base_type_ == 'google::line'){
-    this.redraw_for_line();    
+    this.redraw_for_line();
+  } else { // fall through for custom markers
+    this.redraw_for_marker();    
   }
 }
 
