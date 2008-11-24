@@ -15,7 +15,7 @@ module ActionView # :nodoc:
           # TODO - Move this out once extending Generator methods is supported
           def replace_html(id, *options_for_render)
             options = *options_for_render
-            if url = options.extract(:url)
+            if options.is_a?(Hash) && url = options.extract(:url)
               self.get(url) do |data|
                 self << "$('#{id}').update(#{data});"
               end
