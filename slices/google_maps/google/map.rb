@@ -455,7 +455,7 @@ module Google # :nodoc:
     #  map.open_info_window :locals => :center, :url => {:controller => :spot, :action => :show, :id => @spot},
     #                       :include_location => false
     def open_info_window(options)
-      info_window = InfoWindow.new(:var => self.var, :object => self)
+      info_window = InfoWindow.new(:object => self)
       info_window.open options
     end
 

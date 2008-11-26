@@ -135,7 +135,7 @@ module Google
     #
     #  map.open_info_window :url => {:controller => :spot, :action => :show, :id => @spot}
     def open_info_window(options)
-      info_window = InfoWindow.new(:var => self.var, :object => self)
+      info_window = InfoWindow.new(:object => self)
       info_window.open_on_marker options
     end
 

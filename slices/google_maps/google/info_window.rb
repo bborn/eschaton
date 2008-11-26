@@ -4,17 +4,18 @@ module Google
     attr_reader :object
 
     def initialize(options = {})
-      super
-
       # TODO - Find a better name than "object"
       @object = options.extract(:object)
+      options[:var] = @object.var
+
+      super
     end
 
     def open(options)     
       options.default! :location => :center, :include_location => true
 
       location = Google::OptionsHelper.to_location(options[:location])
-      location = object.center if location == :center      
+      location = self.object.center if location == :center      
 
       if options[:url]
         options[:location] = location
