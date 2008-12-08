@@ -26,14 +26,23 @@ module Google
                        :border_thickness => 2,
                        :border_opacity => 0.5,
                        :fill_colour => '#66F',
-                       :fill_opacity => 0.5               
+                       :fill_opacity => 0.5,
+                       :from_encoded => false               
 
       super
 
       if create_var?
-        self.vertices = options.extract(:vertices).arify.collect do |vertex|
-                                                                   Google::OptionsHelper.to_location(vertex)
-                                                                 end
+        from_encoded  = options.extract(:from_encoded)
+        
+        unless from_encoded
+          self.vertices = options.extract(:vertices).arify.collect do |vertex|
+            Google::OptionsHelper.to_location(vertex)
+          end
+        else
+          self.vertices = options.extract(:vertices)
+        end
+
+        
         editable = options.extract(:editable)
         
         border_colour =  options.extract(:border_colour) 
@@ -46,12 +55,24 @@ module Google
         tooltip_options = options.extract(:tooltip)
         
         remaining_options = options
-        self << "#{self.var} = new GPolygon([#{self.vertices.join(', ')}], #{border_colour.to_js}, #{border_thickness.to_js}, #{border_opacity.to_js}, #{fill_colour.to_js}, #{fill_opacity.to_js}, #{remaining_options.to_google_options});"
+        
+        unless from_encoded
+          self << "#{self.var} = new GPolygon([#{self.vertices.join(', ')}], #{border_colour.to_js}, #{border_thickness.to_js}, #{border_opacity.to_js}, #{fill_colour.to_js}, #{fill_opacity.to_js}, #{remaining_options.to_google_options});"
+        else
+          polylines = "[{points: \"#{self.vertices[:points]}\", levels: \"#{self.vertices[:levels]}\", numLevels: #{self.vertices[:numLevels]}, zoomFactor: #{self.vertices[:zoomFactor]}, color: #{border_colour.to_js}, weight: #{border_thickness.to_js}, opacity: #{border_opacity.to_js}}]"
+                          
+          self << "#{self.var} = new GPolygon.fromEncoded({polylines: #{polylines}, fill: true, color: #{fill_colour.to_js}, outline: true, opacity:#{fill_opacity.to_js}});"
+                
+        end
 
         self.enable_editing! if editable
         self.set_tooltip(tooltip_options) if tooltip_options
       end
-
+    end
+    
+    def self.new_from_encoded(options = {})
+      options.default! :from_encoded => true
+      new(options)
     end
 
     # Adds a vertex at the given +location+ and updates the shape of the polygon.
