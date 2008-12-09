@@ -18,7 +18,6 @@ class PolygonTest < Test::Unit::TestCase
 
   def test_encoded
     Eschaton.with_global_script do |script|
-
       assert_output_fixture 'polygon = new GPolygon.fromEncoded({color: "#66F", fill: true, opacity: 0.5, outline: true, polylines: [{color: "#00F", levels: "PFHFGP", numLevels: 18, opacity: 0.5, points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB", weight: 2, zoomFactor: 2}]});',
                             script.record_for_test {
                               Google::Polygon.new(:encoded => {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP',

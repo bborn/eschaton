@@ -313,8 +313,10 @@ module Google # :nodoc:
       line.added_to_map self
 
       self << "map_lines.push(#{line});"      
-
-      self.extend_track_bounds line.vertices
+      
+      unless line.encoded?
+        self.extend_track_bounds line.vertices
+      end
 
       line
     end
