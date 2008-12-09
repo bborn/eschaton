@@ -73,4 +73,26 @@ class OptionsHelperTest < Test::Unit::TestCase
     assert_equal Google::Line, Google::OptionsHelper.to_line(:vertices => :first_location).class
   end
 
+  def test_to_encoded_polyline
+    line = {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP', :color => 'red',
+            :opacity => 0.7, :weight => 3, :num_levels => 18, :zoom_factor => 2}
+
+    assert_equal '{color: "red", levels: "PFHFGP", numLevels: 18, opacity: 0.7, points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB", weight: 3, zoomFactor: 2}',
+                  Google::OptionsHelper.to_encoded_polyline(line)
+                  
+    line = {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP'}
+
+    assert_equal '{levels: "PFHFGP", points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB"}',
+                  Google::OptionsHelper.to_encoded_polyline(line)                  
+  end
+  
+  def test_to_encoded_polylines
+    options = {:color => 'red', :opacity => 0.7, :weight => 3}
+    options[:lines] = [{:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP', :num_levels => 18, :zoom_factor => 2},
+                       {:points => 'cbglFhciuMY{FtDqBfCvD{AbFgEm@', :levels => 'PDFDEP', :num_levels => 18, :zoom_factor => 2}]
+
+    assert_equal '[{color: "red", levels: "PFHFGP", numLevels: 18, opacity: 0.7, points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB", weight: 3, zoomFactor: 2}, {levels: "PDFDEP", numLevels: 18, points: "cbglFhciuMY{FtDqBfCvD{AbFgEm@", zoomFactor: 2}]',
+                  Google::OptionsHelper.to_encoded_polylines(options)
+  end
+
 end

@@ -96,6 +96,24 @@ module Google
         "new GControlPosition(#{options[:anchor].to_google_anchor}, #{options[:offset].to_google_size})"        
       end
     end
+    
+    def self.to_encoded_polyline(options)
+      options.to_google_options
+    end
+    
+    def self.to_encoded_polylines(options)
+      lines = options.extract(:lines)
+      style_options = options
+
+      # The first line's style will be used for all line styles
+      lines.first.merge!(style_options)
+
+      polylines = lines.collect do |encoded_polyline|
+                    self.to_encoded_polyline encoded_polyline
+                  end
+
+      "[#{polylines.join(', ')}]"
+    end
 
   end
 
