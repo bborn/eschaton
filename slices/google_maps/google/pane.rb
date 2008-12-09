@@ -19,9 +19,9 @@ module Google
 
       pane_options = {}
 
-      pane_options[:id] = self.var
-      pane_options[:position] = OptionsHelper.to_google_position options
-      pane_options[:text] = OptionsHelper.to_content options
+      pane_options[:id] = self.var.to_s
+      pane_options[:position] = OptionsHelper.to_google_position(options)
+      pane_options[:text] = OptionsHelper.to_content(options)
       pane_options[:css_class] = options[:css_class].to_s
 
       if create_var?

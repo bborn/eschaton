@@ -106,7 +106,7 @@ class LineTest < Test::Unit::TestCase
       assert_equal 'line.getLength() / 1000', line.length(:kilometers)      
     end    
   end
-  
+
   def test_style
     Eschaton.with_global_script do |script|
       line = Google::Line.new :from => {:latitude => -33.947, :longitude => 18.462},
@@ -120,12 +120,30 @@ class LineTest < Test::Unit::TestCase
       assert_output_fixture 'line.setStrokeStyle({color: "red", weight: 12});',
                             script.record_for_test {
                               line.style = {:colour => 'red', :thickness => 12}
-                            }                       
+                            }
+                       
       assert_output_fixture 'line.setStrokeStyle({color: "red", opacity: 0.7, weight: 12});',
                             script.record_for_test {
                               line.style = {:colour => 'red', :thickness => 12, :opacity => 0.7}
                             }
     end
-  end  
+  end
+
+  def test_encoded
+    Eschaton.with_global_script do |script|
+      assert_output_fixture 'line = new GPolyline.fromEncoded({color: null, levels: "PFHFGP", numLevels: 18, opacity: null, points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB", weight: null, zoomFactor: 2});',
+                            script.record_for_test {
+                              Google::Line.new(:encoded => {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP',
+                                                            :num_levels => 18, :zoom_factor => 2})
+                            }
+
+      assert_output_fixture 'line = new GPolyline.fromEncoded({color: "green", levels: "PFHFGP", numLevels: 18, opacity: 1, points: "ihglFxjiuMkAeSzMkHbJxMqFfQaOoB", weight: 10, zoomFactor: 2});',
+                            script.record_for_test {
+                              Google::Line.new(:encoded => {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP',
+                                                            :num_levels => 18, :zoom_factor => 2},
+                                               :colour => 'green', :opacity => 1, :thickness => 10)
+                            }
+    end
+  end
     
 end

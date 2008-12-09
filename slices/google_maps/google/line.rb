@@ -23,20 +23,40 @@ module Google
   #                            {:location => {:latitude => -33.999, :longitude => 18.472}})
   #
   #  Google::Line.new :between_markers => markers, :colour => 'red', :thickness => 10
+  #
+  # === Encoding examples:
+  #
+  #  # Encoded line with default styling
+  #  Google::Line.new :encoded => {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP',
+  #                                :num_levels => 18, :zoom_factor => 2}
+  #
+  #  # Encoded line with styling
+  #  Google::Line.new :encoded => {:points => 'ihglFxjiuMkAeSzMkHbJxMqFfQaOoB', :levels => 'PFHFGP',
+  #                                :num_levels => 18, :zoom_factor => 2},
+  #                   :colour => 'green', :opacity => 1, :thickness => 10
+  #
   class Line < MapObject
-    attr_reader :vertices
+    attr_reader :vertices, :encoded
     
     include Tooltipable
     
-    # Either +vertices+, +from+ and +to+ or +between_markers+ will be used to draw the line.
+    # Either +vertices+, +from+ and +to+, +between_markers+ or +encoded+ will be used to draw the line.
     #
     # ==== Options:
     # * +vertices+ - Optional. A single location or array of locations representing the vertices of the line.
     # * +from+ - Optional. The location where the line begins.
     # * +to+ - Optional. The location where the line ends.
     # * +between_markers+ - Optional. An array of markers. The line will be drawn between the markers.
+    #
     # * +editable+ - Optional. Indicates if the line is editable, defaulted to +false+.    
     # * +tooltip+ - Optional. See Google::Tooltip#new for valid options.
+    #    
+    # ==== Encoded options
+    # * +encoded+ - Optional. A single hash or array of hashes witht he below options, which represent encoded polylines.
+    #   * +points+ - A string containing the encoded latitude and longitude coordinates.
+    #   * +levels+ - A string containing the encoded polyline zoom level groups
+    #   * +num_levels+ - The number of zoom levels contained in the encoded +levels+ option.
+    #   * +zoom_factor+ - The magnification between adjacent sets of zoom levels in the encoded +levels+ option.    
     #
     # ==== Styling options
     # * +colour+ - Optional. The colour of the line, can be a name('red', 'blue') or a hex colour.
@@ -48,24 +68,33 @@ module Google
       super
 
       if create_var?
-        options[:vertices] << options.extract(:from) if options[:from]  
-        options[:vertices] << options.extract(:to) if options[:to]
+        self.encoded = options.extract(:encoded)
+        
+        unless self.encoded?
+          options[:vertices] << options.extract(:from) if options[:from]  
+          options[:vertices] << options.extract(:to) if options[:to]
 
-        if markers = options[:between_markers]
-          markers.each do |marker|
-            options[:vertices] << marker.location
+          if markers = options[:between_markers]
+            markers.each do |marker|
+              options[:vertices] << marker.location
+            end
           end
-        end
 
-        self.vertices = options.extract(:vertices).arify.collect do |vertex| 
-                                                                   Google::OptionsHelper.to_location(vertex)
-                                                                 end
+          self.vertices = options.extract(:vertices).arify.collect do |vertex| 
+                                                                     Google::OptionsHelper.to_location(vertex)
+                                                                   end
+        end
         
         colour =  options.extract(:colour) 
         thickness =  options.extract(:thickness) 
         opacity =  self.get_opacity(options.extract(:opacity))
 
-        self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
+        if self.encoded?
+          encoded_options = self.encoded.merge(:color => colour, :weight => thickness, :opacity => opacity)
+          self << "#{self.var} = new GPolyline.fromEncoded(#{encoded_options.to_google_options});"
+        else
+          self << "#{self.var} = new GPolyline([#{self.vertices.join(', ')}], #{colour.to_js}, #{thickness.to_js}, #{opacity.to_js});"
+        end
 
         self.enable_editing! if options[:editable] == true
 
@@ -159,8 +188,13 @@ module Google
       self.remove_tooltip_from_map(map)
     end    
     
+    # Indicates if the polygon was created using encoded polylines.
+    def encoded?
+      self.encoded.not_nil?
+    end    
+    
     protected
-      attr_writer :vertices
+      attr_writer :vertices, :encoded
       
       def get_opacity(opacity)
         if opacity == :solid
