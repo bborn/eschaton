@@ -98,7 +98,7 @@ module Google
     end
     
     def self.to_encoded_polyline(options)
-      options.to_google_options
+      options.to_google_options(:dont_convert => [:points, :levels])
     end
     
     def self.to_encoded_polylines(options)
