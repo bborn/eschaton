@@ -24,7 +24,8 @@ class SliceLoader # :nodoc:
        
       Eschaton.dependencies.load_paths << location
       Dir["#{location}/*.rb"].each do |file|
-        Eschaton.dependencies.require_or_load file
+        # require file, for some reason
+        Eschaton.dependencies.require file
       end
 
       # Generator extentions
